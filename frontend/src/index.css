@@ -1,0 +1,153 @@
+body {
+  background-color: #0f121f !important;
+  min-height: 100% !important;
+  background-image: url(../stars.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* background-position: center center; */
+  color: #fff !important;
+  text-align: center;
+}
+nav{
+  background: none !important;
+}
+/* html {
+  min-height: 100%;
+} */
+
+* {
+  font-family: Ubuntu;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: normal;
+  margin: 0;
+}
+
+a, a:hover, a:visited {
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+.logo a{
+  color:#00bda0 !important;
+}
+
+.wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+div.wrapper > h1 {
+  text-align: center;
+  margin: 100px auto;
+  font-size: 2.4em
+}
+
+.btn-s {
+  color:#198754 !important;
+  background: none !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+}
+
+.btn-s:hover {
+  color: #0f121f !important;
+  background-color: #00dba0 !important;
+}
+
+.my-tag {
+  background: none !important;
+  color: #00dba0;
+  font-size: 18px;
+  cursor: pointer !important;
+}
+
+.my-tag:hover {
+  color:#198754 !important;
+}
+
+.search-input {
+  background: none !important;
+  color:#fff !important;
+  border: 0 !important;
+}
+
+.search-input:focus {
+  outline:none!important;
+  border-bottom: 0.10mm solid #00dba0 !important;
+  box-shadow: none !important;
+  border-radius: 0;
+}
+
+.search-input::placeholder{
+  font-size: medium !important;
+  font-weight: bold !important;
+  color: #c3c0c0 !important
+}
+
+.pic-l {
+  border: none !important;
+  border: 1px solid #00dba0;
+  position: relative;
+}
+
+.pic-l img {
+  height: 100% !important;
+}
+
+.pic-t {
+  /* max-width:300px !important;
+  max-height:300px !important;
+  min-width:300px !important;
+  min-height:300px !important; */
+  height:250px !important;
+}
+
+/* .article-2 {
+  padding: 10px;
+  position: relative;
+  padding-bottom: 40px;
+} */
+
+.side {
+  background: none !important;
+  color: #00dba0 !important;
+  border:1px solid #00bda0 !important;
+  height: 100%;
+  width: 250px;
+  border-radius: 1%;
+  text-align: center;
+  padding: 0px !important;
+}
+
+
+.image-container {
+  display: flex;
+  justify-content: center; /* Center the image horizontally */
+  align-items: center; /* Center the image vertically */
+  max-width: 100%; /* Ensure the container doesn't exceed its parent's width */
+  /* height: auto; Maintain the image's aspect ratio */
+  max-height: 100vh; /* Ensure the container doesn't exceed viewport height */
+  /* overflow:   */
+}
+
+.vis {
+  background: none;
+  border: none !important;
+  color: #00dba0;
+  cursor: pointer;
+  position: absolute;
+  right: 250px;
+}
+
+.hid {
+  background: none;
+  border: none !important;
+  color: #00dba0;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+}
+
+
