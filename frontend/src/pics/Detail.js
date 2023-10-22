@@ -61,48 +61,54 @@ const Pic = () => {
     const toggleSidebar = () => {
         console.log("asd")
         const sidebar = document.getElementById("menu");
-        const imgcontent = document.getElementById("img-content");
         const togglebutton = document.getElementById("togglebutton")
+        const main = document.getElementById("main")
         if (sidebar.style.display === "block") {
             setSlid(hidContent)
             sidebar.style.display = "none";
             togglebutton.classList.replace("vis", "hid");
-            imgcontent.classList.replace("col-lg-9", "col-lg-12");
-            imgcontent.classList.replace("col-md-8", "col-md-12");
+            main.classList.replace("vis-main", "hid-main");
         } else {
             setSlid(visContent)
             sidebar.style.display = "block";
             togglebutton.classList.replace("hid", "vis");
-            imgcontent.classList.replace("col-lg-12", "col-lg-9");
-            imgcontent.classList.replace("col-md-12", "col-md-8");
+            main.classList.replace("hid-main", "vis-main");
         }
     }
     
     return(
-        <Row>
-            <Col id="img-content" xs={12} sm={6} md={8} lg={9}>
-                <Container className='mt-5 image-container'>
-                    {data && 
-                    <div className="image-container">
-                        <img onLoad={handleImageLoad} className="" src={data.thumb} style={{height: hight_, width: width_}} alt="Image Description"/>
+        <>
+            {/* the side bar */}
+            <aside id="menu" style={{display: "block"}}>
+                {/* the side body */}
+                <div id="showcase-sidebar" className='' style={{height: "100%"}}>
+                      <div className="lsidebar"> 
+                        <div className="side">
+                            <Side post={data} toggleSidebar={toggleSidebar}></Side>
+                        <div className="sidebar-content" style={{marginRight: "-16.8px"}}></div>
+                      </div>
                     </div>
-                    }
-                </Container>
-            </Col>
-            <div id="togglebutton" style={{width:"auto", marginTop: imageHeight/2}} className="vis" onClick={e=>toggleSidebar()}>
+                </div>
+
+            </aside>
+            {/* the button */}
+            <div id="togglebutton" style={{width:"auto", marginTop: he/5 }} className="vis" onClick={e=>toggleSidebar()}>
                 {slid}
             </div>
-            <Col id="menu" xs={8} sm={5} md={4} lg={2} style={{display: "block"}}>
-                <Container className='mt-5' style={{height: "100%"}}>
-                    <div className="side">
-                        <Side post={data} toggleSidebar={toggleSidebar}/>
+
+            
+            <main id="main" className="vis-main">
+                <section id="" className="fit showcase">
+                        {/* the image body */}
+                            <div className="scrollbox" style={{marginRight: "-16.8px", marginBottom: "-16.8px"}}>
+                                
+                            {data && 
+                                <img onLoad={handleImageLoad} id="img-content" src={data.thumb}  alt="Image Description"/>
+                            }
                     </div>
-                </Container>
-            </Col>
-            {options.map((props, idx) => (
-                <Side post={data} key={idx} {...props} />
-            ))}
-        </Row>
+                </section>
+            </main>
+        </>
     )
 }
 

@@ -110,27 +110,109 @@ div.wrapper > h1 {
   padding-bottom: 40px;
 } */
 
-.side {
+
+
+
+#main{
+  position: relative;
+  height: 100%;
+  left: 250px;
+  width: calc(100% - 250px);
+  border-top-width: 50px;
+  transition: .15s border-top-width;
+  z-index: 100;
+  display: block;
+  outline: 0 none;
+  margin: 0;
+  padding: 0;
+  border-width: 0;
+  border-left-width: 20em !important;
+}
+
+
+
+.lsidebar{
+  position: relative;
+  overflow: hidden;
+  left: 0;
+  border-width: 0 1px 0 0
+}
+
+
+.lsidebar~#togglebutton{
+  right: -1.25em !important;
+  border-radius: 0 100% 100% 0;
+}
+
+
+#showcase-sidebar{
+  position: fixed;
   background: none !important;
   color: #00dba0 !important;
   border:1px solid #00bda0 !important;
   height: 100%;
-  width: 250px;
+  width: 248px;
   border-radius: 1%;
   text-align: center;
   padding: 0px !important;
+  margin: 0;
+}
+
+.side {
+  position: relative;
+  bottom: 0;
+  top: 10px;
+  transition: .15s top;
+  overflow: visible;
+  z-index: 300;
+}
+
+.sidebar-content{
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 1em 2em;
 }
 
 
-.image-container {
-  display: flex;
-  justify-content: center; /* Center the image horizontally */
-  align-items: center; /* Center the image vertically */
-  max-width: 100%; /* Ensure the container doesn't exceed its parent's width */
-  /* height: auto; Maintain the image's aspect ratio */
-  max-height: 100vh; /* Ensure the container doesn't exceed viewport height */
-  /* overflow:   */
+.showcase {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 15px;
+  right: 0;
+  bottom: -666px;
+  overflow: hidden;
+  z-index: 350;
 }
+
+
+.showcase>.scrollbox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: scroll;
+}
+
+
+.showcase #img-content{
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  max-width: 95%;
+  max-height: 95%;
+  cursor: -webkit-zoom-in;
+  -webkit-user-select: none;
+  padding: 0;
+  border-width: 0;
+}
+
 
 .vis {
   background: none;
@@ -138,7 +220,8 @@ div.wrapper > h1 {
   color: #00dba0;
   cursor: pointer;
   position: absolute;
-  right: 250px;
+  left: 250px;
+  z-index: 350;
 }
 
 .hid {
@@ -147,7 +230,16 @@ div.wrapper > h1 {
   color: #00dba0;
   cursor: pointer;
   position: absolute;
-  right: 0;
+  left: 0;
+  z-index: 350;
 }
 
+.vis-main {
+  transition: 0.1s !important;
+}
 
+.hid-main {
+  left: 0px !important;
+  width: 100% !important;
+  transition: 0.2s !important;
+}
