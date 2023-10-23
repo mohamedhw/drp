@@ -52,6 +52,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR, 'build'],
+        'DIRS': ['template'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -142,5 +143,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
 #         'PAGE_SIZE': 8
 # }
+
+
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_FROM = 'waselm991@gmail.com'
+EMAIL_HOST_USER = 'waselm991@gmail.com'
+EMAIL_HOST_PASSWORD = "hdiy rwmy onpx mwuh"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False  # Set to True if you're using SSL
+DEFAULT_FROM_EMAIL = 'waselm991@gmail.com' # The email address from which emails will be sent
+
+PASSWORD_RESET_TIMEOUT = 14400
 
 CORS_ORIGIN_ALLOW_ALL = True

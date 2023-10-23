@@ -35,6 +35,23 @@ class Home(generics.ListAPIView):
             qs = qs.filter(lookups)
         return qs
 
+
+class Search(generics.ListAPIView):
+    queryset=Post.objects.all()
+    serializer_class=PostSerializers
+
+    def get_queryset(self, *args, **kwargs):
+        qs = Post.objects.all()
+        query = self.request.GET.get('search')
+        if query:
+            lookups = (
+                Q(title__icontains=query) |
+                Q(body__icontains=query)
+            )
+            qs = qs.filter(lookups)
+        return qs
+
+
 class Detail(generics.RetrieveAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializers
@@ -53,14 +70,14 @@ class Detail(generics.RetrieveAPIView):
         return Response(data)
 
 
-class SavedPicsView(generics.ListAPIView):
-    model = Post.objects.all()
-    serializer_class = PostSerializers
-    lookup_field = 'pk'
+# class SavedPicsView(generics.ListAPIView):
+#     model = Post.objects.all()
+#     serializer_class = PostSerializers
+#     lookup_field = 'pk'
 
-    def get_queryset(self):
-        user = self.request.user
-        return user.save_pic.all()
+#     def get_queryset(self):
+#         user = self.request.user
+#         return user.save_pic.all()
 
 
 class SavedPicsView(generics.ListAPIView):
@@ -78,3 +95,43 @@ class SavedPicsView(generics.ListAPIView):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
+
+# @method_decorator(csrf_protect, name='dispatch')
+class PostCreate(generics.CreateAPIView):
+    queryset = Post.objects.all()
+    # authentication_classes = [authentication.SessionAuthentication]
+    # permission_classes = [permissions.IsAuthenticated]
+    serializer_class = PostSerializers
+
+
+# @method_decorator(ensure_csrf_cookie, name='dispatch')
+class PostDelete(generics.DestroyAPIView):
+    queryset = Post.objects.all()
+    lookup_field = 'pk'
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if request.user == instance.author:
+            instance.delete()
+            return Response({"message": "post deleted success"})
+        else:
+            return Response({"message": "failed"})
+
+
+# @method_decorator(ensure_csrf_cookie, name='dispatch')
+class PostUpdate(generics.UpdateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializers
+    lookup_field = 'pk'
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        if request.user == instance.author:
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"message": "post updated success"})
+            else:
+                return Response({"message": "failed", "details": serializer.errors})
+        else:
+            return Response({"message": "failed"})
