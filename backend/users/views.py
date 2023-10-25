@@ -201,7 +201,7 @@ class LoginUser(APIView):
 @method_decorator(csrf_protect, name='dispatch')
 class CheckAuth(APIView):
     def get(self, request, format=None):
-        is_authenticated = User.is_authenticated
+        is_authenticated = self.request.user.is_authenticated
         if is_authenticated:
             return Response({"isAuthenticated": "success"})
         else:

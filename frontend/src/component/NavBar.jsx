@@ -8,12 +8,12 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Link } from "react-router-dom"
+import { logout } from "../redux/action/auth";
+import { connect } from "react-redux"
 
 
 
-
-
-const NavBar = ({setQ}) => {
+const NavBar = ({setQ, setModalShowLogin, setModalShowRegister, logout, isAuthenticated}) => {
 
     return (
         <Navbar expand="lg" className="navbar-dark pt-3">
@@ -51,13 +51,27 @@ const NavBar = ({setQ}) => {
                     </NavDropdown> */}
                     </Nav>
                     <Nav>
-                        <Nav.Link href="#home"><Button className='btn btn-outline-success btn-s'>Home</Button></Nav.Link>
-                        <Nav.Link href="#link"><Button className='btn btn-outline-success btn-s'>Link</Button></Nav.Link>
+                        <Nav.Link href="/"><Button className='btn btn-outline-success btn-s'>Home</Button></Nav.Link>
+                        {isAuthenticated?
+                            <>
+                                <Nav.Link href=""><Button className='btn btn-outline-success btn-s' onClick={logout}>Logout</Button></Nav.Link>
+                            </>
+                            :
+                            <>
+                                <Nav.Link href=""><Button className='btn btn-outline-success btn-s' onClick={() => setModalShowLogin(true)}>Login</Button></Nav.Link>
+                                <Nav.Link href=""><Button className='btn btn-outline-success btn-s' onClick={() => setModalShowRegister(true)}>Register</Button></Nav.Link>
+                            </>
+                        }
                     </Nav>
+
                 </Navbar.Collapse>
             </Container>
         </Navbar>  
     )
 }
 
-export default NavBar
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps, { logout })(NavBar);
