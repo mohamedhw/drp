@@ -101,7 +101,7 @@ export const logout = () => async dispatch =>{
     }
 }
 
-export const register=(username, password, password2)=> async dispatch =>{
+export const register=(username, email, password, password2)=> async dispatch =>{
     const config = {
         headers: {
             "Accept": "application/json",
@@ -110,7 +110,7 @@ export const register=(username, password, password2)=> async dispatch =>{
         }
     };
 
-    const body = JSON.stringify({username, password, password2})
+    const body = JSON.stringify({username, email, password, password2})
     try {
         const res = await axios.post(`${apiUrl}/api-register/`, body, config)
         if (res.data.success){

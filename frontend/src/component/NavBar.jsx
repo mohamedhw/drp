@@ -51,7 +51,7 @@ const NavBar = ({setQ, setModalShowLogin, setModalShowRegister, logout, isAuthen
                     </NavDropdown> */}
                     </Nav>
                     <Nav>
-                        <Nav.Link href="/"><Button className='btn btn-outline-success btn-s'>Home</Button></Nav.Link>
+                        <Nav.Link><Link to='/' ><Button className='btn btn-outline-success btn-s'>Home</Button></Link></Nav.Link>
                         {isAuthenticated?
                             <>
                                 <Nav.Link href=""><Button className='btn btn-outline-success btn-s' onClick={logout}>Logout</Button></Nav.Link>

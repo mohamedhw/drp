@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import {login} from '../redux/action/auth'
 import {connect} from 'react-redux'
 import {useState, useEffect} from 'react';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 
@@ -48,13 +48,16 @@ const Login = (props) => {
                     <h2>Login</h2>
                     <form class="site-form" onSubmit={e=>handleSubmit(e)} method="post">
                         <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
-                        <div className='m-5 p-2 form-group'>
-                            <input type='text' className="form-control" placeholder="username" onChange={ e => setUsername(e.target.value)}/>
+                        <div className='m-lg-5 m-2 p-lg-2 pt-3 form-group'>
+                            <input type='text' className="form-control p-2" placeholder="username" onChange={ e => setUsername(e.target.value)}/>
                         </div>
-                        <div className='m-5 p-2 form-group'>
-                            <input type='password' className="form-control" placeholder="password" onChange={ e => setPassword(e.target.value)}/>
+                        <div className='m-lg-5 m-2 p-lg-2 pt-3 form-group'>
+                            <input type='password' className="form-control p-2" placeholder="password" onChange={ e => setPassword(e.target.value)}/>
                         </div>
-                        <input class="btn btn-outline-success btn-s px-4 mt-5 m-1" onClick={props.onHide} type="submit" value="Login" />
+                        <div className=' mt-5 m-1'>
+                            <input class="btn btn-outline-success btn-s px-4" onClick={props.onHide} type="submit" value="Login" />
+                            <Link to="" ><small className='p-2 p-lg-5' style={{}}>forgot your password?</small></Link>
+                        </div>
                     </form>
                 </Modal.Body>
                 {/* <Modal.Footer className="custom-modal">

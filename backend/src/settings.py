@@ -51,8 +51,8 @@ ROOT_URLCONF = 'src.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR, 'build'],
-        'DIRS': ['template'],
+        'DIRS': [BASE_DIR, 'dist', 'template'],
+        # 'DIRS': ['template'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -113,10 +113,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_URL = '/assets/'
 STATICFILES_DIRS = [
-    BASE_DIR / "build/static",
+    BASE_DIR / "dist/assets",
+    BASE_DIR / "assets",
 ]
 
 # Media files
@@ -133,15 +133,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # REST_FRAMEWORK = {
-#     "DEFAULT_PERMISSION_CLASSES":[
-#         "rest_framework.permissions.IsAuthenticated"
-#     ],
+#     # "DEFAULT_PERMISSION_CLASSES":[
+#     #     "rest_framework.permissions.IsAuthenticated"
+#     # ],
 #     "DEFAULT_AUTHENTICATION_CLASSES": [
 #         "rest_framework.authentication.SessionAuthentication",
 #         # "rest_framework.authentication.TokenAuthentication",
 #     ],
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#         'PAGE_SIZE': 8
+#     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+#     #     'PAGE_SIZE': 8
 # }
 
 
