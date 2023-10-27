@@ -299,3 +299,42 @@ div.wrapper > h1 {
 button {
   margin-top: 10px;
 }
+
+
+.not-found-txt{
+  animation-name: n0tfound-txt;
+  animation-duration: 0.6s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
+}
+
+.not-found-txt{
+  animation-delay: 0.3s;
+}
+
+.not-found span{
+  animation-name: n0tfound;
+  animation-duration: 0.6s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  text-shadow:1px 1px #00bda0;
+}
+
+.not-found .not-found1, .not-found .not-found2{
+  animation-delay: 0.6s;
+}
+
+
+@keyframes n0tfound-txt{
+  to{
+    /* opacity: 0; */
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes n0tfound{
+  to{
+    /* opacity: 0; */
+    transform: translateY(-20px);
+  }
+}
