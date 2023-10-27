@@ -15,7 +15,7 @@ const Login = (props) => {
     const navigate = useNavigate()
     // const refresh = () => window.location.reload(true)
     const csrfToken = CSRFToken();
-    console.log(csrfToken)
+    
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log(username)
@@ -54,9 +54,12 @@ const Login = (props) => {
                         <div className='m-lg-5 m-2 p-lg-2 pt-3 form-group'>
                             <input type='password' className="form-control p-2" placeholder="password" onChange={ e => setPassword(e.target.value)}/>
                         </div>
-                        <div className=' mt-5 m-1'>
+                        <div className='mt-5 m-1'>
                             <input class="btn btn-outline-success btn-s px-4" onClick={props.onHide} type="submit" value="Login" />
-                            <Link to="" ><small className='p-2 p-lg-5' style={{}}>forgot your password?</small></Link>
+                            <span className='m-lg-5 m-md-2 m-sm-1'></span>
+                            <div className='p-1' style={{display: 'inline-block'}}>
+                                <a href="/reset_password/"><b className='' style={{}}>forgot your password?</b></a>
+                            </div>
                         </div>
                     </form>
                 </Modal.Body>

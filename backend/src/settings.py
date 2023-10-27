@@ -27,12 +27,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'users',
     'posts',
 
     'rest_framework',
     'corsheaders',
-
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -132,6 +134,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
 # REST_FRAMEWORK = {
 #     # "DEFAULT_PERMISSION_CLASSES":[
 #     #     "rest_framework.permissions.IsAuthenticated"
@@ -161,3 +166,6 @@ DEFAULT_FROM_EMAIL = 'waselm991@gmail.com' # The email address from which emails
 PASSWORD_RESET_TIMEOUT = 14400
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+

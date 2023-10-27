@@ -17,19 +17,19 @@ nav{
   background: none !important;
 }
 
-input {
+input, textarea {
   background: none !important;
   border: 1px solid #00bda0 !important;
   color: #fff !important;
   font-size: large !important;
 }
 
-input:focus {
+input:focus, textarea:focus, .btn-s:focus {
   box-shadow: none !important;
   /* border: 1px solid #198754 !important; */
 }
 
-input::placeholder {
+input::placeholder, textarea::placeholder {
   color:#00dba0 !important
 }
 
@@ -43,6 +43,13 @@ a, a:hover, a:visited {
   text-decoration: none !important;
 }
 
+a b:hover {
+  color: #00dba0 !important;
+}
+
+.a-curs {
+  cursor: auto;
+}
 
 .modal-content{
   background: none !important;
@@ -65,15 +72,19 @@ div.wrapper > h1 {
 }
 
 .btn-s {
-  color:#198754 !important;
+  color:#00dba0 !important;
   background: none !important;
   font-size: 16px !important;
   cursor: pointer !important;
 }
 
-.btn-s:hover {
+.btn-s:hover{
   color: #0f121f !important;
   background-color: #00dba0 !important;
+}
+
+.nav-link {
+  cursor: auto !important;
 }
 
 .my-tag {

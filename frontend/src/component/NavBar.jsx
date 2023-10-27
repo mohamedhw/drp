@@ -54,12 +54,13 @@ const NavBar = ({setQ, setModalShowLogin, setModalShowRegister, logout, isAuthen
                         <Nav.Link><Link to='/' ><Button className='btn btn-outline-success btn-s'>Home</Button></Link></Nav.Link>
                         {isAuthenticated?
                             <>
-                                <Nav.Link href=""><Button className='btn btn-outline-success btn-s' onClick={logout}>Logout</Button></Nav.Link>
+                                <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={logout}>Logout</Button></Nav.Link>
+                                <Nav.Link><Link to='/create' ><Button className='btn btn-outline-success btn-s'>upload</Button></Link></Nav.Link>
                             </>
                             :
                             <>
-                                <Nav.Link href=""><Button className='btn btn-outline-success btn-s' onClick={() => setModalShowLogin(true)}>Login</Button></Nav.Link>
-                                <Nav.Link href=""><Button className='btn btn-outline-success btn-s' onClick={() => setModalShowRegister(true)}>Register</Button></Nav.Link>
+                                <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={() => setModalShowLogin(true)}>Login</Button></Nav.Link>
+                                <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={() => setModalShowRegister(true)}>Register</Button></Nav.Link>
                             </>
                         }
                     </Nav>

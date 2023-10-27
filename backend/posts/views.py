@@ -1,6 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import generics
 from rest_framework.response import Response
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from .models import Post, Hashtag
 from .serializers import PostSerializers, HashtagSerializers
 from django.db.models import Q
@@ -96,13 +98,41 @@ class SavedPicsView(generics.ListAPIView):
         return Response(serializer.data)
 
 
-# @method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class PostCreate(generics.CreateAPIView):
-    queryset = Post.objects.all()
+    # queryset = Post.objects.all()
     # authentication_classes = [authentication.SessionAuthentication]
     # permission_classes = [permissions.IsAuthenticated]
     serializer_class = PostSerializers
 
+    def post(self, request):
+        tags_ = Hashtag.objects.all()
+        data = request.data
+        tags_data = data.pop('tag', [])
+
+        if '#' in tags_data:
+            tags_data=tags_data[0].split('#')
+        tags_data=tags_data[0].split()
+
+        post_serializer = PostSerializers(data=data)
+
+        if post_serializer.is_valid():
+            # Create and associate tags with the post
+            post = post_serializer.save()
+
+            for tag_data in tags_data:
+                if '#' in tag_data:
+                    tag_data = tag_data.lstrip('#')
+                tag, created = Hashtag.objects.get_or_create(tag=tag_data)
+
+                if not created:
+                    post.tags.add(tag)
+                    # pass
+                post.tags.add(tag)
+
+            return redirect('/')
+
+        return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # @method_decorator(ensure_csrf_cookie, name='dispatch')
 class PostDelete(generics.DestroyAPIView):
