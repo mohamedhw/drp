@@ -20,6 +20,7 @@ export const pics = (url, setLoading) => async dispatch => {
             })
         }
         else {
+            console.log(res.data)
             dispatch({
                 type: PICS_SUCCESS,
                 payload: res.data

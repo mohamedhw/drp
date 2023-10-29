@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import pics from './pics'
 import auth from './auth'
 import profile from "./profile";
-
+import pages from "./pages"
 
 
 
@@ -10,5 +10,6 @@ import profile from "./profile";
 export default combineReducers({
     pics,
     auth,
-    profile
+    profile,
+    pages
 })

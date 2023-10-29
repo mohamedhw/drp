@@ -22,15 +22,17 @@ const App = () => {
   return (
     <>
       <Layout>
+
         <NavBar setQ={setQ} setModalShowLogin={setModalShow} setModalShowRegister={setModalShowRegister}/>
         <Login show={modalShow} onHide={() => setModalShow(false)}/>
         <Register show={modalShowRegister} onHide={() => setModalShowRegister(false)} />
+
         <Routes>
           <Route path='/create' element={<Create />} />
           <Route path='/profile' element={<Profile />} />
           <Route exact path='/tag/:tagSlug' element={<TagFiltered />} />
           <Route exact path='/pic/:postId' element={<Pic/>}/>
-          <Route exact path='/' element={<Home q={q}/>} />
+          <Route exact path='/:page?' element={<Home q={q} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>
