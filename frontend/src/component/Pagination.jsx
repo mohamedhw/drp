@@ -1,26 +1,29 @@
 import {connect} from 'react-redux'
-import { setPage, setCurrentPage } from '../redux/action/pages'; // Import your new actions
+import { setCurrentPage } from '../redux/action/pages'; // Import your new actions
 import { useNavigate } from 'react-router-dom';
 
 
 
-const Pagination = ({previous, next, setPage, currentPage, setCurrentPage, count}) => {
+const Pagination = ({previous, next, currentPage, setCurrentPage, count, setLoading}) => {
   const navigate = useNavigate()
 
   
   const handelFirstPage = () => {
     setCurrentPage(1)
     navigate('/')
+    setLoading(true)
   }
   
   const handePageNumber = (index) => {
     setCurrentPage(index+1)
     navigate(currentPage)
+    setLoading(true)
   }
 
   const handelPreviousPage = () => {
     try{
       setCurrentPage(parseInt(previous.match(/page=(\d+)/)[1]))
+      setLoading(true)
     }catch{
       handelFirstPage()
     }
@@ -34,7 +37,7 @@ const Pagination = ({previous, next, setPage, currentPage, setCurrentPage, count
         <nav className="Page navigation example mt-5" style={{paddingBottom: "80px"}}>
           <ul className="pagination pg-blue justify-content-center">
 
-            {numberOfPages && numberOfPages?
+            {numberOfPages?
               <ul className="pagination pg-blue">
                 {previous?
                   <>

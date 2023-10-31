@@ -8,14 +8,14 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 const TagFiltered = ({pics, tagpics}) => {
+    console.log("test")
     const apiUrl = import.meta.env.VITE_API_URL;
-
     const {tagSlug} = useParams()
     const [loading, setLoading] = useState(true)
     // if('/tag'){
         // const url = `${process.env.REACT_APP_API_URL}/api-post/`
     // }else{
-    const url = `${apiUrl}api-tag/${tagSlug}/`
+    const url = `${apiUrl}/api-tag/${tagSlug}/`
     // }
     useEffect(()=>{
         tagpics(url, setLoading)
@@ -52,6 +52,6 @@ const TagFiltered = ({pics, tagpics}) => {
 
 
 const mapStateToProps = state => ({
-    pics: state.pics.taged,
+    pics: state.pics.taged.results,
 })
 export default connect(mapStateToProps, {tagpics}) (TagFiltered)

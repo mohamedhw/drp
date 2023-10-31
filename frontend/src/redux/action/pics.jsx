@@ -1,5 +1,5 @@
 import axios from "axios"
-import {PICS_SUCCESS, PICS_FAIL, TAG_PICS_SUCCESS, TAG_PICS_FAIL, CREATE_PICS_SUCCESS, CREATE_PICS_FAIL} from './type'
+import {PICS_SUCCESS, PICS_FAIL, TAG_PICS_SUCCESS, TAG_PICS_FAIL, CREATE_PICS_SUCCESS, CREATE_PICS_FAIL, SEARCH_SUCCESS, SEARCH_FAIL} from './type'
 
 const config = {
     headers: {
@@ -25,20 +25,49 @@ export const pics = (url, setLoading) => async dispatch => {
                 type: PICS_SUCCESS,
                 payload: res.data
             })
-            setLoading(false)
         }
     }
     catch(err){
         dispatch({
             type: PICS_FAIL
-        })
+        });
+    } finally {
+        setLoading(false); // Set loading to false when data fetching is complete
     }
 }
 
+export const search = (url, setLoading) => async dispatch => {
+
+
+    try {
+        const res = await axios.get(url, config)
+        if(res.data.error){
+            dispatch({
+                type: SEARCH_FAIL,
+            })
+        }
+        else {
+            console.log(res.data)
+            dispatch({
+                type: SEARCH_SUCCESS,
+                payload: res.data
+            })
+        }
+    }
+    catch(err){
+        dispatch({
+            type: SEARCH_FAIL
+        });
+    } finally {
+        setLoading(false); // Set loading to false when data fetching is complete
+    }
+}
 export const tagpics = (url, setLoading) => async dispatch => {
     
 
     try {
+        console.log("test")
+
         const res = await axios.get(url, config)
         if(res.data.error){
             dispatch({
@@ -54,6 +83,8 @@ export const tagpics = (url, setLoading) => async dispatch => {
         }
     }
     catch(err){
+        console.log("test1")
+
         dispatch({
             type: TAG_PICS_FAIL
         })

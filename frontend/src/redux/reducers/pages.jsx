@@ -3,7 +3,7 @@ import {SET_PAGE, SET_CURRENT_PAGE} from '../action/type'
 
 const initialState = {
     page: 1,
-    currentPage: 1
+    currentPage: null,
   };
 
 export default function(state = initialState, action){

@@ -14,11 +14,11 @@ import { setCurrentPage } from '../redux/action/pages'; // Import your new actio
 
 
 
-const NavBar = ({setQ, setModalShowLogin, setModalShowRegister, logout, isAuthenticated}) => {
-    const handelSearch = (e) => {
-        setCurrentPage(1)
-        setQ(e.target.value)
-    }
+const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticated, setCurrentPage, setShow}) => {
+    // const handelSearch = (e) => {
+    //     setCurrentPage(1)
+    //     setQ(e.target.value)
+    // }
     return (
         <Navbar expand="lg" className="navbar-dark pt-3">
             <Container>
@@ -28,7 +28,7 @@ const NavBar = ({setQ, setModalShowLogin, setModalShowRegister, logout, isAuthen
                     <Nav className="me-auto mx-5">
                     <Form inline>
                         <Row>
-                        <Col xs="auto">
+                        {/* <Col xs="auto">
                             <Form.Control
                             type="text"
                             name='q'
@@ -36,7 +36,7 @@ const NavBar = ({setQ, setModalShowLogin, setModalShowRegister, logout, isAuthen
                             className=" mr-sm-2 search-input"
                             onChange={e=>handelSearch(e)}
                             />
-                        </Col>
+                        </Col> */}
                         {/* <Col xs="auto">
                             <Button type="submit">Submit</Button>
                         </Col> */}
@@ -63,6 +63,7 @@ const NavBar = ({setQ, setModalShowLogin, setModalShowRegister, logout, isAuthen
                         </>
                         :
                         <>
+                            <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={() => setShow(true)}>search</Button></Nav.Link>
                             <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={() => setModalShowLogin(true)}>Login</Button></Nav.Link>
                             <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={() => setModalShowRegister(true)}>Register</Button></Nav.Link>
                         </>
@@ -79,4 +80,4 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 })
 
-export default connect(mapStateToProps, { logout })(NavBar);
+export default connect(mapStateToProps, { logout, setCurrentPage })(NavBar);

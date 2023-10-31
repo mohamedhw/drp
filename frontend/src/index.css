@@ -9,6 +9,7 @@ body {
   text-align: center;
 }
 
+
 * {
   font-family: Ubuntu;
 }
@@ -337,4 +338,16 @@ button {
     /* opacity: 0; */
     transform: translateY(-20px);
   }
+}
+
+.my-model-search {
+  background-color: #0f121f !important;
+  background-image: url(../stars.png) !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  color: #fff !important;
+}
+
+.btn-close {
+  background-color: #ffffff69 !important;
 }

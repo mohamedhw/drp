@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom"
 import { useNavigate } from 'react-router-dom';
 import { setPage, setCurrentPage } from '../redux/action/pages'; // Import your new actions
 
-const Home = ({pics_g, pics, q, setCurrentPage, currentPage}) => {
+const Home = ({pics_g, pics, setCurrentPage, currentPage}) => {
     const navigate = useNavigate()
     const apiUrl = import.meta.env.VITE_API_URL;
     const [loading, setLoading] = useState(true)
@@ -23,23 +23,17 @@ const Home = ({pics_g, pics, q, setCurrentPage, currentPage}) => {
     
     let url = ``
     useEffect(() => {
-        navigate(`/${currentPage}`);
-        if (q) {
-            if (isPageProvided) {
-                // setCurrentPage(1)
-                if (currentPage > 1) {
-                    url = `${apiUrl}/api-post/?q=${q}&page=${currentPage}`;
-                } else {
-                    url = `${apiUrl}/api-post/?q=${q}`;
-                }
-            } else {
-                url = `${apiUrl}/api-post/?q=${q}`;
-            }
-        } else if (currentPage) {
+        // setCurrentPage(page)
+        if (currentPage != null) {
+            navigate(`/${currentPage}`);
             url = isPageProvided
             ? `${apiUrl}/api-post/?page=${currentPage}`
             : `${apiUrl}/api-post/`;
-        } else {
+        }else if (currentPage === null & page > 1){
+            navigate(`/${page}`);
+            url = `${apiUrl}/api-post/?page=${page}`;
+        }else {
+            // navigate(`/`);
             url = `${apiUrl}/api-post/`; 
         }
         
@@ -48,14 +42,14 @@ const Home = ({pics_g, pics, q, setCurrentPage, currentPage}) => {
         // }
         pics(url, setLoading);
         console.log(url)
-    }, [q, currentPage, page]);
+    }, [currentPage]);
     return(
         <Container className='mt-5'>
             {loading? <h1>Loading...</h1>: <></>}
             {pics_g && 
                 <>
                     <Items pics_g={pics_g} />
-                    <Pagination  page={page} />
+                    <Pagination  page={page} setLoading={setLoading}/>
                 </>
             }
         </Container>

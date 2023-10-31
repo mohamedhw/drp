@@ -6,6 +6,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from .models import Post, Hashtag
 from .serializers import PostSerializers, HashtagSerializers
 from django.db.models import Q
+from rest_framework.pagination import PageNumberPagination
 
 
 class Home(generics.ListAPIView):
@@ -54,6 +55,7 @@ class Search(generics.ListAPIView):
         return qs
 
 
+
 class Detail(generics.RetrieveAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializers
@@ -82,9 +84,12 @@ class Detail(generics.RetrieveAPIView):
 #         return user.save_pic.all()
 
 
-class SavedPicsView(generics.ListAPIView):
+class TagFilterView(generics.ListAPIView):
+    queryset=Post.objects.all()
     serializer_class = PostSerializers
-    lookup_field = 'tag_slug'
+    pagination_class = PageNumberPagination
+    # lookup_field = 'tag_slug'
+    # permission_classes = (permissions.AllowAny, )
 
     def get_queryset(self, *args, **kwargs):
         tag_slug = self.kwargs['tag_slug']
@@ -94,8 +99,12 @@ class SavedPicsView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset(*args, **kwargs)
-        serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
+
+        paginator = PageNumberPagination()
+        paginator.page_size = 12  # You can adjust the page size here
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = self.serializer_class(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 
 @method_decorator(csrf_protect, name='dispatch')
@@ -165,3 +174,6 @@ class PostUpdate(generics.UpdateAPIView):
                 return Response({"message": "failed", "details": serializer.errors})
         else:
             return Response({"message": "failed"})
+
+
+
