@@ -11,14 +11,13 @@ import { Link } from "react-router-dom"
 import { logout } from "../redux/action/auth";
 import { connect } from "react-redux"
 import { setCurrentPage } from '../redux/action/pages'; // Import your new actions
-
-
+import {BiSearchAlt} from 'react-icons/bi'
 
 const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticated, setCurrentPage, setShow}) => {
-    // const handelSearch = (e) => {
-    //     setCurrentPage(1)
-    //     setQ(e.target.value)
-    // }
+    const handelSearch = () => {
+        setShow(true)
+    }
+    
     return (
         <Navbar expand="lg" className="navbar-dark pt-3">
             <Container>
@@ -63,7 +62,7 @@ const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticate
                         </>
                         :
                         <>
-                            <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={() => setShow(true)}>search</Button></Nav.Link>
+                            <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={handelSearch}><BiSearchAlt/></Button></Nav.Link>
                             <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={() => setModalShowLogin(true)}>Login</Button></Nav.Link>
                             <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={() => setModalShowRegister(true)}>Register</Button></Nav.Link>
                         </>

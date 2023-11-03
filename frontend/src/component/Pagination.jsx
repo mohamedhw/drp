@@ -32,8 +32,11 @@ const Pagination = ({previous, next, currentPage, setCurrentPage, count, setLoad
   const numberOfPages = Math.ceil(count / 12)
 
   const itemsToRender = Array(numberOfPages).fill(null);
+  console.log('numberOfPages', numberOfPages)
+  console.log('itemsToRender', itemsToRender)
     return (
       <>
+        {count > 12 ?
         <nav className="Page navigation example mt-5" style={{paddingBottom: "80px"}}>
           <ul className="pagination pg-blue justify-content-center">
 
@@ -79,6 +82,8 @@ const Pagination = ({previous, next, currentPage, setCurrentPage, count, setLoad
             }
           </ul>
         </nav>
+        :<></>
+          }
       </>
 
     )

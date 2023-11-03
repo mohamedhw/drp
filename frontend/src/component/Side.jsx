@@ -7,15 +7,16 @@ import Col from 'react-bootstrap/Col';
 
 const Side = ({post, name, ...props }) => {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const toggleShow = () => setShow((s) => !s);
 
-  return (
+
+    return (
       <>
         {post && 
           <div className='' id="menu">
             <h2 className='m-3'>{post.title}</h2>
+            <h2 className='m-3'>{post.thumb_dimensions}</h2>
             {post.related_tags.map((tag) => (
               <Link to={`/tag/${tag.tag_slug}`}>
                 <span class="m-1 my-tag p-1"># {tag.tag}</span>

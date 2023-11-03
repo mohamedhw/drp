@@ -1,5 +1,16 @@
 import axios from "axios"
-import {PICS_SUCCESS, PICS_FAIL, TAG_PICS_SUCCESS, TAG_PICS_FAIL, CREATE_PICS_SUCCESS, CREATE_PICS_FAIL, SEARCH_SUCCESS, SEARCH_FAIL} from './type'
+import {
+    SET_Q, 
+    PICS_SUCCESS, 
+    PICS_FAIL, 
+    TAG_PICS_SUCCESS, 
+    TAG_PICS_FAIL, 
+    CREATE_PICS_SUCCESS, 
+    CREATE_PICS_FAIL, 
+    SEARCH_SUCCESS, 
+    SEARCH_FAIL, 
+    RESET_PARAMETER
+} from './type'
 
 const config = {
     headers: {
@@ -20,7 +31,6 @@ export const pics = (url, setLoading) => async dispatch => {
             })
         }
         else {
-            console.log(res.data)
             dispatch({
                 type: PICS_SUCCESS,
                 payload: res.data
@@ -35,6 +45,15 @@ export const pics = (url, setLoading) => async dispatch => {
         setLoading(false); // Set loading to false when data fetching is complete
     }
 }
+
+export const resetParameter = () => ({
+    type: RESET_PARAMETER,
+});
+
+export const setQ = (q) => ({
+    type: SET_Q,
+    payload: q
+});
 
 export const search = (url, setLoading) => async dispatch => {
 

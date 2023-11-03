@@ -9,7 +9,6 @@ body {
   text-align: center;
 }
 
-
 * {
   font-family: Ubuntu;
 }
@@ -82,6 +81,7 @@ div.wrapper > h1 {
 .btn-s:hover{
   color: #0f121f !important;
   background-color: #00dba0 !important;
+  cursor: pointer !important;
 }
 
 .nav-link {

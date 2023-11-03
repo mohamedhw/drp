@@ -67,9 +67,14 @@ class Detail(generics.RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object() # Retrieve the Main Item
+        thumb_width = instance.thumb.width
+        thumb_height = instance.thumb.height
+
         related_tags = self.get_related_tags(instance) # Retrieve Related Items
         serializer = self.get_serializer(instance) # Serialize the Main Item
         data = serializer.data
+
+        data['thumb_dimensions'] = f"{thumb_width}X{thumb_height}"
         data['related_tags'] = HashtagSerializers(related_tags, many=True).data # Extend the Response Data
         return Response(data)
 

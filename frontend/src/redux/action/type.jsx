@@ -26,6 +26,8 @@ export const USER_UPDATE_SUCCESS = 'USER_UPDATE_SUCCESS';
 export const USER_UPDATE_FAIL = 'USER_UPDATE_FAIL';
 
 
+export const RESET_PARAMETER = 'RESET_PARAMETER';
+export const SET_Q = 'SET_Q';
 
 export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE"
 export const SET_PAGE = "SET_PAGE"

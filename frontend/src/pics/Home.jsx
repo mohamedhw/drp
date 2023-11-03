@@ -17,21 +17,21 @@ const Home = ({pics_g, pics, setCurrentPage, currentPage}) => {
     const isPageProvided = Boolean(page);
 
     
-    console.log("currentPage:", currentPage)
-    console.log("page:", page)
+    // console.log("currentPage:", currentPage)
+    // console.log("page:", page)
     
     
     let url = ``
     useEffect(() => {
         // setCurrentPage(page)
         if (currentPage != null) {
-            navigate(`/${currentPage}`);
             url = isPageProvided
             ? `${apiUrl}/api-post/?page=${currentPage}`
             : `${apiUrl}/api-post/`;
+            navigate(`/${currentPage}`);
         }else if (currentPage === null & page > 1){
-            navigate(`/${page}`);
             url = `${apiUrl}/api-post/?page=${page}`;
+            navigate(`/${page}`);
         }else {
             // navigate(`/`);
             url = `${apiUrl}/api-post/`; 
@@ -41,8 +41,8 @@ const Home = ({pics_g, pics, setCurrentPage, currentPage}) => {
         //     navigate(`/${currentPage}`);
         // }
         pics(url, setLoading);
-        console.log(url)
-    }, [currentPage]);
+        // console.log(url)
+    }, [currentPage, page]);
     return(
         <Container className='mt-5'>
             {loading? <h1>Loading...</h1>: <></>}
