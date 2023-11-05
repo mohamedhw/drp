@@ -4,13 +4,17 @@ import Card from 'react-bootstrap/Card';
 import { Link } from "react-router-dom"
 
 
-const Items = ({pics_g}) => {
-
+const Items = ({pics_g, setShow}) => {
+    const handelClick = () => {
+        if (setShow){
+            setShow(false)
+        }
+    }
     return (
         <Row>
             {pics_g.map((post) => (
                 <Col xs={12} md={6} lg={3} xl={3} xxl={3} className='p-1 pic-t'>
-                    <Link to={`/pic/${post.id}`} className='article-2'>
+                    <Link to={`/pic/${post.id}`} className='article-2' onClick={e => handelClick()}>
                         <Card className='pic-l' key={post.id} style={{height: "100%"}}>
                             <Card.Img variant="top" src={post.thumb} style={{height: "100% !important"}}/>
                         </Card>

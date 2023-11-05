@@ -34,9 +34,6 @@ const Searched = ({pics_g, q, currentPage, search}) => {
         // if (currentPage !== 1) {
         //     navigate(`/${currentPage}`);
         // }
-        console.log("cur", currentPage)
-        console.log("searchpage", searchpage)
-        console.log(url)
 
         search(url, setLoading);
     }, [currentPage, searchpage]);

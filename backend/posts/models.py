@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.urls import reverse
 from django.db.models import Q
 from django.utils.text import slugify
+from users.models import Profile
+
 
 class PostManager(models.Manager):
 
@@ -34,14 +36,22 @@ class Post(models.Model):
     title = models.CharField(max_length=100)
     body = models.TextField()
     thumb = models.ImageField(default='default.png', blank=True, upload_to='media')
-    date = models.DateTimeField(default=timezone.now())
+    date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     saved_pic = models.ManyToManyField(User, blank=True, related_name="save_pic")
     tags = models.ManyToManyField(Hashtag, related_name="tags")
 
     objects = PostManager()
+
     def __str__(self):
         return self.title
+
+    def author_name(self):
+        return self.author.username
+
+    def author_image(self):
+        profile = Profile.objects.get(user=self.author)
+        return profile.image.url
 
     def snippet(self):
         return self.body[:50] + "..."

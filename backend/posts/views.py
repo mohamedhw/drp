@@ -36,6 +36,7 @@ class Home(generics.ListAPIView):
                 # Q(author__icontains=query)
             )
             qs = qs.filter(lookups)
+        qs = qs.order_by('-date')
         return qs
 
 
@@ -65,17 +66,40 @@ class Detail(generics.RetrieveAPIView):
         qs = Post.objects.get(pk=item.pk).tags.all()
         return qs
 
+    def get_related_pics(self, item):
+
+        item_tags = item.tags.all() # get the item tags
+        all_tags = Hashtag.objects.all() # get all tags
+
+        related_pics = Post.objects.filter(tags__in=item_tags).exclude(pk=item.pk)[:6]
+
+        related_items_count = related_pics.count() # number of related pics
+
+        if related_items_count < 6:
+            additional_items_needed = 6 - related_items_count
+            
+            additional_items = Post.objects.exclude(
+                Q(title__icontains=item.title) | Q(pk=item.pk)
+            )[:additional_items_needed]
+            related_pics = list(related_pics) + list(additional_items)
+            
+            # related_items_count = related_pics.count()
+
+
+        return related_pics
+
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object() # Retrieve the Main Item
         thumb_width = instance.thumb.width
         thumb_height = instance.thumb.height
 
-        related_tags = self.get_related_tags(instance) # Retrieve Related Items
+        related_pics = self.get_related_pics(instance) # Retrieve Related pics
+        related_tags = self.get_related_tags(instance) # Retrieve Related tags
         serializer = self.get_serializer(instance) # Serialize the Main Item
         data = serializer.data
-
-        data['thumb_dimensions'] = f"{thumb_width}X{thumb_height}"
+        data['thumb_dimensions'] = f"{thumb_width} X {thumb_height}"
         data['related_tags'] = HashtagSerializers(related_tags, many=True).data # Extend the Response Data
+        data['related_pics'] = self.get_serializer(related_pics, many=True).data
         return Response(data)
 
 

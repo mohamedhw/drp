@@ -12,6 +12,7 @@ import { logout } from "../redux/action/auth";
 import { connect } from "react-redux"
 import { setCurrentPage } from '../redux/action/pages'; // Import your new actions
 import {BiSearchAlt} from 'react-icons/bi'
+import {BsFillPersonFill} from 'react-icons/bs'
 
 const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticated, setCurrentPage, setShow}) => {
     const handelSearch = () => {
@@ -55,14 +56,15 @@ const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticate
                     </Nav>
                     <Nav>
                         {/* <Nav.Link><Link to='/' ><Button className='btn btn-outline-success btn-s'>Home</Button></Link></Nav.Link> */}
+                        <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={handelSearch}><BiSearchAlt/></Button></Nav.Link>
                         {isAuthenticated?
                         <>
+                            <Nav.Link><Link to='/profile'><Button className='btn btn-outline-success btn-s' ><BsFillPersonFill/></Button></Link></Nav.Link>
                             <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={logout}>Logout</Button></Nav.Link>
                             <Nav.Link><Link to='/create' ><Button className='btn btn-outline-success btn-s'>upload</Button></Link></Nav.Link>
                         </>
                         :
                         <>
-                            <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={handelSearch}><BiSearchAlt/></Button></Nav.Link>
                             <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={() => setModalShowLogin(true)}>Login</Button></Nav.Link>
                             <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={() => setModalShowRegister(true)}>Register</Button></Nav.Link>
                         </>

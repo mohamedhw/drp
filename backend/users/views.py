@@ -106,11 +106,12 @@ class ProfileView(APIView):
     def get(self, request, format=None):
         user = self.request.user
         username = user.username
+        email = user.email
         user = User.objects.get(id=user.id)
         profile = Profile.objects.get(user=user)
         user_profile = UserProfileSerializer(profile)
 
-        return Response({'profile': user_profile.data, 'username':str(username)})
+        return Response({'profile': user_profile.data, 'username':str(username), 'email':email})
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
 class UpdateUserView(APIView):

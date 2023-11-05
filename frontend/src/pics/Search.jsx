@@ -91,7 +91,7 @@ const Search = ({q, setQ, show, setShow, pics_g, search}) => {
                     pics_g &&
                     <>
                         <Container>                            
-                            <Items pics_g={pics_g}/>
+                            <Items pics_g={pics_g} setShow={setShow}/>
                         </Container>
                         <div>
                             <button ref={moreResultsButtonRef} className='btn btn-outline-success btn-s px-lg-5' onClick={e=>handelMore()}>More results</button>

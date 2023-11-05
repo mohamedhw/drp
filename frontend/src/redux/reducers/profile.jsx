@@ -4,6 +4,7 @@ import { PROFILE_FAIL, PROFILE_SUCCESS, PROFILE_UPDATE_SUCCESS, PROFILE_UPDATE_F
 
 const initialState = {
     username: '',
+    email: '',
     image: '',
     user: ''
 }
@@ -19,6 +20,7 @@ export default function(state=initialState,action){
                 ...state,
                 image: payload.profile.image,
                 username: payload.username,
+                email: payload.email,
                 user: payload.profile.user,
             }
         case PROFILE_FAIL:
@@ -26,6 +28,7 @@ export default function(state=initialState,action){
                 ...state,
                 image: '',
                 username: '',
+                email: ''
             }
         case USER_UPDATE_FAIL:
         case PROFILE_UPDATE_FAIL:

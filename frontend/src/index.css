@@ -13,6 +13,10 @@ body {
   font-family: Ubuntu;
 }
 
+hr{
+  color:#00dba0 !important
+}
+
 nav{
   background: none !important;
 }
@@ -91,12 +95,15 @@ div.wrapper > h1 {
 .my-tag {
   background: none !important;
   color: #00dba0;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer !important;
+  border: 1px solid #00dba0;
+  border-radius: 3px !important;
 }
 
 .my-tag:hover {
-  color:#198754 !important;
+  color:#0f121f !important;
+  background: #00dba0 !important;
 }
 
 .search-input {
@@ -208,16 +215,15 @@ div.wrapper > h1 {
 
 
 .showcase {
-  display: block;
+  /* display: block; */
   position: absolute;
   top: 0;
   left: 15px;
   right: 0;
-  bottom: -666px;
+  bottom: -810px;
   overflow: hidden;
   z-index: 350;
 }
-
 
 .showcase>.scrollbox {
   position: absolute;
@@ -229,7 +235,7 @@ div.wrapper > h1 {
 }
 
 
-.showcase #img-content{
+.showcase-norm {
   display: block;
   position: absolute;
   top: 0;
@@ -239,8 +245,44 @@ div.wrapper > h1 {
   margin: auto;
   max-width: 95%;
   max-height: 95%;
-  cursor: -webkit-zoom-in;
-  -webkit-user-select: none;
+  cursor: zoom-in;
+  /* -webkit-user-select: none; */
+  padding: 0;
+  border-width: 0;
+}
+
+.showcase-zoom {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  max-width: none;
+  max-height: 100%;
+  cursor: zoom-in;
+  /* -webkit-user-select: none; */
+  padding: 0;
+  border-width: 0;
+  overflow-x: scroll;
+  overflow-y: scroll;
+
+}
+
+.showcase-x-zoom {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  /* margin-left: 20px;
+  margin-right: 20px; */
+  /* margin-bottom: 0px;
+  margin-top: 0px; */
+  cursor: zoom-out;
   padding: 0;
   border-width: 0;
 }
@@ -351,3 +393,28 @@ button {
 .btn-close {
   background-color: #ffffff69 !important;
 }
+
+
+
+.scrollbar.horizontal {
+  left: 0;
+  margin: 1px 2px;
+}
+
+
+.scrollbar.horizontal .scroll-handle {
+  height: 10px
+}
+
+.profile-info {
+  list-style: none;
+}
+
+.profile-info li{
+  font-size:20px;
+  font-weight:bold; 
+  color:#00bda0;
+  text-align: justify;
+  width: 100%
+}
+

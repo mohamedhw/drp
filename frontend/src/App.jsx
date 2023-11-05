@@ -13,7 +13,7 @@ import Profile from './pics/Profile';
 import Create from './pics/Create';
 import Search from './pics/Search';
 import Searched from './pics/Searched';
-
+import PrivetRoute from './PrivetRoute';
 
 
 const App = () => {
@@ -32,9 +32,12 @@ const App = () => {
         <Search show={show} setShow={() => setShow(false)}/>
         
         <Routes>
+          <Route element={<PrivetRoute/>}>
+            <Route path='/create' element={<Create />} />
+            <Route path='/profile' element={<Profile />} />
+
+          </Route>
           <Route exact path='/search/:searchpage?' element={<Searched />}/>
-          <Route path='/create' element={<Create />} />
-          <Route path='/profile' element={<Profile />} />
           <Route exact path='/tag/:tagSlug' element={<TagFiltered />} />
           <Route exact path='/pic/:postId' element={<Pic/>}/>
           <Route exact path='/:page?' element={<Home />} />

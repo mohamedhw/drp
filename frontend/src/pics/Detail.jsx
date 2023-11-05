@@ -9,12 +9,6 @@ import Side from "../component/Side";
 const Pic = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
 
-
-    const options = [ {
-        name: 'Enable body scrolling',
-        scroll: true,
-        backdrop: false,
-      },]
     const {postId} = useParams()
     const [data, setData]=useState()
     const [imageHeight, setImageHeight] = useState(null);
@@ -24,12 +18,22 @@ const Pic = () => {
         axios.get(`${apiUrl}/api-post/${postId}/`)
         .then(response => {
             setData(response.data)
+
         })
-    }, [])
+    }, [postId])
     const he = window.innerHeight
-    const handleImageLoad = (event) => {
-        setImageHeight(event.target.naturalHeight);
-        setImageWidth(event.target.naturalWidth);
+    const [test, setTest] = useState("showcase-norm")
+    const handleImageLoad = () => {
+        if(test === "showcase-norm"){
+            setTest("showcase-zoom")
+        }else if(test == "showcase-zoom"){
+            setTest("showcase-x-zoom")
+        }
+        else{
+            setTest("showcase-norm")
+        }
+        // setImageHeight(event.target.naturalHeight);
+        // setImageWidth(event.target.naturalWidth);
     }
 
     let hight_=0
@@ -74,7 +78,6 @@ const Pic = () => {
             main.classList.replace("hid-main", "vis-main");
         }
     }
-    
     return(
         <>
             {/* the side bar */}
@@ -83,7 +86,7 @@ const Pic = () => {
                 <div id="showcase-sidebar" className='' style={{height: "100%"}}>
                       <div className="lsidebar"> 
                         <div className="side">
-                            <Side post={data} toggleSidebar={toggleSidebar}></Side>
+                            <Side post={data} toggleSidebar={toggleSidebar} ></Side>
                         <div className="sidebar-content" style={{marginRight: "-16.8px"}}></div>
                       </div>
                     </div>
@@ -94,16 +97,26 @@ const Pic = () => {
             <div id="togglebutton" style={{width:"auto", marginTop: he/5 }} className="vis" onClick={e=>toggleSidebar()}>
                 {slid}
             </div>
-
             
             <main id="main" className="vis-main">
-                <section id="" className="fit showcase">
+                <section id="" className="fit showcase" 
+
+                >
                         {/* the image body */}
-                            <div className="scrollbox" style={{marginRight: "-16.8px", marginBottom: "-16.8px"}}>
+                            <div 
+                            className="scrollbox"
+                            style={{marginRight: "-16.8px", marginBottom: "-16.8px"}}>
                                 
                             {data && 
-                                <img onLoad={handleImageLoad} id="img-content" src={data.thumb}  alt="Image Description"/>
+                                <img
+                                className={test} onClick={handleImageLoad} id="img-content" src={data.thumb}  alt="Image Description" autoFocus/>
                             }
+                                <div className="scrollbar horizontal both">
+                                    <div className="scroll-handle" style={{ width: "56.8642%", left: "6.03324%"}}></div>
+                                </div>
+                                <div className="scrollbar vertical both">
+                                    <div className="scroll-handle" style={{height: "30.3218%", top: "69.6782%"}}></div>
+                                </div>
                     </div>
                 </section>
             </main>
