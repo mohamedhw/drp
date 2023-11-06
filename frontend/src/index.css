@@ -418,3 +418,15 @@ button {
   width: 100%
 }
 
+.drop-list-title {
+  cursor: pointer;
+  width: auto;
+  color: #00dba0 !important;
+  font-size: medium;
+}
+.drop-list-title:focus {
+  background-color: none !important
+}
+.drop-list-title:hover {
+  color: #00bda0 !important;
+}
