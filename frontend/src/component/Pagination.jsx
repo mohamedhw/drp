@@ -27,7 +27,6 @@ const Pagination = ({previous, next, currentPage, setCurrentPage, count, setLoad
     }catch{
       handelFirstPage()
     }
-
   }
   const numberOfPages = Math.ceil(count / 12)
 
@@ -89,10 +88,5 @@ const Pagination = ({previous, next, currentPage, setCurrentPage, count, setLoad
     )
 }
 
-const mapStateToProps = state => ({
-  next: state.pics.pics.next,
-  previous: state.pics.pics.previous,
-  count: state.pics.pics.count,
-  currentPage: state.pages.currentPage,
-})
-export default connect(mapStateToProps, {setCurrentPage}) (Pagination)
+
+export default connect(null, {setCurrentPage}) (Pagination)

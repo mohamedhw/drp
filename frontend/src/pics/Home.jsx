@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom"
 import { useNavigate } from 'react-router-dom';
 import { setPage, setCurrentPage } from '../redux/action/pages'; // Import your new actions
 
-const Home = ({pics_g, pics, setCurrentPage, currentPage}) => {
+const Home = ({pics_g, pics, setCurrentPage, currentPage, count, next, previous}) => {
     const navigate = useNavigate()
     const apiUrl = import.meta.env.VITE_API_URL;
     const [loading, setLoading] = useState(true)
@@ -49,7 +49,7 @@ const Home = ({pics_g, pics, setCurrentPage, currentPage}) => {
             {pics_g && 
                 <>
                     <Items pics_g={pics_g} />
-                    <Pagination  page={page} setLoading={setLoading}/>
+                    <Pagination  page={page} setLoading={setLoading} count={count} currentPage={currentPage} next={next} previous={previous}/>
                 </>
             }
         </Container>
@@ -60,5 +60,8 @@ const Home = ({pics_g, pics, setCurrentPage, currentPage}) => {
 const mapStateToProps = state => ({
     pics_g: state.pics.pics.results,
     currentPage: state.pages.currentPage,
+    count: state.pics.pics.count,
+    next: state.pics.pics.next,
+    previous: state.pics.pics.previous,
 })
 export default connect(mapStateToProps, {pics, setPage, setCurrentPage}) (Home)

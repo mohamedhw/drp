@@ -1,5 +1,7 @@
 import { Routes, Route} from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
 import Layout from './Layout';
 import NavBar from './component/NavBar';
@@ -14,6 +16,7 @@ import Create from './pics/Create';
 import Search from './pics/Search';
 import Searched from './pics/Searched';
 import PrivetRoute from './PrivetRoute';
+import UserPics from './component/UserPics';
 
 
 const App = () => {
@@ -28,15 +31,15 @@ const App = () => {
 
         <NavBar setModalShowLogin={setModalShow} setModalShowRegister={setModalShowRegister} setShow={setShow}/>
         <Login show={modalShow} onHide={() => setModalShow(false)}/>
-        <Register show={modalShowRegister} onHide={() => setModalShowRegister(false)} />
+        <Register show={modalShowRegister} onHide={() => setModalShowRegister(false)} setModalShow={setModalShow}/>
         <Search show={show} setShow={() => setShow(false)}/>
         
         <Routes>
           <Route element={<PrivetRoute/>}>
             <Route path='/create' element={<Create />} />
             <Route path='/profile' element={<Profile />} />
-
           </Route>
+          {/* <Route path='/userpics' element={<UserPics/>}/> */}
           <Route exact path='/search/:searchpage?' element={<Searched />}/>
           <Route exact path='/tag/:tagSlug' element={<TagFiltered />} />
           <Route exact path='/pic/:postId' element={<Pic/>}/>
@@ -44,6 +47,18 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>
+      <ToastContainer 
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   );
 }

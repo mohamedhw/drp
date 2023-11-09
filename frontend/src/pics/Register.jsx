@@ -5,12 +5,27 @@ import {register} from '../redux/action/auth'
 import {connect} from 'react-redux'
 import {useState, useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 
 
 const Register = (props) => {
-
-    const { isAuthenticated, register, onHide } = props;
+    const notify = () => toast(`Dear ${username}, please go to your email ${email} inbox and click on \
+    received activation link to activate your your account.`, {
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        type: "info",
+        // style:{
+        //     border: '1px solid #54c7ec',
+        //     color: '#54c7ec',
+        //     fontWeight: 'bold',
+        //     fontSize: '17px'
+        // }
+    });
+    const { isAuthenticated, isRegistered, register, onHide, setModalShow } = props;
 
     const [accountCreated, setAccountCreated] = useState(false)
     const [username, setUsername]=useState()
@@ -26,19 +41,21 @@ const Register = (props) => {
         // form_data.append('password', password);
         // form_data.append('password2', password2);
         
-        if (password === password2){
-            register(username, email, password, password2)
-        }
-        else {
-            console.log("error password dont match!")
-            setAccountCreated(false)
-        }
+        register(username, email, password, password2)
+        setAccountCreated(true)
+
     }
-    if (isAuthenticated){
-        return navigate('/profile')
-     }else if (accountCreated){
-       return navigate('/login')
-    }
+    useEffect(()=>{
+        if (isAuthenticated){
+            navigate('/profile')
+        }else if (isRegistered){
+            onHide()
+            setModalShow(true)
+            notify()
+        }
+    },[isRegistered])
+    console.log(isAuthenticated)
+    console.log(accountCreated)
 
     return(
         
@@ -67,9 +84,8 @@ const Register = (props) => {
                         <div className='m-lg-4 m-2 p-lg-2 pt-3 form-group'>
                             <input type='password' className="form-control p-2" placeholder="confirm password" onChange={ e => setPassword2(e.target.value)}/>
                         </div>
-                        <input class="btn btn-outline-success btn-s px-4 mt-4 m-1" onClick={onHide} type="submit" value="Register" />
+                        <input class="btn btn-outline-success btn-s px-4 mt-4 m-1"  type="submit" value="Register" />
                         {/* <Link to="/" ><small className='p-2 p-lg-5' style={{}}>alrdy have an account?</small></Link> */}
-
                     </form>
                 </Modal.Body>
             </Modal>
@@ -78,8 +94,9 @@ const Register = (props) => {
     )
 }
 
-// const mapStateToProps = state => ({
-//     isAuthenticated: state.auth.isAuthenticated 
-// })
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated,
+    isRegistered: state.auth.isRegistered
+})
 
-export default connect(null, {register})(Register);
+export default connect(mapStateToProps, {register})(Register);

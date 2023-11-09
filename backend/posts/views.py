@@ -1,18 +1,20 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework import permissions, authentication
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from .models import Post, Hashtag
 from .serializers import PostSerializers, HashtagSerializers
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
+from django.contrib.auth.models import User
 
 
 class Home(generics.ListAPIView):
     queryset=Post.objects.all()
     serializer_class=PostSerializers
-    # permission_classes = (permissions.AllowAny, )
+    permission_classes = (permissions.AllowAny, )
 
     def get_queryset(self, *args, **kwargs):
         # Start with all items
@@ -61,9 +63,12 @@ class Detail(generics.RetrieveAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializers
     lookup_field = 'pk'
+    permission_classes = (permissions.AllowAny, )
     
     def get_related_tags(self, item):
+        
         qs = Post.objects.get(pk=item.pk).tags.all()
+        
         return qs
 
     def get_related_pics(self, item):
@@ -139,36 +144,43 @@ class TagFilterView(generics.ListAPIView):
 @method_decorator(csrf_protect, name='dispatch')
 class PostCreate(generics.CreateAPIView):
     # queryset = Post.objects.all()
-    # authentication_classes = [authentication.SessionAuthentication]
-    # permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = PostSerializers
 
     def post(self, request):
-        tags_ = Hashtag.objects.all()
         data = request.data
-        tags_data = data.pop('tag', [])
+        try:
+            if data.tag:
+                tags_ = Hashtag.objects.all()
+                tags_data = data.pop('tag', [])
+                if '#' in tags_data:
+                    tags_data=tags_data[0].split('#')
+                tags_data=tags_data[0].split()
 
-        if '#' in tags_data:
-            tags_data=tags_data[0].split('#')
-        tags_data=tags_data[0].split()
+                post_serializer = PostSerializers(data=data)
 
-        post_serializer = PostSerializers(data=data)
+                if post_serializer.is_valid():
+                    # Create and associate tags with the post
+                    post = post_serializer.save()
 
-        if post_serializer.is_valid():
-            # Create and associate tags with the post
-            post = post_serializer.save()
+                    for tag_data in tags_data:
+                        if '#' in tag_data:
+                            tag_data = tag_data.lstrip('#')
+                        tag, created = Hashtag.objects.get_or_create(tag=tag_data)
 
-            for tag_data in tags_data:
-                if '#' in tag_data:
-                    tag_data = tag_data.lstrip('#')
-                tag, created = Hashtag.objects.get_or_create(tag=tag_data)
-
-                if not created:
-                    post.tags.add(tag)
-                    # pass
-                post.tags.add(tag)
-
-            return redirect('/')
+                        if not created:
+                            post.tags.add(tag)
+                            # pass
+                        post.tags.add(tag)
+                    return redirect('/')
+            
+        except AttributeError:
+            post_serializer = PostSerializers(data=data)
+            if post_serializer.is_valid():
+                # Create and associate tags with the post
+                post = post_serializer.save()
+                return redirect('/')
 
         return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -205,4 +217,14 @@ class PostUpdate(generics.UpdateAPIView):
             return Response({"message": "failed"})
 
 
+class UserPics(generics.ListAPIView):
+    queryset=Post.objects.all()
+    serializer_class=PostSerializers
+    permission_classes = (permissions.AllowAny, )
+    lookup_field = 'user'
+    
+    def get_queryset(self, *args, **kwargs):
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        qs = Post.objects.filter(author=user)
+        return qs
 

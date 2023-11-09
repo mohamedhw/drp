@@ -7,8 +7,9 @@ import {useState, useEffect} from 'react';
 import { Link, useNavigate } from "react-router-dom";
 
 
-
 const Login = (props) => {
+
+
     const { isAuthenticated, login, onHide } = props;
     const [username, setUsername]=useState()
     const [password, setPassword]=useState()
@@ -18,17 +19,16 @@ const Login = (props) => {
     
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(username)
-        console.log(password)
         login(username, password)
     }
     const handleClose = () => {
         // Call the onHide prop to close the modal
-        props.onHide();
+        onHide();
     }
-    // if(isAuthenticated){
-    //     navigate("/")
-    // }
+    if(isAuthenticated){
+        onHide();
+    }
+
     return(
         <Container>
                 <Modal
@@ -55,7 +55,7 @@ const Login = (props) => {
                             <input type='password' className="form-control p-2" placeholder="password" onChange={ e => setPassword(e.target.value)}/>
                         </div>
                         <div className='mt-5 m-1'>
-                            <input class="btn btn-outline-success btn-s px-4" onClick={props.onHide} type="submit" value="Login" />
+                            <input class="btn btn-outline-success btn-s px-4" type="submit" value="Login" />
                             <span className='m-lg-5 m-md-2 m-sm-1'></span>
                             <div className='p-1' style={{display: 'inline-block'}}>
                                 <a href="/reset_password/"><b className='' style={{}}>forgot your password?</b></a>

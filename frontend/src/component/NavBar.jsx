@@ -13,16 +13,34 @@ import { connect } from "react-redux"
 import { setCurrentPage } from '../redux/action/pages'; // Import your new actions
 import {BiSearchAlt} from 'react-icons/bi'
 import {BsFillPersonFill} from 'react-icons/bs'
+import { toast } from 'react-toastify';
 
 const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticated, setCurrentPage, setShow}) => {
     const handelSearch = () => {
         setShow(true)
     }
-    
+    // const handelLogout = () => {
+    //     logout()
+        
+    // }
+    // const notify = () => toast("Wow so easy!", {
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     theme: "dark",
+    //     // type: "def",
+    //     style:{
+    //         border: '1px solid #e74c3c',
+    //         color: '#e74c3c',
+    //         fontWeight: 'bold',
+    //         fontSize: '17px'
+    //     }
+    // });
     return (
         <Navbar expand="lg" className="navbar-dark pt-3">
             <Container>
-                <Navbar.Brand className='logo'><a href="/" >DRP</a></Navbar.Brand>
+                <Navbar.Brand className='logo'><Link to="/" onClick={e=>(setCurrentPage(1))}>DRP</Link></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto mx-5">
@@ -55,12 +73,13 @@ const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticate
                     </NavDropdown> */}
                     </Nav>
                     <Nav>
+                    {/* <button onClick={notify}>Notify!</button> */}
                         {/* <Nav.Link><Link to='/' ><Button className='btn btn-outline-success btn-s'>Home</Button></Link></Nav.Link> */}
                         <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={handelSearch}><BiSearchAlt/></Button></Nav.Link>
                         {isAuthenticated?
                         <>
                             <Nav.Link><Link to='/profile'><Button className='btn btn-outline-success btn-s' ><BsFillPersonFill/></Button></Link></Nav.Link>
-                            <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={logout}>Logout</Button></Nav.Link>
+                            <Nav.Link><Link to='/'><Button className='btn btn-outline-success btn-s' onClick={logout}>Logout</Button></Link></Nav.Link>
                             <Nav.Link><Link to='/create' ><Button className='btn btn-outline-success btn-s'>upload</Button></Link></Nav.Link>
                         </>
                         :

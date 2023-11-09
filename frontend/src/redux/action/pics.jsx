@@ -9,7 +9,8 @@ import {
     CREATE_PICS_FAIL, 
     SEARCH_SUCCESS, 
     SEARCH_FAIL, 
-    RESET_PARAMETER
+    RESET_PARAMETER,
+
 } from './type'
 
 const config = {
@@ -46,6 +47,7 @@ export const pics = (url, setLoading) => async dispatch => {
     }
 }
 
+
 export const resetParameter = () => ({
     type: RESET_PARAMETER,
 });
@@ -56,8 +58,6 @@ export const setQ = (q) => ({
 });
 
 export const search = (url, setLoading) => async dispatch => {
-
-
     try {
         const res = await axios.get(url, config)
         if(res.data.error){

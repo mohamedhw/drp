@@ -8,14 +8,13 @@ import {connect} from 'react-redux'
 import {search, setQ} from '../redux/action/pics'
 import { useNavigate } from 'react-router-dom';
 import {AiOutlineClose} from 'react-icons/ai';
-
-const Search = ({q, setQ, show, setShow, pics_g, search}) => {
+import {setCurrentPage} from '../redux/action/pages'
+const Search = ({q, setQ, show, setShow, pics_g, search, setCurrentPage}) => {
     const moreResultsButtonRef = useRef(null);
     const apiUrl = import.meta.env.VITE_API_URL;
     console.log(q)
     const [loading, setLoading] = useState(true)
     let url = ``
-    
     const values = [true];
     const [fullscreen, setFullscreen] = useState(true);
 
@@ -52,6 +51,7 @@ const Search = ({q, setQ, show, setShow, pics_g, search}) => {
     const handelMore = () => {
         navigate(`/search/?q=${q}`)
         setShow(false)
+        setCurrentPage(1)
     }
     const handelSearch = (e) => {
         // setCurrentPage(1)
@@ -111,4 +111,4 @@ const mapStateToProps = state => ({
     // currentPage: state.pages.currentPage,
     q: state.pics.q
 })
-export default connect(mapStateToProps, {search, setQ}) (Search)
+export default connect(mapStateToProps, {search, setQ, setCurrentPage}) (Search)

@@ -3,6 +3,7 @@ import {REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCE
 
 const initialState = {
     isAuthenticated: null,
+    isRegistered: null,
 }
 
 
@@ -18,7 +19,8 @@ export default function(state=initialState,action){
         case REGISTER_SUCCESS:
             return {
                 ...state,
-                isAuthenticated: false
+                isAuthenticated: false,
+                isRegistered: payload
             }
         case LOGIN_SUCCESS:
             return {
@@ -31,9 +33,15 @@ export default function(state=initialState,action){
                 isAuthenticated: false,
             }
         case REGISTER_FAIL:
+            return{
+                ...state,
+                isAuthenticated: false,
+                isRegistered: payload
+            }
         case LOGIN_FAIL:
         case LOGOUT_FAIL:
             return state
+
         default:
             return state
     }

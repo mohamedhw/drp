@@ -430,3 +430,8 @@ button {
 .drop-list-title:hover {
   color: #00bda0 !important;
 }
+
+.transparent-toast {
+  background: none !important;
+  /* border: 1px solid #00dba0 !important */
+}

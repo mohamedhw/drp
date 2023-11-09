@@ -1,4 +1,13 @@
-import { PICS_FAIL, PICS_SUCCESS, TAG_PICS_FAIL, TAG_PICS_SUCCESS, SEARCH_SUCCESS, SEARCH_FAIL, RESET_PARAMETER, SET_Q } from "../action/type";
+import { 
+    PICS_FAIL,
+    PICS_SUCCESS, 
+    TAG_PICS_FAIL, 
+    TAG_PICS_SUCCESS, 
+    SEARCH_SUCCESS, 
+    SEARCH_FAIL, 
+    RESET_PARAMETER, 
+    SET_Q,
+} from "../action/type";
 
 
 
@@ -6,7 +15,7 @@ const initialState = {
     pics:[],
     taged:[],
     searched:[],
-    q:null
+    q:null,
 }
 
 export default function(state=initialState,action){

@@ -58,6 +58,36 @@ const Side = ({post, name, author, ...props }) => {
       authorInfo.style.display = "block";
     }
   }
+
+  const handelTags = () => {
+    const authorInfo = document.getElementById("dropdown-tags");
+    if(authorInfo.style.display === "block"){
+      authorInfo.style.display = "none";
+    }else{
+      authorInfo.style.display = "block";
+    }
+  }
+  let tagView = <></>
+  const tags = post && post.related_tags
+  if(tags === null){
+      tagView = (<>
+        post &&
+                <hr/>
+                <div>
+                  <div className='pb-3 mx-3' style={{textAlign: "left"}}>
+                      <a className='drop-list-title' onClick={e=> handelTags()}>tags<FaAngleDown style={{fontSize: '14px'}}/></a>
+                  </div>
+                  <div id="dropdown-tags" style={{display: "block"}}>
+                    {post.related_tags.map((tag) => (
+                      <Link to={`/tag/${tag.tag_slug}`}>
+                        <span className="m-1 my-tag p-1">{tag.tag}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div></>)
+  }else{
+    tagView= (<></>)
+  }
   return ( 
       <>
 
@@ -65,16 +95,11 @@ const Side = ({post, name, author, ...props }) => {
             <div className='' id="menu">
               <h2 className='m-3'>{post.title}</h2>
               <h4 className='m-3'>{post.thumb_dimensions}</h4>
-              {post.related_tags.map((tag) => (
-                <li className="nav-item">                  
-                  <Link to={`/tag/${tag.tag_slug}`}>
-                    <span className="m-1 my-tag p-1">{tag.tag}</span>
-                  </Link>
-                </li>
-              ))}
+              {tagView}
+                
               <hr/>
-                <div className='pb-2' onClick={e=> handelDropDown()} >
-                  <a className='drop-list-title'>related pics <FaAngleDown style={{fontSize: '14px'}}/></a>
+                <div className='pb-2 mx-3' style={{textAlign: "left"}}>
+                  <a className='drop-list-title' onClick={e=> handelDropDown()}>related pics <FaAngleDown style={{fontSize: '14px'}}/></a>
                 </div>
                 <div id="dropdown-related" style={{display: "block"}}>
                   {post.related_pics.map((post) => (
@@ -84,20 +109,20 @@ const Side = ({post, name, author, ...props }) => {
                   ))}
                 </div>
               <hr/>
-              <div className='pb-2' onClick={e=> handelAuthorInfo()} >
-                  <a className='drop-list-title'>author info <FaAngleDown style={{fontSize: '14px'}}/></a>
-                </div>
-                <div id="dropdown-author-info" style={{display: "block"}}>
-                  <Row style={{textAlign: "end"}}>
-                      <Col lg={8} sm={8} xs={7} style={{padding: "0px"}}>
-                        <h5>{post.author_name}</h5>
-                        <small>{timeAgo}</small>
-                      </Col>
-                      <Col lg={1} sm={1} xs={1} style={{display: ""}}>
-                        <img style={{width: "50px", height: "50px", borderRadius: "1%"}} src={`${apiUrl}/${post.author_image}`} />
-                      </Col>
-                  </Row>
-                </div>
+              <div className='pb-2 mx-3' style={{textAlign: "left"}}>
+                <a className='drop-list-title' onClick={e=> handelAuthorInfo()} >author info <FaAngleDown style={{fontSize: '14px'}}/></a>
+              </div>
+              <div id="dropdown-author-info" style={{display: "block"}}>
+                <Row style={{textAlign: "end"}}>
+                    <Col lg={8} sm={8} xs={7} style={{padding: "0px"}}>
+                      <h5>{post.author_name}</h5>
+                      <small>{timeAgo}</small>
+                    </Col>
+                    <Col lg={1} sm={1} xs={1}>
+                      <img style={{width: "50px", height: "50px", borderRadius: "1%"}} src={`${apiUrl}/${post.author_image}`} />
+                    </Col>
+                </Row>
+              </div>
               <hr/>
             </div>
           }

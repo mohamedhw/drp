@@ -70,7 +70,7 @@ export const profile_update = (form_data) => async dispatch => {
 }
 
 
-export const user_update = (username) => async dispatch => {
+export const user_update = (username, email) => async dispatch => {
     const config = {
         headers: {
             "Content-Type": "application/json",
@@ -78,7 +78,7 @@ export const user_update = (username) => async dispatch => {
         }
     };
 
-    const body = JSON.stringify({username})
+    const body = JSON.stringify({username, email})
     try{
         
         const res = await axios.put(`${apiUrl}/api-profile-user-update/`, body, config)

@@ -1,8 +1,14 @@
 import axios from "axios"
 import {REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, CHECK_AUTH_SUCCESS, CHECK_AUTH_FAIL} from '../action/type'
 import Cookies from 'js-cookie'
+import { toast } from 'react-toastify';
 
-
+const notify = () => toast('invalid password or username!', {
+    type: "error",
+});
+const notifyregisterproblem = (res) => toast(`${res.data.error}`, {
+    type: "error",
+});
 
 const apiUrl = import.meta.env.VITE_API_URL;
 export const checkauth = () => async dispatch =>{
@@ -58,12 +64,14 @@ export const login = (username, password) => async dispatch =>{
                 type:LOGIN_SUCCESS
             })
         }else{
+            notify()
             dispatch({
                 type:LOGIN_FAIL
             })
         }
     }
     catch{
+        notify()
         dispatch({
             type:LOGIN_FAIL
         })
@@ -102,6 +110,9 @@ export const logout = () => async dispatch =>{
 }
 
 export const register=(username, email, password, password2)=> async dispatch =>{
+
+
+
     const config = {
         headers: {
             "Accept": "application/json",
@@ -113,13 +124,17 @@ export const register=(username, email, password, password2)=> async dispatch =>
     const body = JSON.stringify({username, email, password, password2})
     try {
         const res = await axios.post(`${apiUrl}/api-register/`, body, config)
+
         if (res.data.success){
             dispatch({
                 type: REGISTER_SUCCESS,
+                payload: true
             });
         }else{
+            notifyregisterproblem(res)
             dispatch({
                 type: REGISTER_FAIL,
+                payload: false
             });
         }
     }
