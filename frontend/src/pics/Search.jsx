@@ -12,10 +12,8 @@ import {setCurrentPage} from '../redux/action/pages'
 const Search = ({q, setQ, show, setShow, pics_g, search, setCurrentPage}) => {
     const moreResultsButtonRef = useRef(null);
     const apiUrl = import.meta.env.VITE_API_URL;
-    console.log(q)
     const [loading, setLoading] = useState(true)
     let url = ``
-    const values = [true];
     const [fullscreen, setFullscreen] = useState(true);
 
     function handleShow(breakpoint) {
@@ -45,7 +43,7 @@ const Search = ({q, setQ, show, setShow, pics_g, search, setCurrentPage}) => {
 
         search(url, setLoading);
         
-        console.log(url)
+
     }, [q]);
 
     const handelMore = () => {

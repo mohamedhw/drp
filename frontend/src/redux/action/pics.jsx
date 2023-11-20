@@ -10,7 +10,11 @@ import {
     SEARCH_SUCCESS, 
     SEARCH_FAIL, 
     RESET_PARAMETER,
-
+    AUTHOR_PICS_SUCCESS,
+    AUTHOR_PICS_FAIL,
+    SET_AUTHOR,
+    SAVED_PICS_FAIL,
+    SAVED_PICS_SUCCESS
 } from './type'
 
 const config = {
@@ -55,6 +59,11 @@ export const resetParameter = () => ({
 export const setQ = (q) => ({
     type: SET_Q,
     payload: q
+});
+
+export const setAuthor = (username, image) => ({
+    type: SET_AUTHOR,
+    payload: {username, image}
 });
 
 export const search = (url, setLoading) => async dispatch => {
@@ -110,38 +119,86 @@ export const tagpics = (url, setLoading) => async dispatch => {
     }
 }
 
-// export const createpics = (setLoading, title, body, thumb, tags) => async dispatch => {
+export const createpics = (setLoading, title, body, image, tags) => async dispatch => {
     
-//     const config_ = {
-//         headers: {
-//             'content-type': 'multipart/form-data',
-//             "Content-Type": "application/json",
-//             "X-CSRFToken": Cookies.get('csrftoken')
-//         }
-//     };
+    const config_ = {
+        headers: {
+            'content-type': 'multipart/form-data',
+            "Content-Type": "application/json",
+            "X-CSRFToken": Cookies.get('csrftoken')
+        }
+    };
 
-//     const body = JSON.stringify({title, body, thumb, tags})
+    const body = JSON.stringify({title, body, image, tags})
 
-//     try {
-//         const res = await axios.get(`${apiUrl}/api-create`, body, config_)
-//         if(res.data.error){
-//             dispatch({
-//                 type: CREATE_PICS_FAIL,
-//             })
-//         }
-//         else {
-//             dispatch({
-//                 type: CREATE_PICS_SUCCESS,
-//                 payload: res.data
-//             })
-//             setLoading(false)
-//         }
-//     }
-//     catch(err){
-//         dispatch({
-//             type: CREATE_PICS_FAIL
-//         })
-//     }
-// }
+    try {
+        const res = await axios.get(`${apiUrl}/api-create`, body, config_)
+        if(res.data.error){
+            dispatch({
+                type: CREATE_PICS_FAIL,
+            })
+        }
+        else {
+            dispatch({
+                type: CREATE_PICS_SUCCESS,
+                payload: res.data
+            })
+            setLoading(false)
+        }
+    }
+    catch(err){
+        dispatch({
+            type: CREATE_PICS_FAIL
+        })
+    }
+}
 
 
+export const authorpics = (url) => async dispatch => {
+    
+
+    try {
+        const res = await axios.get(url, config)
+        if(res.data.error){
+            dispatch({
+                type: AUTHOR_PICS_FAIL,
+            })
+        }
+        else {
+            dispatch({
+                type: AUTHOR_PICS_SUCCESS,
+                payload: res.data
+            })
+        }
+    }
+    catch(err){
+        dispatch({
+            type: AUTHOR_PICS_FAIL
+        })
+    }
+}
+
+
+export const savedpics = (url) => async dispatch => {
+    
+
+    try {
+        const res = await axios.get(url, config)
+        if(res.data.error){
+            dispatch({
+                type: SAVED_PICS_FAIL,
+            })
+        }
+        else {
+            dispatch({
+                type: SAVED_PICS_SUCCESS,
+                payload: res.data
+            })
+        }
+    }
+    catch(err){
+        dispatch({
+            type: SAVED_PICS_FAIL
+        })
+    }
+}

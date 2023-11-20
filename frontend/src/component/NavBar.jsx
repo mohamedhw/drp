@@ -15,7 +15,7 @@ import {BiSearchAlt} from 'react-icons/bi'
 import {BsFillPersonFill} from 'react-icons/bs'
 import { toast } from 'react-toastify';
 
-const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticated, setCurrentPage, setShow}) => {
+const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticated, username_global, setCurrentPage, setShow}) => {
     const handelSearch = () => {
         setShow(true)
     }
@@ -75,10 +75,11 @@ const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticate
                     <Nav>
                     {/* <button onClick={notify}>Notify!</button> */}
                         {/* <Nav.Link><Link to='/' ><Button className='btn btn-outline-success btn-s'>Home</Button></Link></Nav.Link> */}
+
                         <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={handelSearch}><BiSearchAlt/></Button></Nav.Link>
                         {isAuthenticated?
                         <>
-                            <Nav.Link><Link to='/profile'><Button className='btn btn-outline-success btn-s' ><BsFillPersonFill/></Button></Link></Nav.Link>
+                            <Nav.Link><Link to={`/userpics/${username_global}`}><Button className='btn btn-outline-success btn-s' ><BsFillPersonFill/></Button></Link></Nav.Link>
                             <Nav.Link><Link to='/'><Button className='btn btn-outline-success btn-s' onClick={logout}>Logout</Button></Link></Nav.Link>
                             <Nav.Link><Link to='/create' ><Button className='btn btn-outline-success btn-s'>upload</Button></Link></Nav.Link>
                         </>
@@ -97,7 +98,8 @@ const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticate
 }
 
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    username_global: state.profile.username,
 })
 
 export default connect(mapStateToProps, { logout, setCurrentPage })(NavBar);

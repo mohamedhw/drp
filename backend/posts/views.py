@@ -1,3 +1,5 @@
+from rest_framework import status
+from rest_framework.decorators import api_view
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import generics
 from rest_framework.response import Response
@@ -5,6 +7,7 @@ from rest_framework import permissions, authentication
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from .models import Post, Hashtag
+from users.models import Profile
 from .serializers import PostSerializers, HashtagSerializers
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
@@ -30,7 +33,7 @@ class Home(generics.ListAPIView):
         #     qs = qs.filter(category=category)
         # elif label:
         #     qs = qs.filter(label=label)
-
+        
         if query:
             lookups = (
                 Q(title__icontains=query) |
@@ -40,7 +43,49 @@ class Home(generics.ListAPIView):
             qs = qs.filter(lookups)
         qs = qs.order_by('-date')
         return qs
+@api_view(["POST", "GET"])
+def save_pic(request, pk):
+    try:
+        post = Post.objects.get(pk=pk)
+        if request.user in post.saved.all():
+            post.saved.remove(request.user)
+            return Response({'success': "Item remove from wish list", "wished": False})
+        else:
+            post.saved.add(request.user)
+            return Response({'success': "Item added to wish list", "wished": True})
+    except:
+        return Response({"error": "error"})
 
+# WISH LIST VIEWS
+class SavedPics(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializers 
+
+    def get_queryset(self, *args, **kwargs):
+        user = self.request.user
+        
+        # Start with all items
+        qs = Post.objects.filter(saved=user)
+        # Retrieve the 'category' and 'label' query parameters from the request
+        # query = self.request.GET.get('q')
+        # category = self.request.GET.get('category')
+        # label = self.request.GET.get('label')
+        # # Apply filters if 'category' and 'label' are provided
+        # if category and label:
+        #     qs = qs.filter(category=category, label=label)
+        # elif category:
+        #     qs = qs.filter(category=category)
+        # elif label:
+        #     qs = qs.filter(label=label)
+        #
+        # if query:
+        #     lookups = (
+        #         Q(title__icontains=query) |
+        #         Q(description__icontains=query) |
+        #         Q(info__icontains=query)
+        #     )
+        #     qs = qs.filter(lookups)
+        return qs
 
 class Search(generics.ListAPIView):
     queryset=Post.objects.all()
@@ -150,10 +195,18 @@ class PostCreate(generics.CreateAPIView):
 
     def post(self, request):
         data = request.data
-        try:
-            if data.tag:
-                tags_ = Hashtag.objects.all()
-                tags_data = data.pop('tag', [])
+        tag_data = data.get('tag')
+        if tag_data:
+            tags_ = Hashtag.objects.all()
+            tags_data = data.pop('tag', [])
+            print(tags_data)
+            if tags_data ==['undefined']:
+                post_serializer = PostSerializers(data=data)
+
+                if post_serializer.is_valid():
+                    post = post_serializer.save()
+                    return redirect('/')
+            else:
                 if '#' in tags_data:
                     tags_data=tags_data[0].split('#')
                 tags_data=tags_data[0].split()
@@ -174,11 +227,11 @@ class PostCreate(generics.CreateAPIView):
                             # pass
                         post.tags.add(tag)
                     return redirect('/')
+        else:
             
-        except AttributeError:
             post_serializer = PostSerializers(data=data)
+
             if post_serializer.is_valid():
-                # Create and associate tags with the post
                 post = post_serializer.save()
                 return redirect('/')
 
@@ -228,3 +281,9 @@ class UserPics(generics.ListAPIView):
         qs = Post.objects.filter(author=user)
         return qs
 
+    # def get_context_data(self, **kwargs):
+    #     user = get_object_or_404(User, username=self.kwargs.get('username'))
+    #     print("test")
+    #     profile = Profile.objects.get(user=user)
+    #     print("test")
+    #     return {'profile': profile}

@@ -26,7 +26,7 @@ const Create=({user_g})=>{
         form_data.append('author', user);
         form_data.append('title', title);
         form_data.append('body', body);
-        form_data.append('thumb', image);
+        form_data.append('image', image);
         form_data.append('tag', tag);
         
         const config = {     

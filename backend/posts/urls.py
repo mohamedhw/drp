@@ -8,6 +8,8 @@ from .views import (
     PostDelete,
     PostUpdate,
     UserPics,
+    save_pic,
+    SavedPics,
     )
 
 
@@ -22,4 +24,6 @@ urlpatterns = [
     path('<str:pk>/api-delete/', PostDelete.as_view()),
     path('<str:pk>/api-update/', PostUpdate.as_view()),
     path('api-user-posts/<str:username>/', UserPics.as_view()),
+    path('<str:pk>/api-save-pic/', save_pic),
+    path('api-saved-pics/', SavedPics.as_view())
 ]

@@ -7,6 +7,11 @@ import {
     SEARCH_FAIL, 
     RESET_PARAMETER, 
     SET_Q,
+    AUTHOR_PICS_SUCCESS,
+    AUTHOR_PICS_FAIL,
+    SET_AUTHOR,
+    SAVED_PICS_SUCCESS,
+    SAVED_PICS_FAIL
 } from "../action/type";
 
 
@@ -16,11 +21,31 @@ const initialState = {
     taged:[],
     searched:[],
     q:null,
+    authorPics:[],
+    authorName:null,
+    authorImage:null,
+    savedPics: [],
 }
 
 export default function(state=initialState,action){
     const { type, payload } = action
     switch(type){
+        case SAVED_PICS_SUCCESS:
+            return {
+                ...state,
+                savedPics: payload
+            }
+        case AUTHOR_PICS_SUCCESS:
+            return {
+                ...state,
+                authorPics: payload
+            }
+        case SET_AUTHOR:
+            return {
+                ...state,
+                authorName: payload.username,
+                authorImage: payload.image
+            }
         case SET_Q:
             return {
                 ...state,
@@ -49,6 +74,7 @@ export default function(state=initialState,action){
         case PICS_FAIL:
         case SEARCH_FAIL:
         case TAG_PICS_FAIL:
+        case SAVED_PICS_FAIL:
             return {
                 ...state
             }

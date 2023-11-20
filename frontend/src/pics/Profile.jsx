@@ -6,17 +6,16 @@ import Row from 'react-bootstrap/esm/Row';
 import { connect } from 'react-redux'
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
-import UserPics from '../component/UserPics';
+import { Link } from 'react-router-dom';
 
 
 
-const Profile = ({ profile, profile_update, user_update, username_global, image_global, email_global, user_global}) => {
+const Profile = ({ profile, profile_update, user_update, username_global, image_global, email_global }) => {
 
     const [username, setUsername] = useState(username_global)
     const [email, setEmail] = useState(email_global)
     const [image, setImage] = useState()
     const [test, setTest] = useState(1)
-    
     
     const handelSubmit = (e) => {
         e.preventDefault();
@@ -30,6 +29,7 @@ const Profile = ({ profile, profile_update, user_update, username_global, image_
     useEffect(() => {
         profile()
     }, [test]);
+    
     return (
         <div className='mt-5'>
             <Container>
@@ -40,25 +40,26 @@ const Profile = ({ profile, profile_update, user_update, username_global, image_
                     <Col lg={7} md={6} sm={8} xs={12} className='pt-1'>
                         <div>
                             <ul className='profile-info' >
-                                <li  className=''>username:  <span style={{color:"#fff"}}>{username_global}</span></li>
-                                <li  className=''>email:  <span style={{color:"#fff"}}>{email_global}</span></li>
+                                <li>username:  <span style={{color:"#fff"}}>{username_global}</span></li>
+                                <li>email:  <span style={{color:"#fff"}}>{email_global}</span></li>
                             </ul>
                         </div>
                     </Col>
                 </Row>
                 <Nav>
-                    <Button className='btn btn-outline-success btn-s' style={{width: '20%'}}>home</Button>
-                    <Button className='btn btn-outline-success btn-s' style={{width: '20%'}}>update</Button>
+                    <Link to={`/userpics/${username_global}`}><Button className='btn btn-outline-success btn-s px-5 mx-lg-1'>my pics</Button></Link>
+                    <Link to='/saved'><Button className='btn btn-outline-success btn-s px-5 mx-lg-1'>saved</Button></Link>
+                    <Button className='btn btn-outline-success btn-s'>update my account info</Button>
                 </Nav>
             </Container>
             <hr style={{margin: '0'}}/>
-            {/* <Container>
+            <Container>
                 <form onSubmit={handelSubmit}>
                     <div className='form-group m-lg-4 m-2 p-lg-1 pt-3'>
-                        <input className='form-control' type='text' placeholder={`${username_global}`} defaultValue={`${username_global}`} name='username' onChange={e => setUsername(e.target.value) } />
+                        <input className='form-control' type='text' placeholder={`${username_global}`} name='username' onChange={e => setUsername(e.target.value) } />
                     </div>
                     <div className='form-group m-lg-4 m-2 p-lg-1 pt-3'>
-                        <input className='form-control' type='email' placeholder={`${email_global}`} defaultValue={`${email_global}`} name='email' onChange={e => setEmail(e.target.value) } />
+                        <input className='form-control' type='email' placeholder={`${email_global}`} name='email' onChange={e => setEmail(e.target.value) } />
                     </div>
                     <div className='form-group m-lg-4 m-2 p-lg-1 pt-3'>
                         <input className='form-control' type='file' placeholder={`${username_global}`} name='image' onChange={e => setImage(e.target.files[0]) } />
@@ -66,10 +67,8 @@ const Profile = ({ profile, profile_update, user_update, username_global, image_
 
                     <button onClick={e=> setTest(test+1)} type="submit" className='btn btn-outline-success btn-s px-4 mt-3'>Update</button>
                 </form>
-            </Container> */}
-            <Container>
-                <UserPics username={username_global}/>
             </Container>
+
 
         </div>
     )
@@ -80,7 +79,8 @@ const mapStateToProps = state => ({
     username_global: state.profile.username,
     image_global: state.profile.image,
     email_global: state.profile.email,
-    user_global: state.profile.user
+    user_global: state.profile.user,
+    pics_: state.pics.authorPics,
 })
 
 export default connect(mapStateToProps, { profile, profile_update, user_update }) (Profile);

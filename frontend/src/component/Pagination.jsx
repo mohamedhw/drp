@@ -1,22 +1,32 @@
 import {connect} from 'react-redux'
 import { setCurrentPage } from '../redux/action/pages'; // Import your new actions
 import { useNavigate } from 'react-router-dom';
+import { useParams } from "react-router-dom"
 
 
 
 const Pagination = ({previous, next, currentPage, setCurrentPage, count, setLoading}) => {
   const navigate = useNavigate()
+  const { username } = useParams();
 
-  
+  console.log(currentPage)
   const handelFirstPage = () => {
     setCurrentPage(1)
-    navigate('/')
+    {username?
+      navigate(`/userpics/${username}/`)
+      :
+      navigate('/')
+    }
     setLoading(true)
   }
   
   const handePageNumber = (index) => {
     setCurrentPage(index+1)
-    navigate(currentPage)
+    {username?
+      navigate(`/userpics/${username}/${currentPage}`)
+      :
+      navigate(currentPage)
+    }
     setLoading(true)
   }
 
@@ -31,8 +41,7 @@ const Pagination = ({previous, next, currentPage, setCurrentPage, count, setLoad
   const numberOfPages = Math.ceil(count / 12)
 
   const itemsToRender = Array(numberOfPages).fill(null);
-  console.log('numberOfPages', numberOfPages)
-  console.log('itemsToRender', itemsToRender)
+
     return (
       <>
         {count > 12 ?
@@ -56,8 +65,8 @@ const Pagination = ({previous, next, currentPage, setCurrentPage, count, setLoad
                 }
 
                 {itemsToRender.map((_, index) => (
-                    <li className="page-item">
-                      <a key={index} className="btn btn-success btn-sm mb-4 pg-lin btn-s" onClick={e=> handePageNumber(index)}>{ index + 1 }</a>
+                    <li key={index} className="page-item">
+                      <a className="btn btn-success btn-sm mb-4 pg-lin btn-s" onClick={e=> handePageNumber(index)}>{ index + 1 }</a>
                     </li>                    
                   )
                 )}

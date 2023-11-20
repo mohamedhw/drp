@@ -17,10 +17,7 @@ const Home = ({pics_g, pics, setCurrentPage, currentPage, count, next, previous}
     const isPageProvided = Boolean(page);
 
     
-    // console.log("currentPage:", currentPage)
-    // console.log("page:", page)
-    
-    
+
     let url = ``
     useEffect(() => {
         // setCurrentPage(page)

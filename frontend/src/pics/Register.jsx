@@ -54,8 +54,7 @@ const Register = (props) => {
             notify()
         }
     },[isRegistered])
-    console.log(isAuthenticated)
-    console.log(accountCreated)
+
 
     return(
         

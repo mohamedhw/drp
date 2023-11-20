@@ -109,7 +109,7 @@ const Pic = () => {
                                 
                             {data && 
                                 <img
-                                className={test} onClick={handleImageLoad} id="img-content" src={data.thumb}  alt="Image Description" autoFocus/>
+                                className={test} onClick={handleImageLoad} id="img-content" src={data.image}  alt="Image Description" autoFocus/>
                             }
                                 <div className="scrollbar horizontal both">
                                     <div className="scroll-handle" style={{ width: "56.8642%", left: "6.03324%"}}></div>

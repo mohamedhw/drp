@@ -7,12 +7,22 @@ body {
   /* background-position: center center; */
   color: #fff !important;
   text-align: center;
+
 }
 
 * {
   font-family: Ubuntu;
 }
+*::-webkit-scrollbar {
+  width: 2px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #00bda0;
+}
 
+*::-webkit-scrollbar-track {
+  /* background-color: #; */
+}
 hr{
   color:#00dba0 !important
 }
@@ -434,4 +444,10 @@ button {
 .transparent-toast {
   background: none !important;
   /* border: 1px solid #00dba0 !important */
+}
+
+.no-result {
+  color: #00dba0;
+  font-size: 20px;
+  font-weight: bolder;
 }

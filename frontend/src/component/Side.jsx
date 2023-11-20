@@ -6,15 +6,23 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { FaAngleDown } from 'react-icons/fa6';
+import {setAuthor} from '../redux/action/pics'
+import { useNavigate } from 'react-router-dom';
 
-const Side = ({post, name, author, ...props }) => {
+const Side = ({post, setAuthor, name, author, ...props }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const toggleShow = () => setShow((s) => !s);
   const [timeAgo, setTimeAgo] = useState('');
   const [datePosted, setDatePosted] = useState('')
+  const navigate = useNavigate()
 
+  const handelAuthorPage = (username_, image_) => {
+    setAuthor(username_, image_)
+    navigate(`/userpics/${username_}`)
+  }
+  
   useEffect(()=>{
 
     setDatePosted(post && post.date)
@@ -69,24 +77,28 @@ const Side = ({post, name, author, ...props }) => {
   }
   let tagView = <></>
   const tags = post && post.related_tags
-  if(tags === null){
-      tagView = (<>
-        post &&
-                <hr/>
-                <div>
-                  <div className='pb-3 mx-3' style={{textAlign: "left"}}>
-                      <a className='drop-list-title' onClick={e=> handelTags()}>tags<FaAngleDown style={{fontSize: '14px'}}/></a>
-                  </div>
-                  <div id="dropdown-tags" style={{display: "block"}}>
-                    {post.related_tags.map((tag) => (
-                      <Link to={`/tag/${tag.tag_slug}`}>
-                        <span className="m-1 my-tag p-1">{tag.tag}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </div></>)
+  if(post && tags.length === 0){
+      tagView= (<></>)
   }else{
-    tagView= (<></>)
+      tagView = (
+          <>
+            {post &&
+            <div>
+                <hr/>
+                <div className='pb-3 mx-3' style={{textAlign: "left"}}>
+                    <a className='drop-list-title' onClick={e=> handelTags()}>tags<FaAngleDown style={{fontSize: '14px'}}/></a>
+                </div>
+                <div id="dropdown-tags" style={{display: "block"}}>
+                    {post.related_tags.map((tag) => (
+                    <Link to={`/tag/${tag.tag_slug}`}>
+                        <span className="m-1 my-tag p-1">{tag.tag}</span>
+                    </Link>
+                    ))}
+                </div>
+            </div>
+            }
+        </>
+            )
   }
   return ( 
       <>
@@ -119,7 +131,7 @@ const Side = ({post, name, author, ...props }) => {
                       <small>{timeAgo}</small>
                     </Col>
                     <Col lg={1} sm={1} xs={1}>
-                      <img style={{width: "50px", height: "50px", borderRadius: "1%"}} src={`${apiUrl}/${post.author_image}`} />
+                      <img onClick={e=>handelAuthorPage(post.author_name, post.author_image)} style={{width: "50px", height: "50px", borderRadius: "1%"}} src={`${apiUrl}/${post.author_image}`} />
                     </Col>
                 </Row>
               </div>
@@ -131,5 +143,7 @@ const Side = ({post, name, author, ...props }) => {
   );
 }
 
+const mapStateToProps = state => ({
 
-export default Side
+})
+export default connect(null, {setAuthor}) (Side)

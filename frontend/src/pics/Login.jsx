@@ -3,18 +3,15 @@ import CSRFToken from '../component/CSRFToken'
 import Modal from 'react-bootstrap/Modal';
 import {login} from '../redux/action/auth'
 import {connect} from 'react-redux'
-import {useState, useEffect} from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import {useState} from 'react';
+import { profile } from "../redux/action/profile";
 
 
 const Login = (props) => {
 
-
-    const { isAuthenticated, login, onHide } = props;
+    const { isAuthenticated, login, onHide, profile } = props;
     const [username, setUsername]=useState()
     const [password, setPassword]=useState()
-    const navigate = useNavigate()
-    // const refresh = () => window.location.reload(true)
     const csrfToken = CSRFToken();
     
     const handleSubmit = (e) => {
@@ -27,6 +24,7 @@ const Login = (props) => {
     }
     if(isAuthenticated){
         onHide();
+        profile();
     }
 
     return(
@@ -38,11 +36,6 @@ const Login = (props) => {
                 centered
                 onHide={handleClose}
                 >
-                {/* <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                    Modal heading
-                    </Modal.Title>
-                </Modal.Header> */}
                 <Modal.Body className="custom-modal">
 
                     <h2>Login</h2>
@@ -63,9 +56,6 @@ const Login = (props) => {
                         </div>
                     </form>
                 </Modal.Body>
-                {/* <Modal.Footer className="custom-modal">
-                    <Button onClick={props.onHide}>Close</Button>
-                </Modal.Footer> */}
             </Modal>
         </Container>
     )
@@ -76,4 +66,4 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated 
 })
 
-export default connect(mapStateToProps, {login})(Login);
+export default connect(mapStateToProps, {login, profile})(Login);
