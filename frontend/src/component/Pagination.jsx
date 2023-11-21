@@ -9,7 +9,6 @@ const Pagination = ({previous, next, currentPage, setCurrentPage, count, setLoad
   const navigate = useNavigate()
   const { username } = useParams();
 
-  console.log(currentPage)
   const handelFirstPage = () => {
     setCurrentPage(1)
     {username?

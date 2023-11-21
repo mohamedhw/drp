@@ -1,4 +1,5 @@
 from rest_framework import status
+from django.db.models import Count
 from rest_framework.decorators import api_view
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import generics
@@ -43,16 +44,31 @@ class Home(generics.ListAPIView):
             qs = qs.filter(lookups)
         qs = qs.order_by('-date')
         return qs
+
+@api_view(["POST", "GET"])
+def like_pic(request, pk):
+    try:
+        post = Post.objects.get(pk=pk)
+        if request.user in post.like.all():
+            post.like.remove(request.user)
+            return Response({'success': "like remoed"})
+        else:
+            post.like.add(request.user)
+            return Response({'success': "like added"})
+    except:
+        return Response({"error": "error"})
+
+
 @api_view(["POST", "GET"])
 def save_pic(request, pk):
     try:
         post = Post.objects.get(pk=pk)
         if request.user in post.saved.all():
             post.saved.remove(request.user)
-            return Response({'success': "Item remove from wish list", "wished": False})
+            return Response({'success': "pic remove from your saved pics list"})
         else:
             post.saved.add(request.user)
-            return Response({'success': "Item added to wish list", "wished": True})
+            return Response({'success': "pic added to your saved pics list"})
     except:
         return Response({"error": "error"})
 
@@ -66,25 +82,7 @@ class SavedPics(generics.ListAPIView):
         
         # Start with all items
         qs = Post.objects.filter(saved=user)
-        # Retrieve the 'category' and 'label' query parameters from the request
-        # query = self.request.GET.get('q')
-        # category = self.request.GET.get('category')
-        # label = self.request.GET.get('label')
-        # # Apply filters if 'category' and 'label' are provided
-        # if category and label:
-        #     qs = qs.filter(category=category, label=label)
-        # elif category:
-        #     qs = qs.filter(category=category)
-        # elif label:
-        #     qs = qs.filter(label=label)
-        #
-        # if query:
-        #     lookups = (
-        #         Q(title__icontains=query) |
-        #         Q(description__icontains=query) |
-        #         Q(info__icontains=query)
-        #     )
-        #     qs = qs.filter(lookups)
+
         return qs
 
 class Search(generics.ListAPIView):
@@ -167,11 +165,11 @@ class TagFilterView(generics.ListAPIView):
     queryset=Post.objects.all()
     serializer_class = PostSerializers
     pagination_class = PageNumberPagination
-    # lookup_field = 'tag_slug'
-    # permission_classes = (permissions.AllowAny, )
+    lookup_field = 'tag_slug'
+    permission_classes = (permissions.AllowAny, )
 
     def get_queryset(self, *args, **kwargs):
-        tag_slug = self.kwargs['tag_slug']
+        tag_slug = self.kwargs.get('tag_slug')
         tag = get_object_or_404(Hashtag, tag_slug=tag_slug)
         queryset = Post.objects.filter(tags=tag)
         return queryset
@@ -182,9 +180,24 @@ class TagFilterView(generics.ListAPIView):
         paginator = PageNumberPagination()
         paginator.page_size = 12  # You can adjust the page size here
         result_page = paginator.paginate_queryset(queryset, request)
-        serializer = self.serializer_class(result_page, many=True)
+        serializer = self.serializer_class(result_page, many=True, context={'request': request})
         return paginator.get_paginated_response(serializer.data)
 
+class AllTags(generics.ListAPIView):
+    queryset=Hashtag.objects.all()
+    serializer_class = HashtagSerializers
+    pagination_class = None
+    permission_classes = (permissions.AllowAny, )
+    
+    def list(self, request, *args, **kwargs):
+        # Retrieve all hashtags with post count
+        tags_with_count = Hashtag.objects.annotate(post_count=Count('tags')).values('tag', 'tag_slug', 'post_count')
+
+        # Serialize the data
+        serializer = self.serializer_class(tags_with_count, many=True)
+
+        # Return the serialized data as a response
+        return Response(serializer.data)
 
 @method_decorator(csrf_protect, name='dispatch')
 class PostCreate(generics.CreateAPIView):
@@ -287,3 +300,4 @@ class UserPics(generics.ListAPIView):
     #     profile = Profile.objects.get(user=user)
     #     print("test")
     #     return {'profile': profile}
+

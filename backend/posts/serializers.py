@@ -5,18 +5,31 @@ from .models import Post, Hashtag
 
 
 class PostSerializers(serializers.ModelSerializer):
+
     # date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
-    
+    user_has_saved = serializers.SerializerMethodField()
+    user_has_liked = serializers.SerializerMethodField()
+    like_count = serializers.SerializerMethodField(default=0)
+
     class Meta:
         model = Post
-        fields = ["id", "title", "body", "image","thumb",  "date", "author", "author_name", "author_image"]
+        fields = ["id", "title", "body", "image","thumb",  "date", "author", "author_name", "author_image", "user_has_saved", "user_has_liked", "like_count"]
 
-    # def get_author_profile(self, obj):
-    #     user = obj.author
-    #     profile = Profile.objects.get(user=user)
-    #     serializer = UserProfileSerializer(profile)
-    #     return serializer.data
+    def get_user_has_saved(self, obj):
+        user = self.context['request'].user
+        return obj.saved.filter(id=user.id).exists()
+
+    def get_user_has_liked(self, obj):
+        user = self.context['request'].user
+        return obj.like.filter(id=user.id).exists()
+
+    def get_like_count(self, obj):
+        like_count = obj.like.all().count()
+        return like_count
+
 class HashtagSerializers(serializers.ModelSerializer):
+    post_count = serializers.IntegerField(read_only=True)
     class Meta:
         model = Hashtag
-        fields = "__all__"
+        fields = ['tag', 'tag_slug', 'post_count']
+

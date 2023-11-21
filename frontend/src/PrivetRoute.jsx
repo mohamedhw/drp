@@ -2,7 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { connect } from 'react-redux';
 
 
-const PrivateRoute = ({isAuthenticated}) => {
+const PrivateRoute = ({isAuthenticated, setModalShow}) => {
     console.log(isAuthenticated)
     if (isAuthenticated){
         return (
@@ -14,9 +14,12 @@ const PrivateRoute = ({isAuthenticated}) => {
             <Outlet/>
         )    
     }
-    return (
-        <Navigate to="/login"/>
-    )
+    else{
+        setModalShow(true)
+        return (
+            <Navigate to={'/'}/>
+        )
+    }
 }
 
 const mapStateToProps = state => ({

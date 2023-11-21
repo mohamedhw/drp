@@ -11,13 +11,20 @@ import {
     AUTHOR_PICS_FAIL,
     SET_AUTHOR,
     SAVED_PICS_SUCCESS,
-    SAVED_PICS_FAIL
+    SAVED_PICS_FAIL,
+    SAVE_SUCCESS,
+    SAVE_FAIL,
+    LIKE_SUCCESS,
+    LIKE_FAIL,
+    TAGS_SUCCESS,
+    TAGS_FAIL
 } from "../action/type";
 
 
 
 const initialState = {
     pics:[],
+    tags: [],
     taged:[],
     searched:[],
     q:null,
@@ -30,13 +37,23 @@ const initialState = {
 export default function(state=initialState,action){
     const { type, payload } = action
     switch(type){
+        case TAGS_SUCCESS:
+            return {
+                ...state,
+                tags: payload
+            }
+        case LIKE_SUCCESS:
+        case SAVE_SUCCESS:
+            return {
+                ...state,
+            }
         case SAVED_PICS_SUCCESS:
             return {
                 ...state,
                 savedPics: payload
             }
         case AUTHOR_PICS_SUCCESS:
-            return {
+            return {    
                 ...state,
                 authorPics: payload
             }
@@ -71,10 +88,13 @@ export default function(state=initialState,action){
                 ...state,
                 taged: payload
             }
+        case TAGS_FAIL:
+        case LIKE_FAIL:
         case PICS_FAIL:
         case SEARCH_FAIL:
         case TAG_PICS_FAIL:
         case SAVED_PICS_FAIL:
+        case SAVE_FAIL:
             return {
                 ...state
             }

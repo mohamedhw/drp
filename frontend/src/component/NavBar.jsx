@@ -77,6 +77,7 @@ const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticate
                         {/* <Nav.Link><Link to='/' ><Button className='btn btn-outline-success btn-s'>Home</Button></Link></Nav.Link> */}
 
                         <Nav.Link><Button className='btn btn-outline-success btn-s' onClick={handelSearch}><BiSearchAlt/></Button></Nav.Link>
+                        <Nav.Link><Link to='/tags' ><Button className='btn btn-outline-success btn-s'>tags</Button></Link></Nav.Link>
                         {isAuthenticated?
                         <>
                             <Nav.Link><Link to={`/userpics/${username_global}`}><Button className='btn btn-outline-success btn-s' ><BsFillPersonFill/></Button></Link></Nav.Link>

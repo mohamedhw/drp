@@ -1,15 +1,15 @@
 import { connect } from 'react-redux'
 import { useEffect, useState } from 'react';
-import { useParams, Link } from "react-router-dom"
-import Button from 'react-bootstrap/Button';
-import Offcanvas from 'react-bootstrap/Offcanvas';
+import { Link } from "react-router-dom"
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { FaAngleDown } from 'react-icons/fa6';
 import {setAuthor} from '../redux/action/pics'
 import { useNavigate } from 'react-router-dom';
+import { FaBookmark, FaHeart } from "react-icons/fa6";
+import { save, like } from '../redux/action/pics';
 
-const Side = ({post, setAuthor, name, author, ...props }) => {
+const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...props }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -17,25 +17,27 @@ const Side = ({post, setAuthor, name, author, ...props }) => {
   const [timeAgo, setTimeAgo] = useState('');
   const [datePosted, setDatePosted] = useState('')
   const navigate = useNavigate()
+  const [saveToggle, setSaveToggle] = useState(1);
 
+  const [isSaved, setIsSaved] = useState( post && post?.user_has_saved || false);
+  console.log(isSaved)
   const handelAuthorPage = (username_, image_) => {
     setAuthor(username_, image_)
-    navigate(`/userpics/${username_}`)
   }
   
   useEffect(()=>{
 
-    setDatePosted(post && post.date)
+    setDatePosted(post?.date);
     const timeDifference = new Date() - new Date(datePosted);
-
-
+    
+    
     // Define the time units for formatting
     const seconds = 1000;
     const minutes = seconds * 60;
     const hours = minutes * 60;
     const days = hours * 24;
     const years = days * 365;
-
+    
     if (timeDifference < minutes) {
       setTimeAgo(Math.floor(timeDifference / seconds) + ' seconds ago');
     } else if (timeDifference < hours) {
@@ -47,7 +49,7 @@ const Side = ({post, setAuthor, name, author, ...props }) => {
     } else {
       setTimeAgo(Math.floor(timeDifference / years) + ' years ago');
     }
-  },[datePosted, post])
+  },[datePosted, post, save, saveToggle])
 
   const handelDropDown = () => {
       const related = document.getElementById("dropdown-related");
@@ -75,8 +77,10 @@ const Side = ({post, setAuthor, name, author, ...props }) => {
       authorInfo.style.display = "block";
     }
   }
+
   let tagView = <></>
   const tags = post && post.related_tags
+
   if(post && tags.length === 0){
       tagView= (<></>)
   }else{
@@ -100,6 +104,54 @@ const Side = ({post, setAuthor, name, author, ...props }) => {
         </>
             )
   }
+
+  let saveButton = <></>
+
+  const handelSave = (e) => {
+    save(e)
+    setSaveToggle(saveToggle+1)
+        setIsSaved((prev) => !prev); // Toggle the saved state
+
+    const saveMark = document.getElementById("save-mark");
+    console.log(saveMark.classList.value)
+    if(saveMark.classList.contains("btn-i")){
+      saveMark.classList.remove("btn-i")
+      saveMark.classList.add("btn-i-click")
+    }else{
+      saveMark.classList.remove("btn-i-click")
+      saveMark.classList.add("btn-i")
+    }
+  }
+  
+  if(isAuthenticated && post && post.user_has_saved === true){
+    saveButton = <button className='btn btn-outline-success btn-i-click mx-2 m-3' onClick={e=>handelSave(post.id)} id="save-mark"><FaBookmark/></button>
+  }else{
+    saveButton = <button className='btn btn-outline-success btn-i mx-2 m-3' onClick={e=>handelSave(post.id)} id="save-mark"><FaBookmark/></button>
+  }
+  
+  let likeButton = <></>
+  const handelLike = (e) => {
+    like(e)
+    setSaveToggle(saveToggle+1)
+        setIsSaved((prev) => !prev); // Toggle the saved state
+
+    const saveMark = document.getElementById("like-mark");
+    console.log(saveMark.classList.value)
+    if(saveMark.classList.contains("btn-i")){
+      saveMark.classList.remove("btn-i")
+      saveMark.classList.add("btn-i-click")
+    }else{
+      saveMark.classList.remove("btn-i-click")
+      saveMark.classList.add("btn-i")
+    }
+  }
+
+  if(isAuthenticated && post && post.user_has_liked === true){
+    likeButton = <button className='btn btn-outline-success btn-i-click mx-2 m-3' onClick={e=>handelLike(post.id)} id="like-mark"><FaHeart/></button>
+  }else{
+    likeButton = <button className='btn btn-outline-success btn-i mx-2 m-3' onClick={e=>handelLike(post.id)} id="like-mark"><FaHeart/></button>
+  }
+
   return ( 
       <>
 
@@ -120,18 +172,26 @@ const Side = ({post, setAuthor, name, author, ...props }) => {
                     </Link>
                   ))}
                 </div>
-              <hr/>
+              <hr style={{marginBottom: "0"}}/>
+                {saveButton}
+                {likeButton}
+
+              <hr style={{marginTop: "0px"}}/>
               <div className='pb-2 mx-3' style={{textAlign: "left"}}>
                 <a className='drop-list-title' onClick={e=> handelAuthorInfo()} >author info <FaAngleDown style={{fontSize: '14px'}}/></a>
               </div>
               <div id="dropdown-author-info" style={{display: "block"}}>
                 <Row style={{textAlign: "end"}}>
                     <Col lg={8} sm={8} xs={7} style={{padding: "0px"}}>
-                      <h5>{post.author_name}</h5>
+                      <Link to={`/userpics/${post.author_name}`}>
+                        <h5 style={{color: "#00dba0"}}>{post.author_name}</h5>
+                      </Link>
                       <small>{timeAgo}</small>
                     </Col>
                     <Col lg={1} sm={1} xs={1}>
-                      <img onClick={e=>handelAuthorPage(post.author_name, post.author_image)} style={{width: "50px", height: "50px", borderRadius: "1%"}} src={`${apiUrl}/${post.author_image}`} />
+                      <Link to={`/userpics/${post.author_name}`}>
+                        <img onClick={e=>handelAuthorPage(post.author_name, post.author_image)} style={{width: "50px", height: "50px", borderRadius: "1%"}} src={`${apiUrl}/${post.author_image}`} />
+                      </Link>
                     </Col>
                 </Row>
               </div>
@@ -144,6 +204,6 @@ const Side = ({post, setAuthor, name, author, ...props }) => {
 }
 
 const mapStateToProps = state => ({
-
+  isAuthenticated: state.auth.isAuthenticated 
 })
-export default connect(null, {setAuthor}) (Side)
+export default connect(mapStateToProps, {setAuthor, save, like}) (Side)

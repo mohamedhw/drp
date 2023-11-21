@@ -20,6 +20,7 @@ import UserPics from './pics/UserPics';
 import AllUserPics from './pics/AllUserPics';
 import SavedPics from './component/SavedPics';
 import AllSavedPics from './pics/AllSavedPics';
+import Tags from './pics/Tags';
 
 const App = () => {
   const [modalShow, setModalShow] = useState(false);
@@ -37,12 +38,13 @@ const App = () => {
         <Search show={show} setShow={() => setShow(false)}/>
 
         <Routes>
-          <Route element={<PrivetRoute/>}>
+          <Route element={<PrivetRoute setModalShow={setModalShow}/>}>
             <Route path='/create' element={<Create />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/saved' element={<SavedPics />} />
             <Route path='/moresaved' element={<AllSavedPics/>} />
           </Route>
+          <Route path='/tags' element={<Tags/>}/>
           <Route path='/userpics/:authorname' element={<UserPics/>}/>
           <Route exact path='/search/:searchpage?' element={<Searched />}/>
           <Route exact path='/tag/:tagSlug' element={<TagFiltered />} />

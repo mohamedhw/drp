@@ -14,8 +14,26 @@ import {
     AUTHOR_PICS_FAIL,
     SET_AUTHOR,
     SAVED_PICS_FAIL,
-    SAVED_PICS_SUCCESS
+    SAVED_PICS_SUCCESS,
+    SAVE_SUCCESS,
+    SAVE_FAIL,
+    LIKE_SUCCESS,
+    LIKE_FAIL,
+    TAGS_SUCCESS,
+    TAGS_FAIL
 } from './type'
+import Cookies from 'js-cookie'
+import { toast } from 'react-toastify';
+
+
+
+const notifyproblem = (res) => toast(`${res.data.error}`, {
+    type: "error",
+});
+
+const notifysuccess = (res) => toast(`${res.data.success}`, {
+    type: "info",
+});
 
 const config = {
     headers: {
@@ -45,6 +63,33 @@ export const pics = (url, setLoading) => async dispatch => {
     catch(err){
         dispatch({
             type: PICS_FAIL
+        });
+    } finally {
+        setLoading(false); // Set loading to false when data fetching is complete
+    }
+}
+
+
+export const tags = (setLoading) => async dispatch => {
+
+
+    try {
+        const res = await axios.get(`${apiUrl}/api-tags/`, config)
+        if(res.data.error){
+            dispatch({
+                type: TAGS_FAIL,
+            })
+        }
+        else {
+            dispatch({
+                type: TAGS_SUCCESS,
+                payload: res.data
+            })
+        }
+    }
+    catch(err){
+        dispatch({
+            type: TAGS_FAIL
         });
     } finally {
         setLoading(false); // Set loading to false when data fetching is complete
@@ -202,3 +247,74 @@ export const savedpics = (url) => async dispatch => {
         })
     }
 }
+
+
+export const save = (pic_id) => async dispatch =>{
+    const config = {
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-CSRFToken": Cookies.get('csrftoken')
+        }
+    };
+    console.log(pic_id)
+    const body = JSON.stringify({
+        "withCredentials": true
+    })
+    try{
+        const res = await axios.post(`${apiUrl}/${pic_id}/api-save-pic/`, body, config)
+        if(res.data.success){
+            notifysuccess(res)
+            dispatch({
+                type:SAVE_SUCCESS,
+                payload: res.data.username
+            })
+        }else{
+            notifyproblem(res)
+            dispatch({
+                type:SAVE_FAIL
+            })
+        }
+    }
+    catch{
+        dispatch({
+            type:SAVE_FAIL
+        })
+    }
+}
+
+
+export const like = (pic_id) => async dispatch =>{
+    const config = {
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-CSRFToken": Cookies.get('csrftoken')
+        }
+    };
+    console.log(pic_id)
+    const body = JSON.stringify({
+        "withCredentials": true
+    })
+    try{
+        const res = await axios.post(`${apiUrl}/${pic_id}/api-like-pic/`, body, config)
+        if(res.data.success){
+            notifysuccess(res)
+            dispatch({
+                type:LIKE_SUCCESS,
+                payload: res.data.username
+            })
+        }else{
+            notifyproblem(res)
+            dispatch({
+                type:LIKE_FAIL
+            })
+        }
+    }
+    catch{
+        dispatch({
+            type:LIKE_FAIL
+        })
+    }
+}
+

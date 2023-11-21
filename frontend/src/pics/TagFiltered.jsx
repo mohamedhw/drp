@@ -32,7 +32,7 @@ const TagFiltered = ({pics, tagpics}) => {
                         <Col xs={12} md={6} lg={3} xl={3} xxl={3} className='p-1 pic-t'>
                             <Link to={`/${post.id}`} className='article-2'>
                                 <Card className='pic-l' key={post.id} style={{height: "100%"}}>
-                                    <Card.Img variant="top" src={`http://localhost:8000${post.thumb}`} style={{height: "100% !important"}}/>
+                                    <Card.Img variant="top" src={post.thumb} style={{height: "100% !important"}}/>
                                 </Card>
                             </Link>
                         </Col>

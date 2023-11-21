@@ -46,6 +46,7 @@ class Post(models.Model):
     tags = models.ManyToManyField(Hashtag, blank=True, related_name="tags")
     thumb = models.ImageField(blank=True, null=True, upload_to='thumb')
     saved = models.ManyToManyField(User, blank=True, related_name="wish")
+    like = models.ManyToManyField(User, blank=True, related_name="like")
     objects = PostManager()
 
     def __str__(self):
@@ -81,9 +82,3 @@ class Post(models.Model):
         profile = Profile.objects.get(user=self.author)
         return profile.image.url
 
-    def snippet(self):
-        return self.body[:50] + "..."
-
-
-    def get_absolute_url(self):
-        return reverse("articles:detail", kwargs={"id": self.id})

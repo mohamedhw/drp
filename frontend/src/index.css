@@ -98,6 +98,32 @@ div.wrapper > h1 {
   cursor: pointer !important;
 }
 
+.btn-i {
+  color:#00dba0 !important;
+  background: none !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+}
+
+.btn-i-click {
+  color: #0f121f !important;
+  background-color: #00dba0 !important;
+  cursor: pointer !important;
+}
+
+/* .btn-s-click:hover {
+  color:#00dba0 !important;
+  background: none !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+} */
+/* 
+.btn-s-click:hover {
+  color: #0f121f !important;
+  background-color: #00dba0 !important;
+  cursor: pointer !important;
+} */
+
 .nav-link {
   cursor: auto !important;
 }
@@ -450,4 +476,30 @@ button {
   color: #00dba0;
   font-size: 20px;
   font-weight: bolder;
+}
+
+.tag-card {
+    background: none;
+    color: #00bda0;
+    border: 1px solid #00bda0;
+    display: inline-block;
+    width: 95%; 
+}
+.tag-card:hover {
+    color: green;
+    border-color: green;
+    .tag-card-span {
+        border-color: green
+    }
+}
+
+
+.tag-card-span {
+    border-left: 1px solid #00bda0;
+    height: 30px
+}
+
+
+.tag-card p {
+    display: inline-block
 }
