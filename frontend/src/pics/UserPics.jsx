@@ -6,13 +6,15 @@ import Items from "../component/Items";
 import {authorpics} from "../redux/action/pics"
 import ProfileHead from "../component/ProfileHead";
 import { useParams, Link } from "react-router-dom"
+import SliceItems from '../component/SliceItems'
 
 const UserPics = ({authorpics, pics, pics_, username_g, image_g}) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const {authorname} = useParams()
     const url = `${apiUrl}/api-user-posts/${authorname}/`
     const [profileHead, setProfileHead] = useState(<></>)
-    
+    const [authorpic, setAuthorpic] = useState() 
+    let slicePics = pics && pics.slice(0, 8)
     useEffect(()=>{
         authorpics(url)
         if(username_g === authorname){
@@ -29,26 +31,32 @@ const UserPics = ({authorpics, pics, pics_, username_g, image_g}) => {
     }else{
         picsView = (
             <>
-                <Items pics_g={pics}/>
-                <div>
-                    <Link to={`/userallpics/${authorname}`}>
-                        <button className='btn btn-outline-success btn-s px-lg-5'>More results</button>
-                    </Link>
-                </div>
+            
+                    
+                    <SliceItems pics_g={slicePics}/>
+                    {pics && pics.length > 8?
+                            <div>
+                                <Link to={`/userallpics/${authorname}`}>
+                                    <button className='btn btn-outline-success btn-s px-lg-5'>More results</button>
+                                </Link>
+                            </div>
+                        :
+                            <></>
+                     } 
+                
             </>
             )
     }
-
     return (
         <>
-            <Container className="mt-5">
-                {pics &&
-                <Row>
-                        {profileHead}
+                {slicePics &&
+                    <>
+                    {profileHead}
+                    <Container className="mt-5">
                         {picsView}
-                </Row>
+                    </Container>
+                    </>
                 }
-            </Container>
         </>
     )
 }

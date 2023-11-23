@@ -1,5 +1,6 @@
 import { Routes, Route} from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
+import 'react-image-crop/dist/ReactCrop.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
@@ -48,7 +49,7 @@ const App = () => {
           <Route path='/userpics/:authorname' element={<UserPics/>}/>
           <Route exact path='/search/:searchpage?' element={<Searched />}/>
           <Route exact path='/tag/:tagSlug' element={<TagFiltered />} />
-          <Route exact path='/pic/:postId' element={<Pic/>}/>
+          <Route exact path='/pic/:postId' element={<Pic />}/>
 	        <Route exact path='/userallpics/:username/' element={<AllUserPics/>}/>
           <Route exact path='/:page?' element={<Home />} />
           <Route path="*" element={<NotFound />} />

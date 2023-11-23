@@ -7,7 +7,7 @@ import Items from '../component/Items';
 import { useParams } from "react-router-dom"
 import { useNavigate } from 'react-router-dom';
 import { setPage, setCurrentPage } from '../redux/action/pages'; // Import your new actions
-
+import ImageUploader from '../component/ImageUploader'
 const Home = ({pics_g, pics, setCurrentPage, currentPage, count, next, previous}) => {
     const navigate = useNavigate()
     const apiUrl = import.meta.env.VITE_API_URL;

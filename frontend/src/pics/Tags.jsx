@@ -16,22 +16,23 @@ const Tags = ({tags, tags_g}) => {
     
     return (
         <>
+            <h2 style={{color: "#00bda0"}}>Tags</h2>
             {loading? <h1>Loading...</h1>:
-                tags_g && tags_g.map((tag) =>(
                     <Container>
-                        <h2 style={{color: "#00bda0"}}>Tags</h2>
-                        <Row className="m-5" style={{maxWidth: "800px"}}>
-                            <Col lg={4} md={6} sm={12}>
-                                <Link to={`/tag/${tag.tag_slug}`}>
-                                    <Card className="tag-card p-1">
-                                        <p className="p-1 m-0" style={{float: "left"}}>{tag.tag}</p>
-                                        <p className="p-1 m-0" style={{float: "right"}}><span className="p-1 tag-card-span" />{tag.post_count}</p>
-                                    </Card>
-                                </Link>
-                            </Col>
+                        <Row className="m-5" style={{}}>
+                            {tags_g && tags_g.map((tag) =>(
+                                <Col xl={3} md={6} sm={12}>
+                                    <Link to={`/tag/${tag.tag_slug}`}>
+                                        <Card className="tag-card p-1">
+                                            <p className="p-1 m-0" style={{float: "left"}}>{tag.tag}</p>
+                                            <p className="p-1 m-0" style={{float: "right"}}><span className="p-1 tag-card-span" />{tag.post_count}</p>
+                                        </Card>
+                                    </Link>
+                                </Col>
+                            ))
+                            }
                         </Row>
                     </Container>
-                ))
             }
         </>
     )

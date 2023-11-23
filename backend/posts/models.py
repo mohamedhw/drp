@@ -21,7 +21,7 @@ class PostManager(models.Manager):
 
 
 class Hashtag(models.Model):
-    tag   = models.CharField(max_length=3000, blank=True, null=True)
+    tag   = models.CharField(max_length=20, blank=True, null=True)
     tag_slug    = models.SlugField(null=False, unique=True)
 
     def get_absolute_url_tag(self):

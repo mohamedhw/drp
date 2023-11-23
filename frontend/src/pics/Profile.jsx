@@ -46,11 +46,13 @@ const Profile = ({ profile, profile_update, user_update, username_global, image_
                         </div>
                     </Col>
                 </Row>
-                <Nav>
-                    <Link to={`/userpics/${username_global}`}><Button className='btn btn-outline-success btn-s px-5 mx-lg-1'>my pics</Button></Link>
-                    <Link to='/saved'><Button className='btn btn-outline-success btn-s px-5 mx-lg-1'>saved</Button></Link>
-                    <Button className='btn btn-outline-success btn-s'>update my account info</Button>
-                </Nav>
+                <Container>
+                    <Nav className="mx-lg-auto d-flex justify-content-center">
+                        <Link to={`/userpics/${username_global}`}><Button className='btn btn-outline-success btn-s px-lg-5 mx-1 mx-lg-1'>my pics</Button></Link>
+                        <Link to='/saved'><Button className='btn btn-outline-success btn-s px-lg-5 mx-1 mx-lg-1'>saved</Button></Link>
+                        <Button className='btn btn-outline-success btn-s px-lg-5 mx-1 mx-lg-1'>update</Button>
+                    </Nav>
+                </Container>
             </Container>
             <hr style={{margin: '0'}}/>
             <Container>

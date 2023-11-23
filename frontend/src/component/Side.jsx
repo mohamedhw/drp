@@ -158,7 +158,7 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
           {post && 
             <div className='' id="menu">
               <h2 className='m-3'>{post.title}</h2>
-              <h4 className='m-3'>{post.thumb_dimensions}</h4>
+              <h4 className='m-3'>{post.image_dimensions}</h4>
               {tagView}
                 
               <hr/>

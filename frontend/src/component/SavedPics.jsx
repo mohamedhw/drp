@@ -6,10 +6,11 @@ import Items from "../component/Items";
 import ProfileHead from "../component/ProfileHead";
 import { Link } from "react-router-dom"
 import { savedpics } from "../redux/action/pics";
-
+import SliceItems from "./SliceItems"
 const SavedPics = ({savedpics, username_g, image_g, pics, pics_}) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const url = `${apiUrl}/api-saved-pics/`
+    let slicePics = pics && pics.slice(0, 8)
 
     useEffect(()=>{
         savedpics(url)
@@ -22,12 +23,19 @@ const SavedPics = ({savedpics, username_g, image_g, pics, pics_}) => {
     }else{
         picsView = (
             <>
-                <Items pics_g={pics}/>
-                <div>
-                    <Link to={'/moresaved'}>
-                        <button className='btn btn-outline-success btn-s px-lg-5'>More results</button>
-                    </Link>
-                </div>
+            
+                    
+                    <SliceItems pics_g={slicePics}/>
+                    {pics && pics.length > 8?
+                            <div>
+                                <Link to={`/userallpics/${authorname}`}>
+                                    <button className='btn btn-outline-success btn-s px-lg-5'>More results</button>
+                                </Link>
+                            </div>
+                        :
+                            <></>
+                     } 
+                
             </>
             )
     }

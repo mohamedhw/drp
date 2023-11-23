@@ -63,7 +63,7 @@ const Search = ({q, setQ, show, setShow, pics_g, search, setCurrentPage}) => {
     };
     const navigate = useNavigate()
 
-    
+    let slicedPics_g = pics_g && pics_g.slice(0, 12)
     return (
         <>
             <Modal className='my-model-search' show={show} fullscreen={fullscreen} onHide={() => setShow(false)}>
@@ -86,14 +86,16 @@ const Search = ({q, setQ, show, setShow, pics_g, search, setCurrentPage}) => {
                 <hr></hr>
                 <Modal.Body>
                 {q?
-                    pics_g &&
                     <>
+                    {slicedPics_g &&
                         <Container>                            
-                            <Items pics_g={pics_g} setShow={setShow}/>
-                        </Container>
+                            <Items pics_g={slicedPics_g} setShow={setShow}/>
+                        </Container>}
+                    {pics_g && pics_g.length > 12?
                         <div>
                             <button ref={moreResultsButtonRef} className='btn btn-outline-success btn-s px-lg-5' onClick={e=>handelMore()}>More results</button>
                         </div>
+                        :<></>}
                     </>
                     :
                     <div></div>

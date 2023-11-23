@@ -13,24 +13,25 @@ const Pic = () => {
     const [data, setData]=useState()
     const [imageHeight, setImageHeight] = useState(null);
     const [imageWidth, setImageWidth] = useState(null);
+    const [zoom_, setZoom_] = useState("showcase-norm")
 
     useEffect(()=>{
         axios.get(`${apiUrl}/api-post/${postId}/`)
         .then(response => {
             setData(response.data)
-
+            setZoom_("showcase-norm")
         })
     }, [postId])
     const he = window.innerHeight
-    const [test, setTest] = useState("showcase-norm")
+
     const handleImageLoad = () => {
-        if(test === "showcase-norm"){
-            setTest("showcase-zoom")
-        }else if(test == "showcase-zoom"){
-            setTest("showcase-x-zoom")
+        if(zoom_ === "showcase-norm"){
+            setZoom_("showcase-zoom")
+        }else if(zoom_ == "showcase-zoom"){
+            setZoom_("showcase-x-zoom")
         }
         else{
-            setTest("showcase-norm")
+            setZoom_("showcase-norm")
         }
         // setImageHeight(event.target.naturalHeight);
         // setImageWidth(event.target.naturalWidth);
@@ -109,7 +110,7 @@ const Pic = () => {
                                 
                             {data && 
                                 <img
-                                className={test} onClick={handleImageLoad} id="img-content" src={data.image}  alt="Image Description" autoFocus/>
+                                className={zoom_} onClick={handleImageLoad} id="img-content" src={data.image}  alt="Image Description" autoFocus/>
                             }
                                 <div className="scrollbar horizontal both">
                                     <div className="scroll-handle" style={{ width: "56.8642%", left: "6.03324%"}}></div>
