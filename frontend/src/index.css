@@ -55,6 +55,8 @@ h1, h2, h3, h4, h5 {
 a, a:hover, a:visited {
   color: #fff !important;
   text-decoration: none !important;
+  border-style: none !important;
+  outline: none !important;
 }
 
 a b:hover {
@@ -329,7 +331,7 @@ div.wrapper > h1 {
   border: none !important;
   color: #00dba0;
   cursor: pointer;
-  position: absolute;
+  position: fixed;
   left: 250px;
   z-index: 350;
 }
@@ -339,7 +341,7 @@ div.wrapper > h1 {
   border: none !important;
   color: #00dba0;
   cursor: pointer;
-  position: absolute;
+  position: fixed;
   left: 0;
   z-index: 350;
 }

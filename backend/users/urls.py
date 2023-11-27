@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('api-profile/', views.ProfileView.as_view()),
+    path('api-user-profile/<str:username>/', views.UserView.as_view()),
     path('csrfcookie/', views.GetCsrfCookie.as_view(), name='csrfcookie'),
     path('checkauth/', views.CheckAuth.as_view(), name='profile'),
     path('api-register/', views.RegisterUser.as_view(),),

@@ -17,13 +17,21 @@ import {
     LIKE_SUCCESS,
     LIKE_FAIL,
     TAGS_SUCCESS,
-    TAGS_FAIL
+    TAGS_FAIL,
+    DETAIL_FAIL,
+    DETAIL_SUCCESS,
+    RANDOM_FAIL,
+    RANDOM_SUCCESS,
+    TOP_FAIL,
+    TOP_SUCCESS,
 } from "../action/type";
 
 
 
 const initialState = {
     pics:[],
+    top: [],
+    random: [],
     tags: [],
     taged:[],
     searched:[],
@@ -32,11 +40,17 @@ const initialState = {
     authorName:null,
     authorImage:null,
     savedPics: [],
+    detail: null,
 }
 
 export default function(state=initialState,action){
     const { type, payload } = action
     switch(type){
+        case DETAIL_SUCCESS:
+            return {
+                ...state,
+                detail: payload
+            }
         case TAGS_SUCCESS:
             return {
                 ...state,
@@ -72,7 +86,17 @@ export default function(state=initialState,action){
             return {
               ...state,
               searched: initialState, // Reset the parameter to its initial value.
-            };
+            }
+        case TOP_SUCCESS:
+            return {
+                ...state,
+                top: payload
+            }
+        case RANDOM_SUCCESS:
+            return {
+                ...state,
+                random: payload
+            }
         case PICS_SUCCESS:
             return {
                 ...state,
@@ -88,6 +112,9 @@ export default function(state=initialState,action){
                 ...state,
                 taged: payload
             }
+        case RANDOM_FAIL:
+        case TOP_FAIL:
+        case DETAIL_FAIL:
         case TAGS_FAIL:
         case LIKE_FAIL:
         case PICS_FAIL:

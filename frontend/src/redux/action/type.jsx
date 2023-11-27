@@ -1,5 +1,11 @@
 export const PICS_SUCCESS = 'PICS_SUCCESS';
 export const PICS_FAIL = 'PICS_FAIL';
+export const RANDOM_SUCCESS = 'RANDOM_SUCCESS'
+export const RANDOM_FAIL = 'RANDOM_FAIL'
+export const TOP_SUCCESS = 'TOP_SUCCESS'
+export const TOP_FAIL = 'TOP_FAIL'
+ 
+
 export const TAG_PICS_SUCCESS = 'TAG_PICS_SUCCESS'
 export const TAG_PICS_FAIL = 'TAG_PICS_FAIL'
 export const CREATE_PICS_SUCCESS = 'CREATE_PICS_SUCCESS'
@@ -16,6 +22,8 @@ export const LIKE_SUCCESS = 'LIKE_SUCCESS'
 export const LIKE_FAIL = 'LIKE_FAIL'
 export const TAGS_SUCCESS = 'TAGS_SUCCESS'
 export const TAGS_FAIL = 'TAGS_FAIL'
+export const DETAIL_FAIL = 'DETAIL_FAIL'
+export const DETAIL_SUCCESS = 'DETAIL_SUCCESS'
 
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAIL = 'REGISTER_FAIL';

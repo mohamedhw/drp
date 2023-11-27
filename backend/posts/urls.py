@@ -11,7 +11,9 @@ from .views import (
     save_pic,
     SavedPics,
     like_pic,
-    AllTags
+    AllTags,
+    TopPics,
+    RandomPics,
     )
 
 
@@ -29,6 +31,8 @@ urlpatterns = [
     path('<str:pk>/api-save-pic/', save_pic),
     path('api-saved-pics/', SavedPics.as_view()),
     path('<str:pk>/api-like-pic/', like_pic),
-    path('api-tags/', AllTags.as_view())
+    path('api-tags/', AllTags.as_view()),
 
+    path('api-top-pics/', TopPics.as_view()),
+    path('api-random-pics/', RandomPics.as_view()),
 ]

@@ -20,7 +20,7 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
   const [saveToggle, setSaveToggle] = useState(1);
 
   const [isSaved, setIsSaved] = useState( post && post?.user_has_saved || false);
-  console.log(isSaved)
+
   const handelAuthorPage = (username_, image_) => {
     setAuthor(username_, image_)
   }
@@ -69,6 +69,15 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
     }
   }
 
+  const handelActionBtn = () => {
+    const authorInfo = document.getElementById("dropdown-action-btn");
+    if(authorInfo.style.display === "block"){
+      authorInfo.style.display = "none";
+    }else{
+      authorInfo.style.display = "block";
+    }
+  }
+
   const handelTags = () => {
     const authorInfo = document.getElementById("dropdown-tags");
     if(authorInfo.style.display === "block"){
@@ -80,7 +89,7 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
 
   let tagView = <></>
   const tags = post && post.related_tags
-
+  const likes_count = post && post.like_count
   if(post && tags.length === 0){
       tagView= (<></>)
   }else{
@@ -89,13 +98,13 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
             {post &&
             <div>
                 <hr/>
-                <div className='pb-3 mx-3' style={{textAlign: "left"}}>
+                <div className='pb-2 mx-3 mt-3' style={{textAlign: "left"}}>
                     <a className='drop-list-title' onClick={e=> handelTags()}>tags<FaAngleDown style={{fontSize: '14px'}}/></a>
                 </div>
-                <div id="dropdown-tags" style={{display: "block"}}>
+                <div id="dropdown-tags" style={{display: "block", paddingTop: "5px"}}>
                     {post.related_tags.map((tag) => (
                     <Link to={`/tag/${tag.tag_slug}`}>
-                        <span className="m-1 my-tag p-1">{tag.tag}</span>
+                        <span className="m-1 my-tag p-1 px-3">{tag.tag}</span>
                     </Link>
                     ))}
                 </div>
@@ -122,13 +131,12 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
       saveMark.classList.add("btn-i")
     }
   }
-  
-  if(isAuthenticated && post && post.user_has_saved === true){
-    saveButton = <button className='btn btn-outline-success btn-i-click mx-2 m-3' onClick={e=>handelSave(post.id)} id="save-mark"><FaBookmark/></button>
-  }else{
-    saveButton = <button className='btn btn-outline-success btn-i mx-2 m-3' onClick={e=>handelSave(post.id)} id="save-mark"><FaBookmark/></button>
-  }
-  
+      
+      if( post && post.user_has_saved === true){
+        saveButton = <button className='btn btn-outline-success btn-i-click mx-2 m-3' onClick={e=>handelSave(post.id)} id="save-mark"><FaBookmark/></button>
+      }else{
+        saveButton = <button className='btn btn-outline-success btn-i mx-2 m-3' onClick={e=>handelSave(post.id)} id="save-mark"><FaBookmark/></button>
+      }
   let likeButton = <></>
   const handelLike = (e) => {
     like(e)
@@ -145,14 +153,13 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
       saveMark.classList.add("btn-i")
     }
   }
+      if(post && post.user_has_liked === true){
+        likeButton = <button className='btn btn-outline-success btn-i-click mx-2 m-3' onClick={e=>handelLike(post.id)} id="like-mark"><FaHeart/><span className="m-1">{post && post.like_count}</span></button>
+      }else{
+        likeButton = <button className='btn btn-outline-success btn-i mx-2 m-3' onClick={e=>handelLike(post.id)} id="like-mark"><FaHeart/><span className="m-1">{post && post.like_count}</span></button>
+      }
 
-  if(isAuthenticated && post && post.user_has_liked === true){
-    likeButton = <button className='btn btn-outline-success btn-i-click mx-2 m-3' onClick={e=>handelLike(post.id)} id="like-mark"><FaHeart/></button>
-  }else{
-    likeButton = <button className='btn btn-outline-success btn-i mx-2 m-3' onClick={e=>handelLike(post.id)} id="like-mark"><FaHeart/></button>
-  }
-
-  return ( 
+  return (
       <>
 
           {post && 
@@ -162,7 +169,7 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
               {tagView}
                 
               <hr/>
-                <div className='pb-2 mx-3' style={{textAlign: "left"}}>
+                <div className='pb-2 mx-3 mt-3' style={{textAlign: "left"}}>
                   <a className='drop-list-title' onClick={e=> handelDropDown()}>related pics <FaAngleDown style={{fontSize: '14px'}}/></a>
                 </div>
                 <div id="dropdown-related" style={{display: "block"}}>
@@ -173,11 +180,20 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
                   ))}
                 </div>
               <hr style={{marginBottom: "0"}}/>
-                {saveButton}
-                {likeButton}
-
-              <hr style={{marginTop: "0px"}}/>
-              <div className='pb-2 mx-3' style={{textAlign: "left"}}>
+              {isAuthenticated?
+                  <>
+                    <div className='pb-2 mx-3 mt-3' style={{textAlign: "left"}}>
+                      <a className='drop-list-title' onClick={e=> handelActionBtn()}>related pics <FaAngleDown style={{fontSize: '14px'}}/></a>
+                    </div>
+                    <div id="dropdown-action-btn" style={{display: "block"}}>
+                        {saveButton}
+                        {likeButton}
+                    </div>
+                      <hr style={{marginTop: "0px"}}/>
+                  </>
+                  :<></>
+              }
+              <div className='pb-2 mx-3 mt-3' style={{textAlign: "left"}}>
                 <a className='drop-list-title' onClick={e=> handelAuthorInfo()} >author info <FaAngleDown style={{fontSize: '14px'}}/></a>
               </div>
               <div id="dropdown-author-info" style={{display: "block"}}>
@@ -196,6 +212,7 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
                 </Row>
               </div>
               <hr/>
+              <Link to={post.image}>display image full screen</Link>
             </div>
           }
       </>

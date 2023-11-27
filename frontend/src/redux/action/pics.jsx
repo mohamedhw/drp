@@ -20,7 +20,13 @@ import {
     LIKE_SUCCESS,
     LIKE_FAIL,
     TAGS_SUCCESS,
-    TAGS_FAIL
+    TAGS_FAIL,
+    DETAIL_SUCCESS,
+    DETAIL_FAIL,
+    RANDOM_FAIL,
+    RANDOM_SUCCESS,
+    TOP_FAIL,
+    TOP_SUCCESS,
 } from './type'
 import Cookies from 'js-cookie'
 import { toast } from 'react-toastify';
@@ -69,7 +75,85 @@ export const pics = (url, setLoading) => async dispatch => {
     }
 }
 
+export const topPics = (url, setLoading) => async dispatch => {
 
+
+    try {
+        const res = await axios.get(url, config)
+        if(res.data.error){
+            dispatch({
+                type: TOP_FAIL,
+            })
+        }
+        else {
+            dispatch({
+                type: TOP_SUCCESS,
+                payload: res.data
+            })
+        }
+    }
+    catch(err){
+        dispatch({
+            type: TOP_FAIL
+        });
+    } finally {
+        setLoading(false); // Set loading to false when data fetching is complete
+    }
+}
+
+export const randomPics = (url, setLoading) => async dispatch => {
+
+
+    try {
+        const res = await axios.get(url, config)
+        if(res.data.error){
+            dispatch({
+                type: RANDOM_FAIL,
+            })
+        }
+        else {
+            dispatch({
+                type: RANDOM_SUCCESS,
+                payload: res.data
+            })
+        }
+    }
+    catch(err){
+        dispatch({
+            type: RANDOM_FAIL
+        });
+    } finally {
+        setLoading(false); // Set loading to false when data fetching is complete
+    }
+}
+
+
+export const detail = (postId, setLoading, setZoom_) => async dispatch => {
+
+    const url = `${apiUrl}/api-post/${postId}/`
+    try {
+        const res = await axios.get(url, config)
+        if(res.data.error){
+            dispatch({
+                type: DETAIL_FAIL,
+            })
+        }
+        else {
+            setZoom_("showcase-norm")
+            dispatch({
+                type: DETAIL_SUCCESS,
+                payload: res.data
+            })
+        }
+    }
+    catch(err){
+        dispatch({
+            type: DETAIL_FAIL
+        });
+    } finally {
+        setLoading(false); // Set loading to false when data fetching is complete
+    }
+}
 export const tags = (setLoading) => async dispatch => {
 
 

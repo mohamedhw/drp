@@ -40,6 +40,7 @@ const Home = ({pics_g, pics, setCurrentPage, currentPage, count, next, previous}
         pics(url, setLoading);
         // console.log(url)
     }, [currentPage, page]);
+
     return(
         <Container className='mt-5'>
             {loading? <h1>Loading...</h1>: <></>}

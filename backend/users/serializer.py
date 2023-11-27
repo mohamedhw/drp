@@ -9,7 +9,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Profile
-        fields = ['image', 'user_u', 'user']
+        fields = ['image', 'cover', 'user_u', 'user']
 
 
 class UserSerializer(serializers.ModelSerializer):

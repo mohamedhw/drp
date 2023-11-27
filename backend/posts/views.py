@@ -45,6 +45,53 @@ class Home(generics.ListAPIView):
         qs = qs.order_by('-date')
         return qs
 
+
+# most liked pics
+class TopPics(generics.ListAPIView):
+    queryset=Post.objects.all()
+    serializer_class=PostSerializers
+    permission_classes = (permissions.AllowAny, )
+
+    def get_queryset(self, *args, **kwargs):
+        # Start with all items
+        qs = Post.objects.all()
+        #like_count = qs.like.all().count()
+        # Retrieve the 'category' and 'label' query parameters from the request
+        query = self.request.GET.get('q')
+        if query:
+            lookups = (
+                Q(title__icontains=query) |
+                Q(body__icontains=query)
+                # Q(author__icontains=query)
+            )
+            qs = qs.filter(lookups)
+        qs = qs.annotate(like_count=Count('like'))
+        qs = qs.order_by('-like_count')
+        return qs
+
+
+# Random pics
+class RandomPics(generics.ListAPIView):
+    queryset=Post.objects.all()
+    serializer_class=PostSerializers
+    permission_classes = (permissions.AllowAny, )
+
+    def get_queryset(self, *args, **kwargs):
+        # Start with all items
+        qs = Post.objects.all()
+        #like_count = qs.like.all().count()
+        # Retrieve the 'category' and 'label' query parameters from the request
+        query = self.request.GET.get('q')
+        if query:
+            lookups = (
+                Q(title__icontains=query) |
+                Q(body__icontains=query)
+                # Q(author__icontains=query)
+            )
+            qs = qs.filter(lookups)
+        qs = qs.order_by('?')
+        return qs
+
 @api_view(["POST", "GET"])
 def like_pic(request, pk):
     try:

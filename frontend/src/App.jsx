@@ -22,6 +22,10 @@ import AllUserPics from './pics/AllUserPics';
 import SavedPics from './component/SavedPics';
 import AllSavedPics from './pics/AllSavedPics';
 import Tags from './pics/Tags';
+import TopPics from './pics/TopPics';
+import RandomPics from './pics/RandomPics';
+import LatestPics from './pics/LatestPics';
+
 
 const App = () => {
   const [modalShow, setModalShow] = useState(false);
@@ -50,7 +54,10 @@ const App = () => {
           <Route exact path='/search/:searchpage?' element={<Searched />}/>
           <Route exact path='/tag/:tagSlug' element={<TagFiltered />} />
           <Route exact path='/pic/:postId' element={<Pic />}/>
-	        <Route exact path='/userallpics/:username/' element={<AllUserPics/>}/>
+	      <Route exact path='/userallpics/:username/' element={<AllUserPics/>}/>
+          <Route exact path='/top/:page?' element={<TopPics />} />
+          <Route exact path='/random/:page?' element={<RandomPics />} />
+          <Route exact path='/latest/:page?' element={<LatestPics />} />
           <Route exact path='/:page?' element={<Home />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

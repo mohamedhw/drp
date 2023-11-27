@@ -1,26 +1,22 @@
-import { useParams, Link } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
-import axios from "axios"
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import {connect} from 'react-redux'
 import Side from "../component/Side";
+import { detail } from "../redux/action/pics";
 
-const Pic = () => {
-    const apiUrl = import.meta.env.VITE_API_URL;
+const Pic = ({detail, data}) => {
 
     const {postId} = useParams()
-    const [data, setData]=useState()
-    const [imageHeight, setImageHeight] = useState(null);
-    const [imageWidth, setImageWidth] = useState(null);
     const [zoom_, setZoom_] = useState("showcase-norm")
+    const [loading, setLoading] = useState(true)
 
     useEffect(()=>{
-        axios.get(`${apiUrl}/api-post/${postId}/`)
-        .then(response => {
-            setData(response.data)
-            setZoom_("showcase-norm")
-        })
+        detail(postId, setLoading, setZoom_)
+        // axios.get(`${apiUrl}/api-post/${postId}/`)
+        // .then(response => {
+        //     setData(response.data)
+        //     setZoom_("showcase-norm")
+        // })
     }, [postId])
     const he = window.innerHeight
 
@@ -33,22 +29,10 @@ const Pic = () => {
         else{
             setZoom_("showcase-norm")
         }
-        // setImageHeight(event.target.naturalHeight);
-        // setImageWidth(event.target.naturalWidth);
+
     }
 
-    let hight_=0
-    let width_=0
-    if(imageHeight>imageWidth){
-        hight_="40%"
-        width_="40%"
-    }else if(imageHeight===imageWidth){
-        hight_="60%"
-        width_="60%"
-    }else{
-        hight_="100%"
-        width_="100%"
-    }
+
 
 
     const hidContent = (
@@ -81,19 +65,21 @@ const Pic = () => {
     }
     return(
         <>
+            {loading? <h1>Loading...</h1>:
+        <>
             {/* the side bar */}
-            <aside id="menu" style={{display: "block"}}>
-                {/* the side body */}
-                <div id="showcase-sidebar" className='' style={{height: "100%"}}>
-                      <div className="lsidebar"> 
-                        <div className="side">
-                            <Side post={data} toggleSidebar={toggleSidebar} ></Side>
-                        <div className="sidebar-content" style={{marginRight: "-16.8px"}}></div>
-                      </div>
-                    </div>
-                </div>
+                    <aside id="menu" style={{display: "block"}}>
+                        {/* the side body */}
+                        <div id="showcase-sidebar" className='' style={{height: "100%"}}>
+                              <div className="lsidebar"> 
+                                <div className="side">
+                                    <Side post={data} toggleSidebar={toggleSidebar} ></Side>
+                                <div className="sidebar-content" style={{marginRight: "-16.8px"}}></div>
+                              </div>
+                            </div>
+                        </div>
 
-            </aside>
+                    </aside>
             {/* the button */}
             <div id="togglebutton" style={{width:"auto", marginTop: he/5 }} className="vis" onClick={e=>toggleSidebar()}>
                 {slid}
@@ -121,9 +107,15 @@ const Pic = () => {
                     </div>
                 </section>
             </main>
+            </>
+        }
         </>
     )
 }
 
 
-export default Pic
+
+const mapStateToProps = state => ({
+    data: state.pics.detail
+})
+export default connect(mapStateToProps, {detail}) (Pic)

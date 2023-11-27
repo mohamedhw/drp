@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react"
-import Row from "react-bootstrap/esm/Row";
 import { connect } from 'react-redux'
 import Container from "react-bootstrap/esm/Container";
-import Items from "../component/Items";
 import {authorpics} from "../redux/action/pics"
 import ProfileHead from "../component/ProfileHead";
 import { useParams, Link } from "react-router-dom"
@@ -13,7 +11,6 @@ const UserPics = ({authorpics, pics, pics_, username_g, image_g}) => {
     const {authorname} = useParams()
     const url = `${apiUrl}/api-user-posts/${authorname}/`
     const [profileHead, setProfileHead] = useState(<></>)
-    const [authorpic, setAuthorpic] = useState() 
     let slicePics = pics && pics.slice(0, 8)
     useEffect(()=>{
         authorpics(url)
@@ -31,32 +28,29 @@ const UserPics = ({authorpics, pics, pics_, username_g, image_g}) => {
     }else{
         picsView = (
             <>
-            
-                    
-                    <SliceItems pics_g={slicePics}/>
-                    {pics && pics.length > 8?
-                            <div>
-                                <Link to={`/userallpics/${authorname}`}>
-                                    <button className='btn btn-outline-success btn-s px-lg-5'>More results</button>
-                                </Link>
-                            </div>
-                        :
-                            <></>
-                     } 
-                
+                <SliceItems pics_g={slicePics}/>
+                {pics && pics.length > 8?
+                        <div>
+                            <Link to={`/userallpics/${authorname}`}>
+                                <button className='btn btn-outline-success btn-s px-lg-5'>More results</button>
+                            </Link>
+                        </div>
+                    :
+                        <></>
+                }  
             </>
             )
     }
     return (
         <>
-                {slicePics &&
-                    <>
-                    {profileHead}
-                    <Container className="mt-5">
-                        {picsView}
-                    </Container>
-                    </>
-                }
+            {slicePics &&
+                <>
+                {profileHead}
+                <Container className="mt-5">
+                    {picsView}
+                </Container>
+                </>
+            }
         </>
     )
 }

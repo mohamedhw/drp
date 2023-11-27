@@ -75,6 +75,19 @@ class ProfileView(APIView):
 
         return Response({'profile': user_profile.data, 'username':str(username), 'email':email})
 
+#@method_decorator(ensure_csrf_cookie, name='dispatch')
+class UserView(APIView):
+    def get(self, request, username, format=None, *args, **kwargs):
+        print(username)
+        user = User.objects.get(username=username)
+        username = user.username
+        email = user.email
+        user = User.objects.get(id=user.id)
+        profile = Profile.objects.get(user=user)
+        user_profile = UserProfileSerializer(profile)
+
+        return Response({'profile': user_profile.data, 'username':str(username), 'email':email})
+
 @method_decorator(ensure_csrf_cookie, name='dispatch')
 class UpdateUserView(APIView):
     def put(self, *args, **kwargs):
