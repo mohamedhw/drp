@@ -1,6 +1,6 @@
 import process from "process";
 import axios from "axios"
-import { PROFILE_SUCCESS, PROFILE_FAIL, PROFILE_UPDATE_SUCCESS, PROFILE_UPDATE_FAIL, USER_UPDATE_SUCCESS, USER_UPDATE_FAIL } from './type';
+import { PROFILE_SUCCESS, PROFILE_FAIL, PROFILE_UPDATE_SUCCESS, PROFILE_UPDATE_FAIL, USER_UPDATE_SUCCESS, USER_UPDATE_FAIL, USER_DATA_FAIL, USER_DATA_SUCCESS } from './type';
 import Cookies from 'js-cookie'
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -36,7 +36,6 @@ export const profile = () => async dispatch => {
 
 
 export const profile_update = (form_data) => async dispatch => {
-    console.log(form_data)
     const config = {
         headers: {
             'content-type': 'multipart/form-data',
@@ -99,6 +98,39 @@ export const user_update = (username, email) => async dispatch => {
     catch(err){
         dispatch({
             type: USER_UPDATE_FAIL
+        })
+    }
+}
+
+export const user_data = (username) => async dispatch => {
+    const config = {
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        }
+    };
+
+    // const body = JSON.stringify({
+    //     "withCredentials": true
+    // })
+    try {
+        const res = await axios.get(`${apiUrl}/api-user-profile/${username}/`, config)
+        console.log('test', res)
+        if(res.data.error){
+            dispatch({
+                type: USER_DATA_FAIL,
+            })
+        }
+        else {
+            dispatch({
+                type: USER_DATA_SUCCESS,
+                payload: res.data
+            })
+        }
+    }
+    catch(err){
+        dispatch({
+            type: USER_DATA_FAIL
         })
     }
 }

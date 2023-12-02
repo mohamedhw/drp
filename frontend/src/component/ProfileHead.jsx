@@ -5,9 +5,14 @@ import { Link } from "react-router-dom";
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
+import { user_data } from '../redux/action/profile';
+import { useEffect }from 'react'
 
-const ProfileHead = ({isAuthenticated, image, username, username_global, image_global, email_global, count, test}) => {
+const ProfileHead = ({isAuthenticated, user_data, user_username, user_image, image, username, username_global, image_global, email_global, count, test}) => {
     const apiUrl = import.meta.env.VITE_API_URL;
+    useEffect(() => {
+        user_data(username);
+    }, [username]);
 
     return (
         <>
@@ -39,13 +44,12 @@ const ProfileHead = ({isAuthenticated, image, username, username_global, image_g
         <div style={{backgroundImage: "url(../../w1.jpg)", backgroundSize: "cover"}}>
                 <Row>
                     <Col lg={5} md={6} sm={8} xs={12}>
-                        <img style={{width: "230px", height: "230px"}} src={`${apiUrl}/${image}`} alt='Profile Image' />
+                        <img style={{width: "230px", height: "230px"}} src={`${apiUrl}/${user_image}`} alt='Profile Image' />
                     </Col>
                     <Col lg={7} md={6} sm={8} xs={12} className='pt-1'>
                         <div>
                             <ul className='profile-info' >
-                                <li><h2>username: <span style={{color:"#fff"}}>{username}</span></h2></li>
-                                <li><h2>number of uploads: <span style={{color:"#fff"}}>{count}</span></h2></li>
+                                <li><h2><span style={{}}>{username}</span></h2></li>
                             </ul>
                         </div>
                     </Col>
@@ -60,7 +64,9 @@ const mapStateToProps = state => ({
     username_global: state.profile.username,
     image_global: state.profile.image,
     email_global: state.profile.email,
-    user_global: state.profile.user
+    user_global: state.profile.user,
+    user_username: state.profile.user_username,
+    user_image: state.profile.user_image
 })
 
-export default connect(mapStateToProps, {})(ProfileHead);
+export default connect(mapStateToProps, {user_data})(ProfileHead);

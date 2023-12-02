@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['email']
 
 
     def validate_email(self, value):

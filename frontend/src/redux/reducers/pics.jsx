@@ -24,6 +24,8 @@ import {
     RANDOM_SUCCESS,
     TOP_FAIL,
     TOP_SUCCESS,
+    DELETE_SUCCESS,
+    DELETE_FAIL
 } from "../action/type";
 
 
@@ -112,7 +114,12 @@ export default function(state=initialState,action){
                 ...state,
                 taged: payload
             }
+        case DELETE_SUCCESS:
+            return {
+                ...state
+            }
         case RANDOM_FAIL:
+        case AUTHOR_PICS_FAIL:
         case TOP_FAIL:
         case DETAIL_FAIL:
         case TAGS_FAIL:
@@ -122,6 +129,7 @@ export default function(state=initialState,action){
         case TAG_PICS_FAIL:
         case SAVED_PICS_FAIL:
         case SAVE_FAIL:
+        case DELETE_FAIL:
             return {
                 ...state
             }

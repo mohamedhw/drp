@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { Link } from "react-router-dom"
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -7,9 +8,9 @@ import { FaAngleDown } from 'react-icons/fa6';
 import {setAuthor} from '../redux/action/pics'
 import { useNavigate } from 'react-router-dom';
 import { FaBookmark, FaHeart } from "react-icons/fa6";
-import { save, like } from '../redux/action/pics';
+import { save, like, delete_pic } from '../redux/action/pics';
 
-const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...props }) => {
+const Side = ({isAuthenticated, setShowDelete, save, like, post, setAuthor, name, author, ...props }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -19,6 +20,7 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
   const navigate = useNavigate()
   const [saveToggle, setSaveToggle] = useState(1);
 
+  const handleShow = () => setShowDelete(true);
   const [isSaved, setIsSaved] = useState( post && post?.user_has_saved || false);
 
   const handelAuthorPage = (username_, image_) => {
@@ -86,6 +88,7 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
       authorInfo.style.display = "block";
     }
   }
+
 
   let tagView = <></>
   const tags = post && post.related_tags
@@ -212,7 +215,9 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
                 </Row>
               </div>
               <hr/>
-              <Link to={post.image}>display image full screen</Link>
+              <Link to={post.image}><h6>display image full screen</h6></Link>
+              <Link to=''><h6>crop the image</h6></Link>
+              <Button className='btn btn-outline-danger m-2 btn-d' onClick={handleShow}>delete</Button>
             </div>
           }
       </>
@@ -223,4 +228,5 @@ const Side = ({isAuthenticated, save, like, post, setAuthor, name, author, ...pr
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated 
 })
+
 export default connect(mapStateToProps, {setAuthor, save, like}) (Side)

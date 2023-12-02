@@ -75,10 +75,10 @@ class ProfileView(APIView):
 
         return Response({'profile': user_profile.data, 'username':str(username), 'email':email})
 
-#@method_decorator(ensure_csrf_cookie, name='dispatch')
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class UserView(APIView):
+    permission_classes = (permissions.AllowAny, )
     def get(self, request, username, format=None, *args, **kwargs):
-        print(username)
         user = User.objects.get(username=username)
         username = user.username
         email = user.email
@@ -86,7 +86,7 @@ class UserView(APIView):
         profile = Profile.objects.get(user=user)
         user_profile = UserProfileSerializer(profile)
 
-        return Response({'profile': user_profile.data, 'username':str(username), 'email':email})
+        return Response({'profile': user_profile.data, 'email':email})
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
 class UpdateUserView(APIView):

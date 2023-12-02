@@ -13,6 +13,7 @@ from .serializers import PostSerializers, HashtagSerializers
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_protect
 
 
 class Home(generics.ListAPIView):
@@ -297,10 +298,12 @@ class PostCreate(generics.CreateAPIView):
 
         return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# @method_decorator(ensure_csrf_cookie, name='dispatch')
+@method_decorator([ensure_csrf_cookie, csrf_protect], name='dispatch')
 class PostDelete(generics.DestroyAPIView):
     queryset = Post.objects.all()
     lookup_field = 'pk'
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()

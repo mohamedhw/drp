@@ -25,12 +25,13 @@ import Tags from './pics/Tags';
 import TopPics from './pics/TopPics';
 import RandomPics from './pics/RandomPics';
 import LatestPics from './pics/LatestPics';
-
+import Delete from './pics/DeleteConfirmation';
 
 const App = () => {
   const [modalShow, setModalShow] = useState(false);
   const [modalShowRegister, setModalShowRegister] = useState(false);
   const [show, setShow] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   // const [q, setQ] = useState(null)
 
   return (
@@ -41,7 +42,8 @@ const App = () => {
         <Login show={modalShow} onHide={() => setModalShow(false)}/>
         <Register show={modalShowRegister} onHide={() => setModalShowRegister(false)} setModalShow={setModalShow}/>
         <Search show={show} setShow={() => setShow(false)}/>
-
+        <Delete show={showDelete} setShow={() => setShowDelete(false)}/>
+        
         <Routes>
           <Route element={<PrivetRoute setModalShow={setModalShow}/>}>
             <Route path='/create' element={<Create />} />
@@ -53,8 +55,8 @@ const App = () => {
           <Route path='/userpics/:authorname' element={<UserPics/>}/>
           <Route exact path='/search/:searchpage?' element={<Searched />}/>
           <Route exact path='/tag/:tagSlug' element={<TagFiltered />} />
-          <Route exact path='/pic/:postId' element={<Pic />}/>
-	      <Route exact path='/userallpics/:username/' element={<AllUserPics/>}/>
+          <Route exact path='/pic/:postId' element={<Pic setShowDelete={setShowDelete}/>}/>
+          <Route exact path='/userallpics/:username/' element={<AllUserPics/>}/>
           <Route exact path='/top/:page?' element={<TopPics />} />
           <Route exact path='/random/:page?' element={<RandomPics />} />
           <Route exact path='/latest/:page?' element={<LatestPics />} />

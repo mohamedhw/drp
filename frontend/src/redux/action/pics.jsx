@@ -27,6 +27,8 @@ import {
     RANDOM_SUCCESS,
     TOP_FAIL,
     TOP_SUCCESS,
+    DELETE_FAIL,
+    DELETE_SUCCESS
 } from './type'
 import Cookies from 'js-cookie'
 import { toast } from 'react-toastify';
@@ -341,7 +343,6 @@ export const save = (pic_id) => async dispatch =>{
             "X-CSRFToken": Cookies.get('csrftoken')
         }
     };
-    console.log(pic_id)
     const body = JSON.stringify({
         "withCredentials": true
     })
@@ -367,6 +368,36 @@ export const save = (pic_id) => async dispatch =>{
     }
 }
 
+export const delete_pic = (pic_id) => async dispatch =>{
+    const config = {
+            headers: {
+            // "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-CSRFToken": Cookies.get('csrftoken'),
+            },
+            withCredentials: true,
+    };
+
+    try{
+        const res = await axios.delete(`${apiUrl}/${pic_id}/api-delete/`, config)
+        if(res.data.success){
+            notifysuccess(res)
+            dispatch({
+                type:DELETE_SUCCESS,
+            })
+        }else{
+            notifyproblem(res)
+            dispatch({
+                type:DELETE_FAIL
+            })
+        }
+    }
+    catch{
+        dispatch({
+            type: DELETE_FAIL
+        })
+    }
+}
 
 export const like = (pic_id) => async dispatch =>{
     const config = {

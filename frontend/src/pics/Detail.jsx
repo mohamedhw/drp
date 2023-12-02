@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import Side from "../component/Side";
 import { detail } from "../redux/action/pics";
 
-const Pic = ({detail, data}) => {
+const Pic = ({setShowDelete, detail, data}) => {
 
     const {postId} = useParams()
     const [zoom_, setZoom_] = useState("showcase-norm")
@@ -73,7 +73,7 @@ const Pic = ({detail, data}) => {
                         <div id="showcase-sidebar" className='' style={{height: "100%"}}>
                               <div className="lsidebar"> 
                                 <div className="side">
-                                    <Side post={data} toggleSidebar={toggleSidebar} ></Side>
+                                    <Side post={data} toggleSidebar={toggleSidebar} setShowDelete={setShowDelete}></Side>
                                 <div className="sidebar-content" style={{marginRight: "-16.8px"}}></div>
                               </div>
                             </div>

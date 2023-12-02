@@ -22,20 +22,27 @@ const CSRFToken = () => {
   }
 
   useEffect(() => {
-
+    const existingToken = getCookie('csrftoken');
+    if (existingToken) {
+      // Use the existing token without making a network request
+      setCsrftoken(existingToken);
+      return;
+    }
+  
     const fetchData = async () => {
       try {
-        // Make a GET request to the CSRF endpoint to obtain the token
         const response = await axios.get(`${apiUrl}/csrfcookie/`);
         if (response.status === 200) {
           const csrfToken = getCookie('csrftoken');
           setCsrftoken(csrfToken);
+        } else {
+          console.error(`Failed to fetch CSRF token. Status: ${response.status}`);
         }
       } catch (err) {
-        console.error(err);
+        console.error('Error fetching CSRF token:', err);
       }
     };
-
+  
     fetchData();
   }, [apiUrl]);
 
