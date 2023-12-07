@@ -141,25 +141,27 @@ const Side = ({isAuthenticated, setShowDelete, save, like, post, setAuthor, name
         saveButton = <button className='btn btn-outline-success btn-i mx-2 m-3' onClick={e=>handelSave(post.id)} id="save-mark"><FaBookmark/></button>
       }
   let likeButton = <></>
+  const [likeCount, setLikeCount] = useState(post && post.like_count)
   const handelLike = (e) => {
     like(e)
     setSaveToggle(saveToggle+1)
         setIsSaved((prev) => !prev); // Toggle the saved state
 
-    const saveMark = document.getElementById("like-mark");
-    console.log(saveMark.classList.value)
-    if(saveMark.classList.contains("btn-i")){
-      saveMark.classList.remove("btn-i")
-      saveMark.classList.add("btn-i-click")
+    const likeMark = document.getElementById("like-mark");
+    if(likeMark.classList.contains("btn-i")){ 
+      setLikeCount(likeCount+1)
+      likeMark.classList.remove("btn-i")
+      likeMark.classList.add("btn-i-click")
     }else{
-      saveMark.classList.remove("btn-i-click")
-      saveMark.classList.add("btn-i")
+      setLikeCount(likeCount-1)
+      likeMark.classList.remove("btn-i-click")
+      likeMark.classList.add("btn-i")
     }
   }
       if(post && post.user_has_liked === true){
-        likeButton = <button className='btn btn-outline-success btn-i-click mx-2 m-3' onClick={e=>handelLike(post.id)} id="like-mark"><FaHeart/><span className="m-1">{post && post.like_count}</span></button>
+        likeButton = <button className='btn btn-outline-success btn-i-click mx-2 m-3' onClick={e=>handelLike(post.id)} id="like-mark"><FaHeart/><span className="m-1">{likeCount}</span></button>
       }else{
-        likeButton = <button className='btn btn-outline-success btn-i mx-2 m-3' onClick={e=>handelLike(post.id)} id="like-mark"><FaHeart/><span className="m-1">{post && post.like_count}</span></button>
+        likeButton = <button className='btn btn-outline-success btn-i mx-2 m-3' onClick={e=>handelLike(post.id)} id="like-mark"><FaHeart/><span className="m-1">{likeCount}</span></button>
       }
 
   return (
@@ -173,7 +175,7 @@ const Side = ({isAuthenticated, setShowDelete, save, like, post, setAuthor, name
                 
               <hr/>
                 <div className='pb-2 mx-3 mt-3' style={{textAlign: "left"}}>
-                  <a className='drop-list-title' onClick={e=> handelDropDown()}>related pics <FaAngleDown style={{fontSize: '14px'}}/></a>
+                  <a className='drop-list-title' onClick={e=> handelDropDown()}>related <FaAngleDown style={{fontSize: '14px'}}/></a>
                 </div>
                 <div id="dropdown-related" style={{display: "block"}}>
                   {post.related_pics.map((post) => (
@@ -186,7 +188,7 @@ const Side = ({isAuthenticated, setShowDelete, save, like, post, setAuthor, name
               {isAuthenticated?
                   <>
                     <div className='pb-2 mx-3 mt-3' style={{textAlign: "left"}}>
-                      <a className='drop-list-title' onClick={e=> handelActionBtn()}>related pics <FaAngleDown style={{fontSize: '14px'}}/></a>
+                      <a className='drop-list-title' onClick={e=> handelActionBtn()}>Like & save <FaAngleDown style={{fontSize: '14px'}}/></a>
                     </div>
                     <div id="dropdown-action-btn" style={{display: "block"}}>
                         {saveButton}
@@ -197,7 +199,7 @@ const Side = ({isAuthenticated, setShowDelete, save, like, post, setAuthor, name
                   :<></>
               }
               <div className='pb-2 mx-3 mt-3' style={{textAlign: "left"}}>
-                <a className='drop-list-title' onClick={e=> handelAuthorInfo()} >author info <FaAngleDown style={{fontSize: '14px'}}/></a>
+                <a className='drop-list-title' onClick={e=> handelAuthorInfo()} >author <FaAngleDown style={{fontSize: '14px'}}/></a>
               </div>
               <div id="dropdown-author-info" style={{display: "block"}}>
                 <Row style={{textAlign: "end"}}>

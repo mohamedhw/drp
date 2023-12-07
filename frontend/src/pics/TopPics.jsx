@@ -7,7 +7,6 @@ import Items from '../component/Items';
 import { useParams } from "react-router-dom"
 import { useNavigate } from 'react-router-dom';
 import { setPage, setCurrentPage } from '../redux/action/pages'; // Import your new actions
-import ImageUploader from '../component/ImageUploader'
 
 const TopPics = ({pics_g, topPics, setCurrentPage, currentPage, count, next, previous}) => {
     const navigate = useNavigate()
@@ -26,10 +25,10 @@ const TopPics = ({pics_g, topPics, setCurrentPage, currentPage, count, next, pre
             url = isPageProvided
             ? `${apiUrl}/api-top-pics/?page=${currentPage}`
             : `${apiUrl}/api-top-pics/`;
-            navigate(`/${currentPage}`);
+            navigate(`/top/${currentPage}`);
         }else if (currentPage === null & page > 1){
             url = `${apiUrl}/api-top-pics/?page=${page}`;
-            navigate(`/${page}`);
+            navigate(`/top/${page}`);
         }else {
             // navigate(`/`);
             url = `${apiUrl}/api-top-pics/`; 
@@ -44,6 +43,7 @@ const TopPics = ({pics_g, topPics, setCurrentPage, currentPage, count, next, pre
 
     return(
         <Container className='mt-5'>
+            <h1 style={{float: "left", color: "#00bda0"}} className="mb-5">Top Pics</h1>
             {loading? <h1>Loading...</h1>: <></>}
             {pics_g && 
                 <>

@@ -6,13 +6,25 @@ import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import { user_data } from '../redux/action/profile';
-import { useEffect }from 'react'
+import { useEffect, useState }from 'react'
+import ReactCrop from 'react-image-crop'
 
 const ProfileHead = ({isAuthenticated, user_data, user_username, user_image, image, username, username_global, image_global, email_global, count, test}) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     useEffect(() => {
         user_data(username);
     }, [username]);
+      const [crop, setCrop] = useState({ aspect: 16 / 9 }); // Set the desired aspect ratio
+      const [completedCrop, setCompletedCrop] = useState(null);
+
+      const onCropChange = (crop) => {
+        setCrop(crop);
+      };
+
+      const onCropCompleteHandler = (crop) => {
+        setCompletedCrop(crop);
+        onCropComplete(crop);
+      };
 
     return (
         <>
@@ -20,6 +32,15 @@ const ProfileHead = ({isAuthenticated, user_data, user_username, user_image, ima
         <div style={{backgroundImage: "~/wallhaven-1jr5gg.jpg"}}>
                 <Row>
                     <Col lg={5} md={6} sm={8} xs={12}>
+                        {/*   <ReactCrop
+                                  // src={`${apiUrl}/${image_global}`}
+                                  crop={crop}
+                                  onChange={onCropChange}
+                                  onComplete={onCropCompleteHandler}
+                             >
+                                <img src={`${apiUrl}/${image_global}`} />
+                            </ReactCrop>
+                        */}
                         <img style={{width: "230px", height: "230px"}} src={`${apiUrl}/${image_global}`} alt='Profile Image' />
                     </Col>
                     <Col lg={7} md={6} sm={8} xs={12} className='pt-1'>

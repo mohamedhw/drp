@@ -7,7 +7,11 @@ import Items from '../component/Items';
 import { useParams } from "react-router-dom"
 import { useNavigate } from 'react-router-dom';
 import { setPage, setCurrentPage } from '../redux/action/pages'; // Import your new actions
-import ImageUploader from '../component/ImageUploader'
+import FilterBar from '../component/FilterBar';
+
+
+
+
 const Home = ({pics_g, pics, setCurrentPage, currentPage, count, next, previous}) => {
     const navigate = useNavigate()
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -42,15 +46,18 @@ const Home = ({pics_g, pics, setCurrentPage, currentPage, count, next, previous}
     }, [currentPage, page]);
 
     return(
-        <Container className='mt-5'>
-            {loading? <h1>Loading...</h1>: <></>}
-            {pics_g && 
-                <>
-                    <Items pics_g={pics_g} />
-                    <Pagination  page={page} setLoading={setLoading} count={count} currentPage={currentPage} next={next} previous={previous}/>
-                </>
-            }
-        </Container>
+        <>
+            <FilterBar/>
+            <Container className='mt-5'>
+                {loading? <h1>Loading...</h1>: <></>}
+                {pics_g && 
+                    <>
+                        <Items pics_g={pics_g} />
+                        <Pagination  page={page} setLoading={setLoading} count={count} currentPage={currentPage} next={next} previous={previous}/>
+                    </>
+                }
+            </Container>
+        </>
     )
 }
 
