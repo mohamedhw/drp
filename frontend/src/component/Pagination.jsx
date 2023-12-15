@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom"
 
 
 
-const Pagination = ({previous, next, currentPage, setCurrentPage, count, setLoading}) => {
+const Pagination = ({previous, next, currentPage, setCurrentPage, count}) => {
   const navigate = useNavigate()
   const { username } = useParams();
 
@@ -16,7 +16,6 @@ const Pagination = ({previous, next, currentPage, setCurrentPage, count, setLoad
       :
       navigate('/')
     }
-    setLoading(true)
   }
   
   const handePageNumber = (index) => {
@@ -26,13 +25,11 @@ const Pagination = ({previous, next, currentPage, setCurrentPage, count, setLoad
       :
       navigate(currentPage)
     }
-    setLoading(true)
   }
 
   const handelPreviousPage = () => {
     try{
       setCurrentPage(parseInt(previous.match(/page=(\d+)/)[1]))
-      setLoading(true)
     }catch{
       handelFirstPage()
     }

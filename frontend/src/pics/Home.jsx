@@ -15,7 +15,6 @@ import FilterBar from '../component/FilterBar';
 const Home = ({pics_g, pics, setCurrentPage, currentPage, count, next, previous}) => {
     const navigate = useNavigate()
     const apiUrl = import.meta.env.VITE_API_URL;
-    const [loading, setLoading] = useState(true)
 
     const { page } = useParams();
     const isPageProvided = Boolean(page);
@@ -41,7 +40,7 @@ const Home = ({pics_g, pics, setCurrentPage, currentPage, count, next, previous}
         // if (currentPage !== 1) {
         //     navigate(`/${currentPage}`);
         // }
-        pics(url, setLoading);
+        pics(url);
         // console.log(url)
     }, [currentPage, page]);
 
@@ -49,11 +48,11 @@ const Home = ({pics_g, pics, setCurrentPage, currentPage, count, next, previous}
         <>
             <FilterBar/>
             <Container className='mt-5'>
-                {loading? <h1>Loading...</h1>: <></>}
+                {/* {loading? <h1>Loading...</h1>: <></>} */}
                 {pics_g && 
                     <>
                         <Items pics_g={pics_g} />
-                        <Pagination  page={page} setLoading={setLoading} count={count} currentPage={currentPage} next={next} previous={previous}/>
+                        <Pagination  page={page} count={count} currentPage={currentPage} next={next} previous={previous}/>
                     </>
                 }
             </Container>

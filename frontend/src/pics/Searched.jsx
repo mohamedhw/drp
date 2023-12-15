@@ -11,12 +11,12 @@ const Searched = ({pics_g, q, currentPage, search, count, previous, next}) => {
 
     const navigate = useNavigate()
     const apiUrl = import.meta.env.VITE_API_URL;
-    const [loading, setLoading] = useState(true)
     
     const { searchpage } = useParams();
     const isPageProvided = Boolean(searchpage);
     console.log(count)
     let url=""
+    
     useEffect(() => {
         // setCurrentPage(1)
         if (currentPage != null) {
@@ -36,7 +36,7 @@ const Searched = ({pics_g, q, currentPage, search, count, previous, next}) => {
         //     navigate(`/${currentPage}`);
         // }
 
-        search(url, setLoading);
+        search(url);
     }, [currentPage, searchpage]);
 
     return (
@@ -44,7 +44,7 @@ const Searched = ({pics_g, q, currentPage, search, count, previous, next}) => {
             {pics_g && 
                 <>
                     <Items pics_g={pics_g} />
-                    <Pagination  page={searchpage} setLoading={setLoading} count={count} currentPage={currentPage} next={next} previous={previous}/>
+                    <Pagination  page={searchpage} count={count} currentPage={currentPage} next={next} previous={previous}/>
                 </>
             }
         </Container>

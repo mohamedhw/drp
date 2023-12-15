@@ -1,5 +1,6 @@
 import axios from "axios"
 import {
+    FETCH_DATA_START,
     SET_Q, 
     PICS_SUCCESS, 
     PICS_FAIL, 
@@ -51,10 +52,12 @@ const config = {
 };
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export const pics = (url, setLoading) => async dispatch => {
+export const pics = (url) => async dispatch => {
 
 
     try {
+        dispatch({ type: FETCH_DATA_START });
+
         const res = await axios.get(url, config)
         if(res.data.error){
             dispatch({
@@ -72,15 +75,16 @@ export const pics = (url, setLoading) => async dispatch => {
         dispatch({
             type: PICS_FAIL
         });
-    } finally {
-        setLoading(false); // Set loading to false when data fetching is complete
     }
+
 }
 
-export const topPics = (url, setLoading) => async dispatch => {
+export const topPics = (url) => async dispatch => {
 
 
     try {
+        dispatch({ type: FETCH_DATA_START });
+
         const res = await axios.get(url, config)
         if(res.data.error){
             dispatch({
@@ -98,15 +102,15 @@ export const topPics = (url, setLoading) => async dispatch => {
         dispatch({
             type: TOP_FAIL
         });
-    } finally {
-        setLoading(false); // Set loading to false when data fetching is complete
     }
 }
 
-export const randomPics = (url, setLoading) => async dispatch => {
+export const randomPics = (url) => async dispatch => {
 
 
     try {
+        dispatch({ type: FETCH_DATA_START });
+
         const res = await axios.get(url, config)
         if(res.data.error){
             dispatch({
@@ -124,8 +128,8 @@ export const randomPics = (url, setLoading) => async dispatch => {
         dispatch({
             type: RANDOM_FAIL
         });
-    } finally {
-        setLoading(false); // Set loading to false when data fetching is complete
+    // } finally {
+    //     setLoading(false); // Set loading to false when data fetching is complete
     }
 }
 
@@ -197,7 +201,7 @@ export const setAuthor = (username, image) => ({
     payload: {username, image}
 });
 
-export const search = (url, setLoading) => async dispatch => {
+export const search = (url) => async dispatch => {
     try {
         const res = await axios.get(url, config)
         if(res.data.error){
@@ -217,8 +221,8 @@ export const search = (url, setLoading) => async dispatch => {
         dispatch({
             type: SEARCH_FAIL
         });
-    } finally {
-        setLoading(false); // Set loading to false when data fetching is complete
+    // } finally {
+    //     setLoading(false); // Set loading to false when data fetching is complete
     }
 }
 export const tagpics = (url, setLoading) => async dispatch => {
@@ -286,7 +290,7 @@ export const createpics = (setLoading, title, body, image, tags) => async dispat
 
 
 export const authorpics = (url) => async dispatch => {
-    
+    dispatch({ type: FETCH_DATA_START });
 
     try {
         const res = await axios.get(url, config)
@@ -314,6 +318,8 @@ export const savedpics = (url) => async dispatch => {
     
 
     try {
+        dispatch({ type: FETCH_DATA_START });
+
         const res = await axios.get(url, config)
         if(res.data.error){
             dispatch({

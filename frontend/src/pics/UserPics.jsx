@@ -6,12 +6,13 @@ import ProfileHead from "../component/ProfileHead";
 import { useParams, Link } from "react-router-dom"
 import SliceItems from '../component/SliceItems'
 
-const UserPics = ({authorpics, pics, pics_, username_g, image_g}) => {
+const UserPics = ({authorpics, pics, pics_, username_g, image_g, loading}) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const {authorname} = useParams()
     const url = `${apiUrl}/api-user-posts/${authorname}/`
     const [profileHead, setProfileHead] = useState(<></>)
     let slicePics = pics && pics.slice(0, 8)
+
     useEffect(()=>{
         authorpics(url)
         if(username_g === authorname){
@@ -41,16 +42,19 @@ const UserPics = ({authorpics, pics, pics_, username_g, image_g}) => {
             </>
             )
     }
+
+    if (loading) {
+        return <>Loading...</>;
+    }
+    
     return (
         <>
-            {slicePics &&
-                <>
-                {profileHead}
-                <Container className="mt-5">
+            {pics &&
+                <div className="mt-5">
+                    {profileHead}
                     {picsView}
-                </Container>
-                </>
-            }
+                </div>
+            } 
         </>
     )
 }
@@ -60,6 +64,7 @@ const mapStateToProps = state => ({
     pics: state.pics.authorPics.results,
     username_g: state.profile.username,
     image_g: state.profile.image,
+    loading: state.pics.loading,
 })
 
 export default connect(mapStateToProps, {authorpics}) (UserPics)

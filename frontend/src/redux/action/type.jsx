@@ -1,3 +1,5 @@
+export const FETCH_DATA_START = 'FETCH_DATA_START';
+
 export const PICS_SUCCESS = 'PICS_SUCCESS';
 export const PICS_FAIL = 'PICS_FAIL';
 export const RANDOM_SUCCESS = 'RANDOM_SUCCESS'

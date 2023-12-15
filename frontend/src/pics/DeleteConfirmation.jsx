@@ -15,7 +15,7 @@ function Delete({show, setShow, delete_pic, data}) {
       <Modal show={show} onHide={handleClose}>
         <Modal.Body><h3>are you sure you want to delete this pic?</h3></Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={()=>setShow(false)}>
             cancel
           </Button>
           <Button variant="danger" onClick={handleClose}>

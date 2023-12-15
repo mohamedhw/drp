@@ -19,7 +19,7 @@ import Searched from './pics/Searched';
 import PrivetRoute from './PrivetRoute';
 import UserPics from './pics/UserPics';
 import AllUserPics from './pics/AllUserPics';
-import SavedPics from './component/SavedPics';
+import SavedPics from './pics/SavedPics';
 import AllSavedPics from './pics/AllSavedPics';
 import Tags from './pics/Tags';
 import TopPics from './pics/TopPics';

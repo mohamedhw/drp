@@ -11,7 +11,6 @@ import { setPage, setCurrentPage } from '../redux/action/pages'; // Import your 
 const RandomPics = ({pics_g, randomPics, setCurrentPage, currentPage, count, next, previous}) => {
     const navigate = useNavigate()
     const apiUrl = import.meta.env.VITE_API_URL;
-    const [loading, setLoading] = useState(true)
 
     const { page } = useParams();
     const isPageProvided = Boolean(page);
@@ -37,18 +36,17 @@ const RandomPics = ({pics_g, randomPics, setCurrentPage, currentPage, count, nex
         // if (currentPage !== 1) {
         //     navigate(`/${currentPage}`);
         // }
-        randomPics(url, setLoading);
+        randomPics(url);
         // console.log(url)
     }, [currentPage, page]);
 
     return(
         <Container className='mt-5'>
             <h1 style={{float: "left", color: "#00bda0"}} className="mb-5">Random Pics</h1>
-            {loading? <h1>Loading...</h1>: <></>}
             {pics_g && 
                 <>
                     <Items pics_g={pics_g} />
-                    <Pagination  page={page} setLoading={setLoading} count={count} currentPage={currentPage} next={next} previous={previous}/>
+                    <Pagination  page={page} count={count} currentPage={currentPage} next={next} previous={previous}/>
                 </>
             }
         </Container>

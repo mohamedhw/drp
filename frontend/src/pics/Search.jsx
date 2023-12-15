@@ -9,10 +9,11 @@ import {search, setQ} from '../redux/action/pics'
 import { useNavigate } from 'react-router-dom';
 import {AiOutlineClose} from 'react-icons/ai';
 import {setCurrentPage} from '../redux/action/pages'
+
+
 const Search = ({q, setQ, show, setShow, pics_g, search, setCurrentPage}) => {
     const moreResultsButtonRef = useRef(null);
     const apiUrl = import.meta.env.VITE_API_URL;
-    const [loading, setLoading] = useState(true)
     let url = ``
     const [fullscreen, setFullscreen] = useState(true);
 
@@ -41,7 +42,7 @@ const Search = ({q, setQ, show, setShow, pics_g, search, setCurrentPage}) => {
         // }
         
 
-        search(url, setLoading);
+        search(url);
         
 
     }, [q]);

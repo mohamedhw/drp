@@ -2,9 +2,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import { Link } from "react-router-dom"
+import { connect } from 'react-redux'
 
 
-const Items = ({pics_g, setShow, setZoom_}) => {
+const Items = ({loading, pics_g, setShow, setZoom_}) => {
 
     const handelClick = () => {
         if (setShow){
@@ -12,6 +13,11 @@ const Items = ({pics_g, setShow, setZoom_}) => {
             setShow(false)
         }
     }
+
+    if (loading) {
+        return <>Loading...</>;
+    }
+
     return (
         <div style={{margin: "auto"}}>
             <Row style={{margin: "auto", width: "100%"}}>
@@ -31,4 +37,10 @@ const Items = ({pics_g, setShow, setZoom_}) => {
     )
 }
 
-export default Items
+
+
+const mapStateToProps = state => ({
+    loading: state.pics.loading
+})
+
+export default connect(mapStateToProps, {}) (Items)

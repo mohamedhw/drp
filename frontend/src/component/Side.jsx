@@ -217,7 +217,7 @@ const Side = ({isAuthenticated, setShowDelete, save, like, post, setAuthor, name
                 </Row>
               </div>
               <hr/>
-              <Link to={post.image}><h6>display image full screen</h6></Link>
+              <a href={post.image}><h6>display image full screen</h6></a>
               <Link to=''><h6>crop the image</h6></Link>
               <Button className='btn btn-outline-danger m-2 btn-d' onClick={handleShow}>delete</Button>
             </div>

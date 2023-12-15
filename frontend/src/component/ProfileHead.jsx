@@ -9,23 +9,29 @@ import { user_data } from '../redux/action/profile';
 import { useEffect, useState }from 'react'
 import ReactCrop from 'react-image-crop'
 
-const ProfileHead = ({isAuthenticated, user_data, user_username, user_image, image, username, username_global, image_global, email_global, count, test}) => {
+const ProfileHead = ({loading, isAuthenticated, user_data, user_username, user_image, image, username, username_global, image_global, email_global, count, test}) => {
     const apiUrl = import.meta.env.VITE_API_URL;
+
     useEffect(() => {
         user_data(username);
     }, [username]);
-      const [crop, setCrop] = useState({ aspect: 16 / 9 }); // Set the desired aspect ratio
-      const [completedCrop, setCompletedCrop] = useState(null);
 
-      const onCropChange = (crop) => {
-        setCrop(crop);
-      };
+    const [crop, setCrop] = useState({ aspect: 16 / 9 }); // Set the desired aspect ratio
+    const [completedCrop, setCompletedCrop] = useState(null);
 
-      const onCropCompleteHandler = (crop) => {
-        setCompletedCrop(crop);
-        onCropComplete(crop);
-      };
+    const onCropChange = (crop) => {
+    setCrop(crop);
+    };
 
+    const onCropCompleteHandler = (crop) => {
+    setCompletedCrop(crop);
+    onCropComplete(crop);
+    };
+
+    if (loading) {
+        return <>Loading...</>;
+    }
+    
     return (
         <>
         {isAuthenticated && username_global===username?
@@ -87,7 +93,8 @@ const mapStateToProps = state => ({
     email_global: state.profile.email,
     user_global: state.profile.user,
     user_username: state.profile.user_username,
-    user_image: state.profile.user_image
+    user_image: state.profile.user_image,
+    loading: state.pics.loading,
 })
 
 export default connect(mapStateToProps, {user_data})(ProfileHead);

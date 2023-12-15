@@ -1,4 +1,5 @@
 import { 
+    FETCH_DATA_START,
     PICS_FAIL,
     PICS_SUCCESS, 
     TAG_PICS_FAIL, 
@@ -43,11 +44,17 @@ const initialState = {
     authorImage:null,
     savedPics: [],
     detail: null,
+    loading: true,
 }
 
 export default function(state=initialState,action){
     const { type, payload } = action
     switch(type){
+        case FETCH_DATA_START:
+            return {
+              ...state,
+              loading: true,
+            }
         case DETAIL_SUCCESS:
             return {
                 ...state,
@@ -66,11 +73,13 @@ export default function(state=initialState,action){
         case SAVED_PICS_SUCCESS:
             return {
                 ...state,
+                loading: false,
                 savedPics: payload
             }
         case AUTHOR_PICS_SUCCESS:
             return {    
                 ...state,
+                loading: false,
                 authorPics: payload
             }
         case SET_AUTHOR:
@@ -92,16 +101,19 @@ export default function(state=initialState,action){
         case TOP_SUCCESS:
             return {
                 ...state,
+                loading: false,
                 top: payload
             }
         case RANDOM_SUCCESS:
             return {
                 ...state,
+                loading: false,
                 random: payload
             }
         case PICS_SUCCESS:
             return {
                 ...state,
+                loading: false,
                 pics: payload
             }
         case SEARCH_SUCCESS:
