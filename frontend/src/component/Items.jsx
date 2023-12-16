@@ -3,7 +3,7 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import { Link } from "react-router-dom"
 import { connect } from 'react-redux'
-
+import Loading from '../component/Loading'
 
 const Items = ({loading, pics_g, setShow, setZoom_}) => {
 
@@ -15,7 +15,7 @@ const Items = ({loading, pics_g, setShow, setZoom_}) => {
     }
 
     if (loading) {
-        return <>Loading...</>;
+        return <Loading/>;
     }
 
     return (

@@ -68,7 +68,7 @@ const Pic = ({setShowDelete, detail, data}) => {
             {loading? <h1>Loading...</h1>:
         <>
             {/* the side bar */}
-                    <aside id="menu" style={{display: "block"}}>
+                    <aside id="menu" style={{display: "block", height: "100%"}}>
                         {/* the side body */}
                         <div id="showcase-sidebar" className='' style={{height: "100%"}}>
                               <div className="lsidebar"> 

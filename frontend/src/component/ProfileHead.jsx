@@ -8,6 +8,8 @@ import Container from 'react-bootstrap/Container';
 import { user_data } from '../redux/action/profile';
 import { useEffect, useState }from 'react'
 import ReactCrop from 'react-image-crop'
+import Loading from "./Loading";
+
 
 const ProfileHead = ({loading, isAuthenticated, user_data, user_username, user_image, image, username, username_global, image_global, email_global, count, test}) => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -29,7 +31,7 @@ const ProfileHead = ({loading, isAuthenticated, user_data, user_username, user_i
     };
 
     if (loading) {
-        return <>Loading...</>;
+        return <Loading />;
     }
     
     return (
@@ -86,6 +88,10 @@ const ProfileHead = ({loading, isAuthenticated, user_data, user_username, user_i
         </>
     )
 }
+
+
+
+
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
     username_global: state.profile.username,

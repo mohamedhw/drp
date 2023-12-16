@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { connect } from 'react-redux'
-import Container from "react-bootstrap/esm/Container";
 import {authorpics} from "../redux/action/pics"
 import ProfileHead from "../component/ProfileHead";
 import { useParams, Link } from "react-router-dom"
 import SliceItems from '../component/SliceItems'
+import Loading from '../component/Loading'
 
 const UserPics = ({authorpics, pics, pics_, username_g, image_g, loading}) => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -44,7 +44,7 @@ const UserPics = ({authorpics, pics, pics_, username_g, image_g, loading}) => {
     }
 
     if (loading) {
-        return <>Loading...</>;
+        return <Loading/>;
     }
     
     return (

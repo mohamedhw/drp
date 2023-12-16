@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
-import Row from "react-bootstrap/esm/Row";
 import { connect } from 'react-redux'
-import Container from "react-bootstrap/esm/Container";
-import Items from "../component/Items";
 import ProfileHead from "../component/ProfileHead";
 import { Link } from "react-router-dom"
 import { savedpics } from "../redux/action/pics";
 import SliceItems from "../component/SliceItems"
+import Loading from "../component/Loading";
+
+
 const SavedPics = ({savedpics, username_g, image_g, pics, pics_, loading}) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const url = `${apiUrl}/api-saved-pics/`
@@ -40,7 +40,7 @@ const SavedPics = ({savedpics, username_g, image_g, pics, pics_, loading}) => {
     }
 
     if (loading) {
-        return <>Loading...</>;
+        return <Loading/>;
     }
 
     return (

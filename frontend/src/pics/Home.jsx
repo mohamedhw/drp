@@ -10,8 +10,6 @@ import { setPage, setCurrentPage } from '../redux/action/pages'; // Import your 
 import FilterBar from '../component/FilterBar';
 
 
-
-
 const Home = ({pics_g, pics, setCurrentPage, currentPage, count, next, previous}) => {
     const navigate = useNavigate()
     const apiUrl = import.meta.env.VITE_API_URL;
