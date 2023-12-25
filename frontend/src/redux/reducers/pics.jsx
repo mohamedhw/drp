@@ -26,7 +26,9 @@ import {
     TOP_FAIL,
     TOP_SUCCESS,
     DELETE_SUCCESS,
-    DELETE_FAIL
+    DELETE_FAIL,
+    TAG_SUGGESTION_FAIL,
+    TAG_SUGGESTION_SUCCESS
 } from "../action/type";
 
 
@@ -45,6 +47,7 @@ const initialState = {
     savedPics: [],
     detail: null,
     loading: true,
+    tag_suggestion: []
 }
 
 export default function(state=initialState,action){
@@ -87,6 +90,11 @@ export default function(state=initialState,action){
                 ...state,
                 authorName: payload.username,
                 authorImage: payload.image
+            }
+        case TAG_SUGGESTION_SUCCESS:
+            return {
+                ...state,
+                tag_suggestion: payload
             }
         case SET_Q:
             return {
@@ -142,6 +150,7 @@ export default function(state=initialState,action){
         case SAVED_PICS_FAIL:
         case SAVE_FAIL:
         case DELETE_FAIL:
+        case TAG_SUGGESTION_FAIL:
             return {
                 ...state
             }

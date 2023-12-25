@@ -35,7 +35,7 @@ const ProfileHead = ({loading, isAuthenticated, user_data, user_username, user_i
     }
     
     return (
-        <>
+        <Row style={{width: "100%"}}>
         {isAuthenticated && username_global===username?
         <div style={{backgroundImage: "~/wallhaven-1jr5gg.jpg"}}>
                 <Row>
@@ -85,7 +85,7 @@ const ProfileHead = ({loading, isAuthenticated, user_data, user_username, user_i
                 </Row>
         </div>
         }
-        </>
+        </Row>
     )
 }
 

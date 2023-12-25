@@ -10,14 +10,12 @@ import { Link } from "react-router-dom"
 const Tags = ({tags, tags_g}) => {
     const [loading, setLoading] = useState(true)
     useEffect(()=>{
-        tags(setLoading)
-        console.log(tags_g)
+        tags()
     },[])
     
     return (
         <>
             <h2 style={{color: "#00bda0"}}>Tags</h2>
-            {loading? <h1>Loading...</h1>:
                     <Container>
                         <Row className="m-5" style={{}}>
                             {tags_g && tags_g.map((tag) =>(
@@ -33,7 +31,6 @@ const Tags = ({tags, tags_g}) => {
                             }
                         </Row>
                     </Container>
-            }
         </>
     )
 }

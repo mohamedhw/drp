@@ -170,7 +170,7 @@ const Side = ({isAuthenticated, setShowDelete, save, like, post, setAuthor, name
           {post && 
             <div className='' id="menu">
               <h2 className='m-3'>{post.title}</h2>
-              <h4 className='m-3'>{post.image_dimensions}</h4>
+              <h4 className='m-3'>{post.image_width}X{post.image_height}</h4>
               {tagView}
                 
               <hr/>

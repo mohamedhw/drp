@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import permissions, authentication
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
-from .models import Post, Hashtag
+from .models import HashtagManager, Post, Hashtag
 from users.models import Profile
 from .serializers import PostSerializers, HashtagSerializers
 from django.db.models import Q
@@ -193,7 +193,8 @@ class Detail(generics.RetrieveAPIView):
         related_tags = self.get_related_tags(instance) # Retrieve Related tags
         serializer = self.get_serializer(instance) # Serialize the Main Item
         data = serializer.data
-        data['image_dimensions'] = f"{image_width} X {image_height}"
+        data['image_width'] =   image_width
+        data['image_height'] = image_height
         data['related_tags'] = HashtagSerializers(related_tags, many=True).data # Extend the Response Data
         data['related_pics'] = self.get_serializer(related_pics, many=True).data
         return Response(data)
@@ -260,7 +261,6 @@ class PostCreate(generics.CreateAPIView):
         if tag_data:
             tags_ = Hashtag.objects.all()
             tags_data = data.pop('tag', [])
-            print(tags_data)
             if tags_data ==['undefined']:
                 post_serializer = PostSerializers(data=data)
 
@@ -298,6 +298,18 @@ class PostCreate(generics.CreateAPIView):
 
         return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class TagsSuggestion(generics.ListAPIView):
+    queryset=Hashtag.objects.all()
+    serializer_class=HashtagSerializers
+
+    def get_queryset(self, *args, **kwargs):
+        query = self.request.GET.get('q')
+        qs = Hashtag.objects.search(query=query)
+        
+        return qs
+
+
 @method_decorator([ensure_csrf_cookie, csrf_protect], name='dispatch')
 class PostDelete(generics.DestroyAPIView):
     queryset = Post.objects.all()
@@ -307,8 +319,20 @@ class PostDelete(generics.DestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
+        tags = instance.tags.all()
+        # check fot to know if the oic have tags or not and if the tag is used in other pics or not
         if request.user == instance.author:
-            instance.delete()
+            if tags:
+                for tag in tags:
+                    tag_filter = Hashtag.objects.get(tag_slug=tag.tag_slug)
+                    post = Post.objects.filter(tags=tag_filter).count()
+                    if post <= 1:
+                        tag_filter.delete()
+                        instance.delete()
+                    else:
+                        instance.delete()
+            else:
+                instance.delete()
             return Response({"message": "post deleted success"})
         else:
             return Response({"message": "failed"})

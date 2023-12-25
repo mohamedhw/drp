@@ -47,6 +47,59 @@ input::placeholder, textarea::placeholder {
   color:#00dba0 !important
 }
 
+
+.tags-input {
+  background: none !important;
+  border: 1px solid #00bda0 !important;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  color: #fff !important;
+  font-size: large !important;
+}
+
+.tags-input ul {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0 0 0 0;
+}
+
+.tags-input ul li {
+  width: auto;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  /* background-color: green; */
+  /* margin-right: 4px; */
+}
+
+.tags-input input {
+  border: none !important;
+  background: none !important;
+  display: flex;
+  flex: 1;
+  /* align-items: flex-start; */
+  padding: 0;
+  margin: auto;
+  margin-left: 5px;
+}
+
+.tag-bg {
+  font-size: medium;
+  line-height: normal;
+  letter-spacing: 0.5px
+}
+
+.close-ic {
+  cursor: pointer;
+  margin-left: 5px
+}
+
 h1, h2, h3, h4, h5 {
   font-weight: normal;
   margin: 0;
@@ -236,11 +289,11 @@ div.wrapper > h1 {
 
 
 #showcase-sidebar{
-  position: fixed;
+  position: absolute;
   background: none !important;
   color: #00dba0 !important;
   border:1px solid #00bda0 !important;
-  height: 100%;
+  height: auto;
   width: 248px;
   border-radius: 1%;
   text-align: center;
@@ -288,7 +341,7 @@ div.wrapper > h1 {
 
 .showcase-norm {
   display: block;
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   right: 0;
@@ -297,42 +350,33 @@ div.wrapper > h1 {
   max-width: 95%;
   max-height: 95%;
   cursor: zoom-in;
-  /* -webkit-user-select: none; */
   padding: 0;
   border-width: 0;
 }
 
 .showcase-zoom {
   display: block;
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   margin: auto;
-  max-width: none;
-  max-height: 100%;
   cursor: zoom-in;
-  /* -webkit-user-select: none; */
+  max-width: 110%;
+  max-height: 110%;
   padding: 0;
   border-width: 0;
-  overflow-x: scroll;
-  overflow-y: scroll;
-
 }
 
 .showcase-x-zoom {
   display: block;
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   margin: auto;
-  /* margin-left: 20px;
-  margin-right: 20px; */
-  /* margin-bottom: 0px;
-  margin-top: 0px; */
   cursor: zoom-out;
   padding: 0;
   border-width: 0;
@@ -344,7 +388,7 @@ div.wrapper > h1 {
   border: none !important;
   color: #00dba0;
   cursor: pointer;
-  position: fixed;
+  position: absolute;
   left: 250px;
   z-index: 350;
 }
@@ -354,7 +398,7 @@ div.wrapper > h1 {
   border: none !important;
   color: #00dba0;
   cursor: pointer;
-  position: fixed;
+  position: absolute;
   left: 0;
   z-index: 350;
 }

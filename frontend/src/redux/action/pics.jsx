@@ -29,7 +29,9 @@ import {
     TOP_FAIL,
     TOP_SUCCESS,
     DELETE_FAIL,
-    DELETE_SUCCESS
+    DELETE_SUCCESS,
+    TAG_SUGGESTION_SUCCESS,
+    TAG_SUGGESTION_FAIL
 } from './type'
 import Cookies from 'js-cookie'
 import { toast } from 'react-toastify';
@@ -160,7 +162,7 @@ export const detail = (postId, setLoading, setZoom_) => async dispatch => {
         setLoading(false); // Set loading to false when data fetching is complete
     }
 }
-export const tags = (setLoading) => async dispatch => {
+export const tags = () => async dispatch => {
 
 
     try {
@@ -181,9 +183,10 @@ export const tags = (setLoading) => async dispatch => {
         dispatch({
             type: TAGS_FAIL
         });
-    } finally {
-        setLoading(false); // Set loading to false when data fetching is complete
-    }
+    }// finally {
+    //     setLoading(false); // Set loading to false when data fetching is complete
+    // }
+    
 }
 
 
@@ -413,7 +416,6 @@ export const like = (pic_id) => async dispatch =>{
             "X-CSRFToken": Cookies.get('csrftoken')
         }
     };
-    console.log(pic_id)
     const body = JSON.stringify({
         "withCredentials": true
     })
@@ -438,4 +440,39 @@ export const like = (pic_id) => async dispatch =>{
         })
     }
 }
+
+
+export const tag_suggestion = (qs) => async dispatch =>{
+    const config = {
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        }
+    };
+    
+    // const body = JSON.stringify({
+    //     "withCredentials": true
+    // })
+
+    try{
+        const res = await axios.get(`${apiUrl}/api-tag-suggestion/?q=${qs}`, config)
+        if(res.data.error){
+            dispatch({
+                type:TAG_SUGGESTION_FAIL
+            })
+        }else{
+            dispatch({
+                type:TAG_SUGGESTION_SUCCESS,
+                payload: res.data
+            })
+        }
+    }
+    catch{
+        dispatch({
+            type:TAG_SUGGESTION_FAIL
+        })
+    }
+}
+
+
 

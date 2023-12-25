@@ -11,6 +11,15 @@ from PIL import Image
 from os.path import join
 
 
+class HashtagManager(models.Manager):
+    
+    def search(self, query=None):
+        if query is None or query=="":
+            return self.get_queryset().none()
+        lookups = Q(tag__icontains=query)
+        return self.get_queryset().filter(lookups)
+    
+
 class PostManager(models.Manager):
 
     def search(self, query=None):
@@ -23,6 +32,7 @@ class PostManager(models.Manager):
 class Hashtag(models.Model):
     tag   = models.CharField(max_length=20, blank=True, null=True)
     tag_slug    = models.SlugField(null=False, unique=True)
+    objects = HashtagManager()
 
     def get_absolute_url_tag(self):
         return reverse("articles:tags", kwargs={"tag_slug": self.tag_slug})

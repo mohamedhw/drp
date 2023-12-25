@@ -9,6 +9,7 @@ const Pic = ({setShowDelete, detail, data}) => {
     const {postId} = useParams()
     const [zoom_, setZoom_] = useState("showcase-norm")
     const [loading, setLoading] = useState(true)
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
     useEffect(()=>{
         detail(postId, setLoading, setZoom_)
@@ -17,22 +18,47 @@ const Pic = ({setShowDelete, detail, data}) => {
         //     setData(response.data)
         //     setZoom_("showcase-norm")
         // })
+          // Update window height when the window is resized
+        const handleResize = () => {
+          setWindowHeight(window.innerHeight);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        // Remove event listener when the component is unmounted
+        return () => {
+          window.removeEventListener('resize', handleResize);
+        };
     }, [postId])
     const he = window.innerHeight
 
     const handleImageLoad = () => {
         if(zoom_ === "showcase-norm"){
             setZoom_("showcase-zoom")
+            const imageContainer = document.querySelector('.scrollbox');
+            const containerHeight = imageContainer.offsetHeight;
+            const minImageWidth = Math.max(data && data.image_width, containerWidth);
+            const scrollLeft = (minImageWidth - containerWidth) / 2;
+            const scrollTop = (data && data.image_height - containerHeight) / 2;
+            console.log("Image Width:", data.image_width);
+            console.log("Container Width:", containerWidth);
+            console.log("Left:", scrollLeft);
+            imageContainer.scrollTo(scrollLeft, scrollTop);
         }else if(zoom_ == "showcase-zoom"){
             setZoom_("showcase-x-zoom")
+            const imageContainer = document.querySelector('.scrollbox');
+            const containerWidth = imageContainer.offsetWidth;
+            const containerHeight = imageContainer.offsetHeight;
+            const scrollLeft = (data && data.image_width - containerWidth) / 2;
+            const scrollTop = (data && data.image_height - containerHeight) / 2;
+
+            imageContainer.scrollTo(scrollLeft, scrollTop);
         }
         else{
             setZoom_("showcase-norm")
         }
 
     }
-
-
 
 
     const hidContent = (
@@ -63,14 +89,16 @@ const Pic = ({setShowDelete, detail, data}) => {
             main.classList.replace("hid-main", "vis-main");
         }
     }
+
     return(
-        <>
+        <main>
             {loading? <h1>Loading...</h1>:
         <>
-            {/* the side bar */}
-                    <aside id="menu" style={{display: "block", height: "100%"}}>
+                <div>
+                    {/* the side bar */}
+                    <aside id="menu" style={{display: "block"}}>
                         {/* the side body */}
-                        <div id="showcase-sidebar" className='' style={{height: "100%"}}>
+                        <div id="showcase-sidebar" className=''>
                               <div className="lsidebar"> 
                                 <div className="side">
                                     <Side post={data} toggleSidebar={toggleSidebar} setShowDelete={setShowDelete}></Side>
@@ -80,19 +108,17 @@ const Pic = ({setShowDelete, detail, data}) => {
                         </div>
 
                     </aside>
-            {/* the button */}
-            <div id="togglebutton" style={{width:"auto", marginTop: he/5 }} className="vis" onClick={e=>toggleSidebar()}>
-                {slid}
-            </div>
-            
+                    {/* the button */}
+                    <div id="togglebutton" style={{width:"auto", marginTop: he/5 }} className="vis" onClick={e=>toggleSidebar()}>
+                        {slid}
+                    </div>
+                </div>
             <main id="main" className="vis-main">
-                <section id="" className="fit showcase" 
-
-                >
+                <section id="" className="fit showcase" style={{height: windowHeight - 100, marginRight: "15px"}}>
                         {/* the image body */}
                             <div 
                             className="scrollbox"
-                            style={{marginRight: "-16.8px", marginBottom: "-16.8px"}}>
+                            style={{marginRight: "-16.8px", marginBottom: "-16.8px", height: '80vh'}}>
                                 
                             {data && 
                                 <img
@@ -109,7 +135,7 @@ const Pic = ({setShowDelete, detail, data}) => {
             </main>
             </>
         }
-        </>
+        </main>
     )
 }
 

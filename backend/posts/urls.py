@@ -13,6 +13,7 @@ from .views import (
     like_pic,
     AllTags,
     TopPics,
+    TagsSuggestion,
     RandomPics,
     )
 
@@ -25,6 +26,7 @@ urlpatterns = [
     path('api-tag/<slug:tag_slug>/', TagFilterView.as_view()),
     path('api-search/', Search.as_view()),
     path('api-create/', PostCreate.as_view()),
+    path('api-tag-suggestion/', TagsSuggestion.as_view()),
     path('<str:pk>/api-delete/', PostDelete.as_view()),
     path('<str:pk>/api-update/', PostUpdate.as_view()),
     path('api-user-posts/<str:username>/', UserPics.as_view()),
