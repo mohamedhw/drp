@@ -7,57 +7,32 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import { user_data } from '../redux/action/profile';
 import { useEffect, useState }from 'react'
-import ReactCrop from 'react-image-crop'
 import Loading from "./Loading";
 
 
-const ProfileHead = ({loading, isAuthenticated, user_data, user_username, user_image, image, username, username_global, image_global, email_global, count, test}) => {
+const ProfileHead = ({loading, isAuthenticated, user_data, user_username, user_image, user_cover, image, username, username_global, image_global, email_global, count, test}) => {
     const apiUrl = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         user_data(username);
     }, [username]);
 
-    const [crop, setCrop] = useState({ aspect: 16 / 9 }); // Set the desired aspect ratio
-    const [completedCrop, setCompletedCrop] = useState(null);
-
-    const onCropChange = (crop) => {
-    setCrop(crop);
-    };
-
-    const onCropCompleteHandler = (crop) => {
-    setCompletedCrop(crop);
-    onCropComplete(crop);
-    };
 
     if (loading) {
         return <Loading />;
     }
-    
+   console.log(user_cover) 
     return (
         <Row style={{width: "100%"}}>
         {isAuthenticated && username_global===username?
-        <div style={{backgroundImage: "~/wallhaven-1jr5gg.jpg"}}>
-                <Row>
-                    <Col lg={5} md={6} sm={8} xs={12}>
-                        {/*   <ReactCrop
-                                  // src={`${apiUrl}/${image_global}`}
-                                  crop={crop}
-                                  onChange={onCropChange}
-                                  onComplete={onCropCompleteHandler}
-                             >
-                                <img src={`${apiUrl}/${image_global}`} />
-                            </ReactCrop>
-                        */}
-                        <img style={{width: "230px", height: "230px"}} src={`${apiUrl}/${image_global}`} alt='Profile Image' />
-                    </Col>
-                    <Col lg={7} md={6} sm={8} xs={12} className='pt-1'>
-                        <div className="">
-                            <ul className='profile-info' >
-                                <li>username:  <span style={{color:"#fff"}}>{username_global}</span></li>
-                                <li>email:  <span style={{color:"#fff"}}>{email_global}</span></li>
-                                <li>{test}: <span style={{color:"#fff"}}>{count}</span></li>
-                            </ul>
+        <div >
+                <Row style={{backgroundImage: `url(${apiUrl}/${user_cover})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center center", width: "100%", minHeight: "240px", margin: "0"}}>
+                    <div style={{osition: "absolute", top: "0", left: "0", right: "0", bottom: "0", margin: "auto", maxWidth: "200px", maxHeight: "200px"}}>
+                        <img style={{width: "200px", height: "200px"}} src={`${apiUrl}/${image_global}`} alt='Profile Image' />
+                    </div>
+                    <Col lg={8} md={6} sm={6} xs={6} className='pt-1'>
+                        <div className="py-lg-5 py-md-5 p-1">
+                            <h1 className="user-name">{username_global}</h1>
                         </div>
                     </Col>
                 </Row>
@@ -70,16 +45,14 @@ const ProfileHead = ({loading, isAuthenticated, user_data, user_username, user_i
                 </Container>
         </div>
                 :
-        <div style={{backgroundImage: "url(../../w1.jpg)", backgroundSize: "cover"}}>
-                <Row>
-                    <Col lg={5} md={6} sm={8} xs={12}>
-                        <img style={{width: "230px", height: "230px"}} src={`${apiUrl}/${user_image}`} alt='Profile Image' />
-                    </Col>
-                    <Col lg={7} md={6} sm={8} xs={12} className='pt-1'>
-                        <div>
-                            <ul className='profile-info' >
-                                <li><h2><span style={{}}>{username}</span></h2></li>
-                            </ul>
+        <div style={{backgroundImage: `url(${apiUrl}/${user_cover})`, backgroundSize: "cover", backgroundRepeat: "no-repeat"}} >
+                <Row style={{margin: "0", minHeight: "240px"}}>
+                    <div style={{osition: "absolute", top: "0", left: "0", right: "0", bottom: "0", margin: "auto", maxWidth: "200px", maxHeight: "200px"}}>
+                        <img style={{width: "200px", height: "200px"}} src={`${apiUrl}/${user_image}`} alt='Profile Image' />
+                    </div>
+                    <Col lg={8} md={6} sm={6} xs={6} className='pt-1'>
+                        <div className="py-lg-5 py-md-5 p-1">
+                            <h1 className="user-name">{username}</h1> 
                         </div>
                     </Col>
                 </Row>
@@ -100,6 +73,7 @@ const mapStateToProps = state => ({
     user_global: state.profile.user,
     user_username: state.profile.user_username,
     user_image: state.profile.user_image,
+    user_cover: state.profile.user_cover,
     loading: state.pics.loading,
 })
 

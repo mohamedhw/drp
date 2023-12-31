@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 
 
 
-const Profile = ({ profile, profile_update, user_update, username_global, image_global, email_global }) => {
+const Profile = ({ profile, profile_update, user_update, username_global, image_global, email_global, setShow, setCoverPic}) => {
 
     const [username, setUsername] = useState(username_global)
     const [email, setEmail] = useState(email_global)
@@ -30,6 +30,11 @@ const Profile = ({ profile, profile_update, user_update, username_global, image_
         profile()
     }, [test]);
     
+    const handelCover = (e) => {
+        setShow(true);
+        setCoverPic(e.target.files[0])
+    }
+
     return (
         <div className='mt-5'>
             <Container>
@@ -56,6 +61,7 @@ const Profile = ({ profile, profile_update, user_update, username_global, image_
             </Container>
             <hr style={{margin: '0'}}/>
             <Container>
+                <input className="form-control" type='file' onChange={e => handelCover(e)} placeholder='cover'/>
                 <form onSubmit={handelSubmit}>
                     <div className='form-group m-lg-4 m-2 p-lg-1 pt-3'>
                         <input className='form-control' type='text' placeholder={`${username_global}`} name='username' onChange={e => setUsername(e.target.value) } />

@@ -258,6 +258,7 @@ class PostCreate(generics.CreateAPIView):
     def post(self, request):
         data = request.data
         tag_data = data.get('tag')
+        print(tag_data)
         if tag_data:
             tags_ = Hashtag.objects.all()
             tags_data = data.pop('tag', [])
@@ -268,10 +269,7 @@ class PostCreate(generics.CreateAPIView):
                     post = post_serializer.save()
                     return redirect('/')
             else:
-                if '#' in tags_data:
-                    tags_data=tags_data[0].split('#')
-                tags_data=tags_data[0].split()
-
+                tags_data=tags_data[0].split(',')
                 post_serializer = PostSerializers(data=data)
 
                 if post_serializer.is_valid():
@@ -281,6 +279,7 @@ class PostCreate(generics.CreateAPIView):
                     for tag_data in tags_data:
                         if '#' in tag_data:
                             tag_data = tag_data.lstrip('#')
+                        tag_data = tag_data.strip()
                         tag, created = Hashtag.objects.get_or_create(tag=tag_data)
 
                         if not created:

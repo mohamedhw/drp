@@ -26,13 +26,16 @@ import TopPics from './pics/TopPics';
 import RandomPics from './pics/RandomPics';
 import LatestPics from './pics/LatestPics';
 import Delete from './pics/DeleteConfirmation';
+import Cover from './component/CoverUploader';
+
 
 const App = () => {
   const [modalShow, setModalShow] = useState(false);
   const [modalShowRegister, setModalShowRegister] = useState(false);
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  // const [q, setQ] = useState(null)
+  const [showCover, setShowCover] = useState(false);
+  const [coverPic, setCoverPic] = useState()
 
   return (
     <>
@@ -43,11 +46,12 @@ const App = () => {
         <Register show={modalShowRegister} onHide={() => setModalShowRegister(false)} setModalShow={setModalShow}/>
         <Search show={show} setShow={() => setShow(false)}/>
         <Delete show={showDelete} setShow={() => setShowDelete(false)}/>
-        
+        <Cover show={showCover} setShow={() => setShowCover(false)} coverPic={coverPic}/> 
+
         <Routes>
           <Route element={<PrivetRoute setModalShow={setModalShow}/>}>
             <Route path='/create' element={<Create />} />
-            <Route path='/profile' element={<Profile />} />
+            <Route path='/profile' element={<Profile setShow={setShowCover} setCoverPic={setCoverPic} />} />
             <Route path='/saved' element={<SavedPics />} />
             <Route path='/moresaved' element={<AllSavedPics/>} />
           </Route>

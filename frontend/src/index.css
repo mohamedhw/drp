@@ -7,15 +7,16 @@ body {
   /* background-position: center center; */
   color: #fff !important;
   text-align: center;
-
 }
 
 * {
   font-family: Ubuntu;
 }
+
 *::-webkit-scrollbar {
     display: none !important;
 }
+
 /* *::-webkit-scrollbar-thumb { */
 /*   background-color: #00bda0; */
 /* } */
@@ -46,7 +47,6 @@ input:focus, textarea:focus, .btn-s:focus {
 input::placeholder, textarea::placeholder {
   color:#00dba0 !important
 }
-
 
 .tags-input {
   background: none !important;
@@ -513,12 +513,24 @@ button {
   width: 100%
 }
 
+
+
 .drop-list-title {
   cursor: pointer;
   width: auto;
   color: #00dba0 !important;
   font-size: medium;
 }
+
+.user-name {
+  color: #00dba0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: 2.75em;
+  font-weight: 600; 
+  font-family: Montserrat,'Source Sans Pro',Arial,sans-serif;
+  text-align: justify;
+}
+
 .drop-list-title:focus {
   background-color: none !important
 }

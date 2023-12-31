@@ -26,7 +26,7 @@ const Items = ({loading, pics_g, setShow, setZoom_}) => {
 
                         <Link  to={`/pic/${post.id}`} className='article-2' onClick={e => handelClick()}>
                             <Card className='pic-l' style={{minWidth: "200px", minHight: "100px", maxHeight: "300px", maxWidth: "500px"}}>
-                                <Card.Img variant="top" src={post.thumb} style={{overflow: "hidden"}}/>
+                                <Card.Img variant="top" src={post.thumb} style={{overflow: "hidden"}} loading='lazy'/>
                             </Card>
                         </Link>
                     </Col>

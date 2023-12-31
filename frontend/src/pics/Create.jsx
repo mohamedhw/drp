@@ -34,21 +34,6 @@ const Create=({user_g, tags_g, tags, tag_suggestion, tag_suggestions})=>{
     }, [qs])
 
 
-    // const handleSuggestionClick = (tag) => {
-    //     setTag(tag);
-    //     setSuggestions([]); // Clear suggestions
-    // };
-    //
-    // const handleInputChange = () => {
-    //     for(let tag_ of tagList){
-    //         // console.log("lower", tag_.toLowerCase())
-    //         // console.log("tag", tag && tag_.startsWith("l"))
-    //         if(tag && tag_.toLowerCase().startsWith(tag.toLowerCase())){
-    //             // const listItem = document.getElementById() 
-    //             console.log("tag", tag_)
-    //         };
-    //     }
-    // };
     const handleSubmit=(e)=>{
         e.preventDefault();
         let form_data = new FormData();
@@ -91,13 +76,13 @@ const Create=({user_g, tags_g, tags, tag_suggestion, tag_suggestions})=>{
     const removeTags = (e) => {
         setTag(tag.filter((_,index) => index != e))
     }
-
+    
     const addTag = (e) => {
         setQs(e.target.value)
-      if (e.key === "Enter" && e.target.value != "") {
-        setTag([...tag, e.target.value]);
-        e.target.value = "";
-      }
+        if (e.key === "Enter" && e.target.value != "") {
+            setTag([...tag, e.target.value]);
+            e.target.value = "";
+        }
     };
 
     console.log(tag)
@@ -118,7 +103,7 @@ const Create=({user_g, tags_g, tags, tag_suggestion, tag_suggestions})=>{
                     <ul>
                         {tag && tag.map((tag_, index) => (
                             <li key={index}>
-                                <Badge pill bg="success" className="tag-bg">
+                                <Badge bg="success" className="tag-bg">
                                     {tag_}
                                     <IoIosCloseCircle onClick={() => removeTags(index)} className="close-ic" />
                                 </Badge>
