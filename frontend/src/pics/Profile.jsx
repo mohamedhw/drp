@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { profile, profile_update, user_update } from '../redux/action/profile'
 import { useState, useEffect } from 'react';
 import Col from 'react-bootstrap/esm/Col';
@@ -12,24 +13,48 @@ import { Link } from 'react-router-dom';
 
 const Profile = ({ profile, profile_update, user_update, username_global, image_global, email_global, setShow, setCoverPic}) => {
 
-    const [username, setUsername] = useState(username_global)
-    const [email, setEmail] = useState(email_global)
+    const [username, setUsername] = useState()
+    const [email, setEmail] = useState()
     const [image, setImage] = useState()
     const [test, setTest] = useState(1)
-    
+ 
     const handelSubmit = (e) => {
         e.preventDefault();
         let form_data = new FormData();
-        form_data.append('image', image);
-        user_update(username, email)
-        profile_update(form_data)
+        if (image && email && username){
+            form_data.append('image', image)
+            user_update(username, email)
+            profile_update(form_data)
+        }else if(username && email){ 
+            user_update(username, email)
+        }else if(image && username) {
+            form_data.append('image', image)
+            user_update(username, email_global)
+            profile_update(form_data)
+        }else if (image && email){
+            form_data.append('image', image)
+            user_update(username_global, email)
+            profile_update(form_data)
+        }else if(image){
+            form_data.append('image', image)
+            profile_update(form_data)
+        }else if(username){
+            user_update(username, email_global)
+        }else if(email){
+            user_update(username_global, email) 
+        }else{
+            const notifyproblem = () => toast(`error could not update the profile!!`, {
+                type: "error",
+            });
+            notifyproblem()
+        }
         profile()
     }
 
     useEffect(() => {
         profile()
     }, [test]);
-    
+
     const handelCover = (e) => {
         setShow(true);
         setCoverPic(e.target.files[0])

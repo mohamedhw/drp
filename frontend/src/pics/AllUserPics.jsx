@@ -41,47 +41,27 @@ const AllUserPics = ({pics, authorpics, setCurrentPage, currentPage, pics_, next
                 console.error('Error fetching data:', error);
                 setHasMore(false);
             });
-        }, 1500); // Simulated delay for demo purposes
+        }, 100);
     };
     useEffect(() => {
         fetchMoreData();
-    }, [])
-    // useEffect(() => {
-    //     // setCurrentPage(page)
-    //     if (currentPage != null) {
-    //         url = isPageProvided
-    //         ? `${apiUrl}/api-user-posts/${username}/?page=${currentPage}`
-    //         : `${apiUrl}/api-user-posts/${username}/`;
-    //         navigate(`/${currentPage}`);
-    //     }else if (currentPage === null & s > 1){
-    //         url = `${apiUrl}/api-user-posts/${username}/?page=${s}`;
-    //         navigate(`/${s}`);
-    //     }else {
-    //         // navigate(`/`);
-    //         url = `${apiUrl}/api-user-posts/${username}/`;
-    //     }
+    }, [currentPage])
 
-    //     // if (currentPage !== 1) {
-    //     //     navigate(`/${currentPage}`);
-    //     // }
-    //     authorpics(url);
-    //     // setLoading(false)
-    //     // setUserPics(username)
-    //     // console.log(url)
-    // }, [currentPage, s]);
     return(
         <Container className='my-5'>
             <InfiniteScroll
+                className="my-5"
                 dataLength={items.length}
                 next={fetchMoreData}
                 hasMore={hasMore}
-                loader={<h4>Loading...</h4>}
+                loader={<h4 className="my-5">Loading...</h4>}
                 endMessage={<p className='mt-lg-5 no-result'>No more pics</p>}
+                scrollThreshold={0.9}
             >
-            <Row style={{ maxWidth: '1308px' }}>
+            <Row style={{ maxWidth: '1308px', minHeight: "700px"}}>
                 {items.map((item, index) => (
                     // <div key={index}>{/* Render your image component here */}</div>
-                    <Col key={item.id} xs={12} md={6} lg={3} xl={3} xxl={3} className='pic-t'>
+                    <Col key={item.id} xs={12} md={6} lg={3} xl={3} xxl={3} className='pic-t mt-3'>
                         <Link  to={`/pic/${item.id}`} className='article-2' onClick={e => handelClick()}>
                             <Card className='pic-l' style={{height: "100%"}}>
                                 <Card.Img variant="top" src={item.thumb} style={{height: "100% !important"}}/>
@@ -91,7 +71,6 @@ const AllUserPics = ({pics, authorpics, setCurrentPage, currentPage, pics_, next
                 ))}
             </Row>
             </InfiniteScroll>
-            {/* {loading? <h1>Loading...</h1>: <></>} */}
 
         </Container>
     )

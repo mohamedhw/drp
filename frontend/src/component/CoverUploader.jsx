@@ -80,16 +80,6 @@ function Cover({show, setShow, coverPic, profile, profile_update, image_global})
           completedCrop.height * scaleY
         );
 
-        console.log("img", img.width)
-        console.log("x*scalx", completedCrop.x * scaleX)
-        console.log("y*scaly", completedCrop.y * scaleY)
-        console.log("width*scalx", completedCrop.width * scaleX)
-        console.log("height*scaly", completedCrop.height * scaleY)
-        console.log("width", completedCrop.width * scaleX)
-        console.log("height", completedCrop.height * scaleY)
-        // ... rest of the code
-        // Convert the canvas to Blob
-        console.log(canvas)
         canvas.toBlob(
           (blob) => {
             if (!blob) {
@@ -100,8 +90,8 @@ function Cover({show, setShow, coverPic, profile, profile_update, image_global})
             blob.name = fileName;
             resolve(blob);
           },
-          // 'image/jpeg', // Change the format if needed
-          // 0.9 // Change the quality if needed
+          'image/jpeg', // Change the format if needed
+          1.0 // Change the quality if needed
         );
       };
 
@@ -123,7 +113,7 @@ function Cover({show, setShow, coverPic, profile, profile_update, image_global})
         // Create a File object from the Blob
         console.log(croppedImageBlob)
         const croppedImageFile = new File([croppedImageBlob], randomImageName, {
-          // type: 'image/jpeg',
+          type: 'image/jpeg',
           lastModified: Date.now(),
         });
 

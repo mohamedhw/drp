@@ -57,6 +57,7 @@ class Post(models.Model):
     thumb = models.ImageField(blank=True, null=True, upload_to='thumb')
     saved = models.ManyToManyField(User, blank=True, related_name="wish")
     like = models.ManyToManyField(User, blank=True, related_name="like")
+    views = models.ManyToManyField(User, blank=True, related_name="views")
     objects = PostManager()
 
     def __str__(self):

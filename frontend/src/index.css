@@ -338,7 +338,6 @@ div.wrapper > h1 {
   overflow: scroll;
 }
 
-
 .showcase-norm {
   display: block;
   position: relative;
@@ -506,7 +505,7 @@ button {
 }
 
 .profile-info li{
-  font-size:20px;
+  font-size:16px;
   font-weight:bold; 
   color:#00bda0;
   text-align: justify;

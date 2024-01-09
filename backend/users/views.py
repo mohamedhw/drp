@@ -119,9 +119,9 @@ class UpdateProfileView(generics.UpdateAPIView):
         serializer = UserProfileSerializer(instance, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "profile image updated successfully"})
+            return Response({"success": "profile image updated successfully"})
         else:
-            return Response({"message": "failed", "details": serializer.errors})
+            return Response({"error": serializer.errors})
 
 class UserProfileAPIView(generics.UpdateAPIView):
     queryset = Profile.objects.all()

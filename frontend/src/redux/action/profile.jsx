@@ -2,6 +2,15 @@ import process from "process";
 import axios from "axios"
 import { PROFILE_SUCCESS, PROFILE_FAIL, PROFILE_UPDATE_SUCCESS, PROFILE_UPDATE_FAIL, USER_UPDATE_SUCCESS, USER_UPDATE_FAIL, USER_DATA_FAIL, USER_DATA_SUCCESS } from './type';
 import Cookies from 'js-cookie'
+import { toast } from 'react-toastify';
+
+const notifyproblem = (res) => toast(`${res.data.error}`, {
+    type: "error",
+});
+
+const notifysuccess = (res) => toast(`${res.data.success}`, {
+    type: "info",
+});
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -45,16 +54,18 @@ export const profile_update = (form_data) => async dispatch => {
 
     const body = form_data
     try{
-        
+ 
         const res = await axios.put(`${apiUrl}/api-profile-update/`, body, config)
 
 
         if (res.data.success){
+            notifysuccess(res)
             dispatch({
                 type: PROFILE_UPDATE_SUCCESS,
                 payload: res.data
             })
         }else{
+            notifyproblem(res)
             dispatch({
                 type: PROFILE_UPDATE_FAIL
             })
@@ -84,11 +95,13 @@ export const user_update = (username, email) => async dispatch => {
 
 
         if (res.data.success){
+            notifysuccess(res)
             dispatch({
                 type: USER_UPDATE_SUCCESS,
                 payload: res.data
             })
         }else{
+            notifyproblem(res)
             dispatch({
                 type: USER_UPDATE_FAIL
             })

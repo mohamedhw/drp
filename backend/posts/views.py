@@ -184,20 +184,35 @@ class Detail(generics.RetrieveAPIView):
 
         return related_pics
 
+    def add_view(self, item):
+        try:
+            post = Post.objects.get(pk=item.pk)
+            if self.request.user in post.views.all():
+                pass
+            else:
+                post.views.add(self.request.user)
+        except:
+            return Response({"error": "error"})
+
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object() # Retrieve the Main Item
+        self.add_view(instance)
         image_width = instance.image.width
         image_height = instance.image.height
-
+        
         related_pics = self.get_related_pics(instance) # Retrieve Related pics
         related_tags = self.get_related_tags(instance) # Retrieve Related tags
         serializer = self.get_serializer(instance) # Serialize the Main Item
         data = serializer.data
-        data['image_width'] =   image_width
+        size_in_mb = instance.image.size / (1024 * 1024)
+        image_size = round(size_in_mb, 1)
+        data['image_size'] = image_size
+        data['image_width']  = image_width
         data['image_height'] = image_height
         data['related_tags'] = HashtagSerializers(related_tags, many=True).data # Extend the Response Data
         data['related_pics'] = self.get_serializer(related_pics, many=True).data
         return Response(data)
+
 
 
 # class SavedPicsView(generics.ListAPIView):
@@ -332,9 +347,9 @@ class PostDelete(generics.DestroyAPIView):
                         instance.delete()
             else:
                 instance.delete()
-            return Response({"message": "post deleted success"})
+            return Response({"success": "post deleted successfully"})
         else:
-            return Response({"message": "failed"})
+            return Response({"error": "failed"})
 
 
 # @method_decorator(ensure_csrf_cookie, name='dispatch')
@@ -349,11 +364,11 @@ class PostUpdate(generics.UpdateAPIView):
         if request.user == instance.author:
             if serializer.is_valid():
                 serializer.save()
-                return Response({"message": "post updated success"})
+                return Response({"message": "post updated successfully"})
             else:
-                return Response({"message": "failed", "details": serializer.errors})
+                return Response({"error": serializer.errors})
         else:
-            return Response({"message": "failed"})
+            return Response({"error": "failed"})
 
 
 class UserPics(generics.ListAPIView):

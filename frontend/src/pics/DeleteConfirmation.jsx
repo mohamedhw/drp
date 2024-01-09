@@ -3,12 +3,17 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { delete_pic } from '../redux/action/pics'
 import {connect} from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 
 function Delete({show, setShow, delete_pic, data}) {
-    const handleClose = () => {
-        setShow(false);
-        delete_pic(data.id)
-    }
+  const navigate = useNavigate(); // Get the history object
+
+  const handleClose = () => {
+    setShow(false);
+    delete_pic(data.id)
+    navigate('/');
+  }
+
   return (
     <>
 

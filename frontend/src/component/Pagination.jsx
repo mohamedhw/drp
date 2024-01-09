@@ -34,13 +34,13 @@ const Pagination = ({previous, next, currentPage, setCurrentPage, count}) => {
       handelFirstPage()
     }
   }
-  const numberOfPages = Math.ceil(count / 12)
+  const numberOfPages = Math.ceil(count / 24)
 
   const itemsToRender = Array(numberOfPages).fill(null);
 
     return (
       <>
-        {count > 12 ?
+        {count > 24 ?
         <nav className="Page navigation example mt-5" style={{paddingBottom: "80px"}}>
           <ul className="pagination pg-blue justify-content-center">
 
