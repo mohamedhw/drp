@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'users',
     'posts',
 
@@ -127,7 +127,6 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = "media"
 
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -138,7 +137,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES":[
+    "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated"
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -146,11 +145,8 @@ REST_FRAMEWORK = {
         # "rest_framework.authentication.TokenAuthentication",
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-        'PAGE_SIZE': 24
+    'PAGE_SIZE': 24
 }
-
-
-
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -161,11 +157,9 @@ EMAIL_HOST_PASSWORD = "hdiy rwmy onpx mwuh"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False  # Set to True if you're using SSL
-DEFAULT_FROM_EMAIL = 'waselm991@gmail.com' # The email address from which emails will be sent
+# The email address from which emails will be sent
+DEFAULT_FROM_EMAIL = 'waselm991@gmail.com'
 
 PASSWORD_RESET_TIMEOUT = 14400
 
 CORS_ORIGIN_ALLOW_ALL = True
-
-
-

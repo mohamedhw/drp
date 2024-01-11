@@ -11,7 +11,7 @@ import { FaBookmark, FaHeart } from "react-icons/fa6";
 import { save, like, delete_pic } from '../redux/action/pics';
 import { RiDeleteBin7Line } from "react-icons/ri";
 
-const Side = ({setShowCroper, isAuthenticated, user_g, setShowDelete, save, like, post, setAuthor, name, author, ...props }) => {
+const Side = ({ setShowCroper, isAuthenticated, user_g, setShowDelete, save, like, post, setAuthor, name, author, ...props }) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -170,7 +170,7 @@ const Side = ({setShowCroper, isAuthenticated, user_g, setShowDelete, save, like
 
             {post &&
                 <div className='' id="menu">
-                   
+
                     <h4 className='m-3'>{post.image_width}X{post.image_height}</h4>
                     {tagView}
 
@@ -193,7 +193,7 @@ const Side = ({setShowCroper, isAuthenticated, user_g, setShowDelete, save, like
                             </div>
                             <div id="dropdown-action-btn" style={{ display: "block" }}>
                                 {post.author == user_g &&
-                                    <Button className='btn btn-outline-danger m-2 btn-d' onClick={handleShow}><RiDeleteBin7Line style={{fontsize: "30px"}}/></Button>
+                                    <Button className='btn btn-outline-danger m-2 btn-d' onClick={handleShow}><RiDeleteBin7Line style={{ fontsize: "30px" }} /></Button>
                                 }
                                 {saveButton}
                                 {likeButton}
@@ -208,13 +208,13 @@ const Side = ({setShowCroper, isAuthenticated, user_g, setShowDelete, save, like
                     <div id="dropdown-author-info" style={{ display: "block" }}>
                         <ul className='profile-info px-4 py-1' style={{ listStyleType: "none", padding: "0" }}>
                             <li style={{ display: "flex", alignItems: "center" }}>
-                                author: 
+                                author:
                                 <Row style={{ textAlign: "end", alignItems: "center", flex: "1", marginRight: "15px" }}>
                                     <Col lg={8} sm={8} xs={7} style={{ padding: "0px" }}>
                                         <Link to={`/userpics/${post.author_name}`}>
                                             <h6 style={{ color: "rgb(210 144 144)", marginBottom: "0px" }}>{post.author_name}</h6>
                                         </Link>
-                                        <small style={{color: "#fff"}}>{timeAgo}</small>
+                                        <small style={{ color: "#fff" }}>{timeAgo}</small>
                                     </Col>
                                     <Col lg={0.5} sm={1} xs={1}>
                                         <Link to={`/userpics/${post.author_name}`}>
@@ -222,10 +222,10 @@ const Side = ({setShowCroper, isAuthenticated, user_g, setShowDelete, save, like
                                         </Link>
                                     </Col>
                                 </Row>
-                                
+
                             </li>
                             <li style={{ display: "inline-block", marginRight: "10px" }} className='mt-3'>size:  <span className="px-4" style={{ color: "#fff" }}>{post.image_size} M</span></li>
-                            <li style={{ display: "inline-block", marginRight: "10px" }} className='mt-3'>views:  <span className="px-4" style={{ color: "#fff" }}>{post.views_count}</span></li>
+                            {/* <li style={{ display: "inline-block", marginRight: "10px" }} className='mt-3'>views:  <span className="px-4" style={{ color: "#fff" }}>{post.views_count}</span></li> */}
                             <li style={{ display: "inline-block", marginRight: "10px" }} className='mt-3'>saved:  <span className="px-4" style={{ color: "#fff" }}>{post.like_count}</span></li>
                         </ul>
                     </div>

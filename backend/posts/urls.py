@@ -15,9 +15,7 @@ from .views import (
     TopPics,
     TagsSuggestion,
     RandomPics,
-    )
-
-
+)
 
 
 urlpatterns = [

@@ -11,11 +11,12 @@ class PostSerializers(serializers.ModelSerializer):
     user_has_liked = serializers.SerializerMethodField()
     like_count = serializers.SerializerMethodField(default=0)
     # saved_count = serializers.SerializerMethodField(default=0)
-    views_count = serializers.SerializerMethodField(default=0)
+    # views_count = serializers.SerializerMethodField(default=0)
 
     class Meta:
         model = Post
-        fields = ["id", "title", "body", "image","thumb",  "date", "author", "author_name", "author_image", "user_has_saved", "user_has_liked", "like_count", "views_count"]
+        fields = ["id", "title", "body", "image", "thumb",  "date", "author", "author_name",
+                  "author_image", "user_has_saved", "user_has_liked", "like_count"]
 
     def get_user_has_saved(self, obj):
         user = self.context['request'].user
@@ -33,13 +34,14 @@ class PostSerializers(serializers.ModelSerializer):
     #     saved_count = obj.saved.all().count()
     #     return saved_count
 
-    def get_views_count(self, obj):
-        views_count = obj.views.all().count()
-        return views_count
+    # def get_views_count(self, obj):
+    #     views_count = obj.views.all().count()
+    #     return views_count
+
 
 class HashtagSerializers(serializers.ModelSerializer):
     post_count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Hashtag
         fields = ['tag', 'tag_slug', 'post_count']
-
