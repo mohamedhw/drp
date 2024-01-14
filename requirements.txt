@@ -1,5 +1,5 @@
 asgiref==3.7.2
-crispy-bootstrap5==0.7
+crispy-bootstrap5
 Django==3.2.20
 django-bootstrap5==23.3
 django-cors-headers==4.2.0
