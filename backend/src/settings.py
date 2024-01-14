@@ -10,7 +10,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-!pgyp(dsq)4v)(r&@(q6&tc*bb2)qn$4ved@581v^)1g)n3t=)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
@@ -158,14 +157,13 @@ REST_FRAMEWORK = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_FROM = 'waselm991@gmail.com'
-EMAIL_HOST_USER = 'waselm991@gmail.com'
-EMAIL_HOST_PASSWORD = "hdiy rwmy onpx mwuh"
+EMAIL_FROM = os.environ.get("DEFAULT_FROM_EMAIL")
+EMAIL_HOST_USER = os.environ.get("DEFAULT_FROM_EMAIL")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False  # Set to True if you're using SSL
-# The email address from which emails will be sent
-DEFAULT_FROM_EMAIL = 'waselm991@gmail.com'
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL") # The email address from which emails will be sent
 
 PASSWORD_RESET_TIMEOUT = 14400
 
