@@ -1,12 +1,12 @@
-import { 
+import {
     FETCH_DATA_START,
     PICS_FAIL,
-    PICS_SUCCESS, 
-    TAG_PICS_FAIL, 
-    TAG_PICS_SUCCESS, 
-    SEARCH_SUCCESS, 
-    SEARCH_FAIL, 
-    RESET_PARAMETER, 
+    PICS_SUCCESS,
+    TAG_PICS_FAIL,
+    TAG_PICS_SUCCESS,
+    SEARCH_SUCCESS,
+    SEARCH_FAIL,
+    RESET_PARAMETER,
     SET_Q,
     AUTHOR_PICS_SUCCESS,
     AUTHOR_PICS_FAIL,
@@ -34,29 +34,29 @@ import {
 
 
 const initialState = {
-    pics:[],
+    pics: [],
     top: [],
     random: [],
     tags: [],
-    taged:[],
-    searched:[],
-    q:null,
-    authorPics:[],
-    authorName:null,
-    authorImage:null,
+    taged: [],
+    searched: [],
+    q: null,
+    authorPics: [],
+    authorName: null,
+    authorImage: null,
     savedPics: [],
     detail: null,
     loading: true,
     tag_suggestion: []
 }
 
-export default function(state=initialState,action){
+export default function(state = initialState, action) {
     const { type, payload } = action
-    switch(type){
+    switch (type) {
         case FETCH_DATA_START:
             return {
-              ...state,
-              loading: true,
+                ...state,
+                loading: true,
             }
         case DETAIL_SUCCESS:
             return {
@@ -80,7 +80,7 @@ export default function(state=initialState,action){
                 savedPics: payload
             }
         case AUTHOR_PICS_SUCCESS:
-            return {    
+            return {
                 ...state,
                 loading: false,
                 authorPics: payload
@@ -103,8 +103,8 @@ export default function(state=initialState,action){
             };
         case RESET_PARAMETER:
             return {
-              ...state,
-              searched: initialState, // Reset the parameter to its initial value.
+                ...state,
+                searched: initialState, // Reset the parameter to its initial value.
             }
         case TOP_SUCCESS:
             return {

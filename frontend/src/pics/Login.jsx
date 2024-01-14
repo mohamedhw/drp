@@ -1,56 +1,67 @@
 import Container from 'react-bootstrap/esm/Container';
 import CSRFToken from '../component/CSRFToken'
 import Modal from 'react-bootstrap/Modal';
-import {login} from '../redux/action/auth'
-import {connect} from 'react-redux'
-import {useState} from 'react';
+import { login } from '../redux/action/auth'
+import { connect } from 'react-redux'
+import { useState } from 'react';
 import { profile } from "../redux/action/profile";
-
+import { toast } from 'react-toastify';
 
 const Login = (props) => {
 
     const { isAuthenticated, login, onHide, profile } = props;
-    const [username, setUsername]=useState()
-    const [password, setPassword]=useState()
+    const [username, setUsername] = useState()
+    const [password, setPassword] = useState()
     const csrfToken = CSRFToken();
-    
+
     const handleSubmit = (e) => {
         e.preventDefault()
+        if (!username) {
+            toast("please enter your username", { type: "error" });
+            return;
+        } else if (!password) {
+            toast("please enter your password", { type: "error" });
+            return;
+        } else if (password.length < 8) {
+            toast("password incorrect", { type: "error" });
+            return;
+        }
+
         login(username, password)
     }
     const handleClose = () => {
         // Call the onHide prop to close the modal
         onHide();
     }
-    if(isAuthenticated){
+    if (isAuthenticated) {
         onHide();
         profile();
     }
 
-    return(
+    return (
         <Container>
-                <Modal
+            <Modal
                 {...props}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
                 onHide={handleClose}
-                >
+            >
                 <Modal.Body className="custom-modal">
 
                     <h2>Login</h2>
-                    <form class="site-form" onSubmit={e=>handleSubmit(e)} method="post">
+                    <form class="site-form" onSubmit={e => handleSubmit(e)} method="post">
                         <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
                         <div className='m-lg-5 m-2 p-lg-2 pt-3 form-group'>
-                            <input type='text' className="form-control p-2" placeholder="username" onChange={ e => setUsername(e.target.value)}/>
+                            <input type='text' className="form-control p-2" placeholder="username" onChange={e => setUsername(e.target.value)} />
                         </div>
                         <div className='m-lg-5 m-2 p-lg-2 pt-3 form-group'>
-                            <input type='password' className="form-control p-2" placeholder="password" onChange={ e => setPassword(e.target.value)}/>
+                            <input type='password' className="form-control p-2" placeholder="password" onChange={e => setPassword(e.target.value)} />
                         </div>
                         <div className='mt-5 m-1'>
                             <input class="btn btn-outline-success btn-s px-4" type="submit" value="Login" />
                             <span className='m-lg-5 m-md-2 m-sm-1'></span>
-                            <div className='p-1' style={{display: 'inline-block'}}>
+                            <div className='p-1' style={{ display: 'inline-block' }}>
                                 <a href="/reset_password/"><b className='' style={{}}>forgot your password?</b></a>
                             </div>
                         </div>
@@ -63,7 +74,7 @@ const Login = (props) => {
 
 
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated 
+    isAuthenticated: state.auth.isAuthenticated
 })
 
-export default connect(mapStateToProps, {login, profile})(Login);
+export default connect(mapStateToProps, { login, profile })(Login);

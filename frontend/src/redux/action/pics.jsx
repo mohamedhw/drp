@@ -1,15 +1,15 @@
 import axios from "axios"
 import {
     FETCH_DATA_START,
-    SET_Q, 
-    PICS_SUCCESS, 
-    PICS_FAIL, 
-    TAG_PICS_SUCCESS, 
-    TAG_PICS_FAIL, 
-    CREATE_PICS_SUCCESS, 
-    CREATE_PICS_FAIL, 
-    SEARCH_SUCCESS, 
-    SEARCH_FAIL, 
+    SET_Q,
+    PICS_SUCCESS,
+    PICS_FAIL,
+    TAG_PICS_SUCCESS,
+    TAG_PICS_FAIL,
+    CREATE_PICS_SUCCESS,
+    CREATE_PICS_FAIL,
+    SEARCH_SUCCESS,
+    SEARCH_FAIL,
     RESET_PARAMETER,
     AUTHOR_PICS_SUCCESS,
     AUTHOR_PICS_FAIL,
@@ -61,7 +61,7 @@ export const pics = (url) => async dispatch => {
         dispatch({ type: FETCH_DATA_START });
 
         const res = await axios.get(url, config)
-        if(res.data.error){
+        if (res.data.error) {
             dispatch({
                 type: PICS_FAIL,
             })
@@ -73,7 +73,7 @@ export const pics = (url) => async dispatch => {
             })
         }
     }
-    catch(err){
+    catch (err) {
         dispatch({
             type: PICS_FAIL
         });
@@ -88,7 +88,7 @@ export const topPics = (url) => async dispatch => {
         dispatch({ type: FETCH_DATA_START });
 
         const res = await axios.get(url, config)
-        if(res.data.error){
+        if (res.data.error) {
             dispatch({
                 type: TOP_FAIL,
             })
@@ -100,7 +100,7 @@ export const topPics = (url) => async dispatch => {
             })
         }
     }
-    catch(err){
+    catch (err) {
         dispatch({
             type: TOP_FAIL
         });
@@ -114,7 +114,7 @@ export const randomPics = (url) => async dispatch => {
         dispatch({ type: FETCH_DATA_START });
 
         const res = await axios.get(url, config)
-        if(res.data.error){
+        if (res.data.error) {
             dispatch({
                 type: RANDOM_FAIL,
             })
@@ -126,12 +126,12 @@ export const randomPics = (url) => async dispatch => {
             })
         }
     }
-    catch(err){
+    catch (err) {
         dispatch({
             type: RANDOM_FAIL
         });
-    // } finally {
-    //     setLoading(false); // Set loading to false when data fetching is complete
+        // } finally {
+        //     setLoading(false); // Set loading to false when data fetching is complete
     }
 }
 
@@ -141,7 +141,7 @@ export const detail = (postId, setLoading, setZoom_) => async dispatch => {
     const url = `${apiUrl}/api-post/${postId}/`
     try {
         const res = await axios.get(url, config)
-        if(res.data.error){
+        if (res.data.error) {
             dispatch({
                 type: DETAIL_FAIL,
             })
@@ -154,7 +154,7 @@ export const detail = (postId, setLoading, setZoom_) => async dispatch => {
             })
         }
     }
-    catch(err){
+    catch (err) {
         dispatch({
             type: DETAIL_FAIL
         });
@@ -167,7 +167,7 @@ export const tags = () => async dispatch => {
 
     try {
         const res = await axios.get(`${apiUrl}/api-tags/`, config)
-        if(res.data.error){
+        if (res.data.error) {
             dispatch({
                 type: TAGS_FAIL,
             })
@@ -179,14 +179,14 @@ export const tags = () => async dispatch => {
             })
         }
     }
-    catch(err){
+    catch (err) {
         dispatch({
             type: TAGS_FAIL
         });
     }// finally {
     //     setLoading(false); // Set loading to false when data fetching is complete
     // }
-    
+
 }
 
 
@@ -201,13 +201,13 @@ export const setQ = (q) => ({
 
 export const setAuthor = (username, image) => ({
     type: SET_AUTHOR,
-    payload: {username, image}
+    payload: { username, image }
 });
 
 export const search = (url) => async dispatch => {
     try {
         const res = await axios.get(url, config)
-        if(res.data.error){
+        if (res.data.error) {
             dispatch({
                 type: SEARCH_FAIL,
             })
@@ -220,22 +220,22 @@ export const search = (url) => async dispatch => {
             })
         }
     }
-    catch(err){
+    catch (err) {
         dispatch({
             type: SEARCH_FAIL
         });
-    // } finally {
-    //     setLoading(false); // Set loading to false when data fetching is complete
+        // } finally {
+        //     setLoading(false); // Set loading to false when data fetching is complete
     }
 }
 export const tagpics = (url, setLoading) => async dispatch => {
-    
+
 
     try {
         console.log("test")
 
         const res = await axios.get(url, config)
-        if(res.data.error){
+        if (res.data.error) {
             dispatch({
                 type: TAG_PICS_FAIL,
             })
@@ -248,7 +248,7 @@ export const tagpics = (url, setLoading) => async dispatch => {
             setLoading(false)
         }
     }
-    catch(err){
+    catch (err) {
         console.log("test1")
 
         dispatch({
@@ -258,7 +258,7 @@ export const tagpics = (url, setLoading) => async dispatch => {
 }
 
 export const createpics = (setLoading, title, body, image, tags) => async dispatch => {
-    
+
     const config_ = {
         headers: {
             'content-type': 'multipart/form-data',
@@ -267,11 +267,11 @@ export const createpics = (setLoading, title, body, image, tags) => async dispat
         }
     };
 
-    const body = JSON.stringify({title, body, image, tags})
+    const body = JSON.stringify({ title, body, image, tags })
 
     try {
         const res = await axios.get(`${apiUrl}/api-create`, body, config_)
-        if(res.data.error){
+        if (res.data.error) {
             dispatch({
                 type: CREATE_PICS_FAIL,
             })
@@ -284,7 +284,7 @@ export const createpics = (setLoading, title, body, image, tags) => async dispat
             setLoading(false)
         }
     }
-    catch(err){
+    catch (err) {
         dispatch({
             type: CREATE_PICS_FAIL
         })
@@ -293,11 +293,11 @@ export const createpics = (setLoading, title, body, image, tags) => async dispat
 
 
 export const authorpics = (url) => async dispatch => {
-    dispatch({ type: FETCH_DATA_START });
 
     try {
+        dispatch({ type: FETCH_DATA_START });
         const res = await axios.get(url, config)
-        if(res.data.error){
+        if (res.data.error) {
             dispatch({
                 type: AUTHOR_PICS_FAIL,
             })
@@ -309,7 +309,7 @@ export const authorpics = (url) => async dispatch => {
             })
         }
     }
-    catch(err){
+    catch (err) {
         dispatch({
             type: AUTHOR_PICS_FAIL
         })
@@ -318,13 +318,13 @@ export const authorpics = (url) => async dispatch => {
 
 
 export const savedpics = (url) => async dispatch => {
-    
+
 
     try {
         dispatch({ type: FETCH_DATA_START });
 
         const res = await axios.get(url, config)
-        if(res.data.error){
+        if (res.data.error) {
             dispatch({
                 type: SAVED_PICS_FAIL,
             })
@@ -336,7 +336,7 @@ export const savedpics = (url) => async dispatch => {
             })
         }
     }
-    catch(err){
+    catch (err) {
         dispatch({
             type: SAVED_PICS_FAIL
         })
@@ -344,7 +344,7 @@ export const savedpics = (url) => async dispatch => {
 }
 
 
-export const save = (pic_id) => async dispatch =>{
+export const save = (pic_id) => async dispatch => {
     const config = {
         headers: {
             "Accept": "application/json",
@@ -355,60 +355,60 @@ export const save = (pic_id) => async dispatch =>{
     const body = JSON.stringify({
         "withCredentials": true
     })
-    try{
+    try {
         const res = await axios.post(`${apiUrl}/${pic_id}/api-save-pic/`, body, config)
-        if(res.data.success){
+        if (res.data.success) {
             notifysuccess(res)
             dispatch({
-                type:SAVE_SUCCESS,
+                type: SAVE_SUCCESS,
                 payload: res.data.username
             })
-        }else{
+        } else {
             notifyproblem(res)
             dispatch({
-                type:SAVE_FAIL
+                type: SAVE_FAIL
             })
         }
     }
-    catch{
+    catch {
         dispatch({
-            type:SAVE_FAIL
+            type: SAVE_FAIL
         })
     }
 }
 
-export const delete_pic = (pic_id) => async dispatch =>{
+export const delete_pic = (pic_id) => async dispatch => {
     const config = {
-            headers: {
+        headers: {
             // "Accept": "application/json",
             "Content-Type": "application/json",
             "X-CSRFToken": Cookies.get('csrftoken'),
-            },
-            withCredentials: true,
+        },
+        withCredentials: true,
     };
 
-    try{
+    try {
         const res = await axios.delete(`${apiUrl}/${pic_id}/api-delete/`, config)
-        if(res.data.success){
+        if (res.data.success) {
             notifysuccess(res)
             dispatch({
-                type:DELETE_SUCCESS,
+                type: DELETE_SUCCESS,
             })
-        }else{
+        } else {
             notifyproblem(res)
             dispatch({
-                type:DELETE_FAIL
+                type: DELETE_FAIL
             })
         }
     }
-    catch{
+    catch {
         dispatch({
             type: DELETE_FAIL
         })
     }
 }
 
-export const like = (pic_id) => async dispatch =>{
+export const like = (pic_id) => async dispatch => {
     const config = {
         headers: {
             "Accept": "application/json",
@@ -419,57 +419,57 @@ export const like = (pic_id) => async dispatch =>{
     const body = JSON.stringify({
         "withCredentials": true
     })
-    try{
+    try {
         const res = await axios.post(`${apiUrl}/${pic_id}/api-like-pic/`, body, config)
-        if(res.data.success){
+        if (res.data.success) {
             notifysuccess(res)
             dispatch({
-                type:LIKE_SUCCESS,
+                type: LIKE_SUCCESS,
                 payload: res.data.username
             })
-        }else{
+        } else {
             notifyproblem(res)
             dispatch({
-                type:LIKE_FAIL
+                type: LIKE_FAIL
             })
         }
     }
-    catch{
+    catch {
         dispatch({
-            type:LIKE_FAIL
+            type: LIKE_FAIL
         })
     }
 }
 
 
-export const tag_suggestion = (qs) => async dispatch =>{
+export const tag_suggestion = (qs) => async dispatch => {
     const config = {
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
         }
     };
-    
+
     // const body = JSON.stringify({
     //     "withCredentials": true
     // })
 
-    try{
+    try {
         const res = await axios.get(`${apiUrl}/api-tag-suggestion/?q=${qs}`, config)
-        if(res.data.error){
+        if (res.data.error) {
             dispatch({
-                type:TAG_SUGGESTION_FAIL
+                type: TAG_SUGGESTION_FAIL
             })
-        }else{
+        } else {
             dispatch({
-                type:TAG_SUGGESTION_SUCCESS,
+                type: TAG_SUGGESTION_SUCCESS,
                 payload: res.data
             })
         }
     }
-    catch{
+    catch {
         dispatch({
-            type:TAG_SUGGESTION_FAIL
+            type: TAG_SUGGESTION_FAIL
         })
     }
 }

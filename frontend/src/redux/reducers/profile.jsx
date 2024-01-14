@@ -10,20 +10,21 @@ const initialState = {
     user_username: '',
     user_image: '',
     user_cover: '',
-    user_email: ''
+    user_email: '',
+    loading: true
 }
 
 
-export default function(state=initialState,action){
+export default function(state = initialState, action) {
     const { type, payload } = action
-    switch(type){
+    switch (type) {
         case USER_DATA_SUCCESS:
             return {
                 ...state,
                 user_username: payload.profile.user_u,
                 user_email: payload.email,
                 user_image: payload.profile.image,
-                user_cover: payload.profile.cover
+                user_cover: payload.profile.cover,
             }
         case USER_UPDATE_SUCCESS:
         case PROFILE_UPDATE_SUCCESS:
@@ -34,6 +35,7 @@ export default function(state=initialState,action){
                 username: payload.username,
                 email: payload.email,
                 user: payload.profile.user,
+                loading: false
             }
         case PROFILE_FAIL:
             return {
@@ -45,7 +47,7 @@ export default function(state=initialState,action){
         case USER_DATA_FAIL:
         case USER_UPDATE_FAIL:
         case PROFILE_UPDATE_FAIL:
-            return { ...state}
+            return { ...state }
         default:
             return state
     }

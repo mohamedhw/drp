@@ -1,52 +1,50 @@
 import { useEffect, useState } from "react"
 import { connect } from 'react-redux'
-import {authorpics} from "../redux/action/pics"
+import { authorpics } from "../redux/action/pics"
 import ProfileHead from "../component/ProfileHead";
 import { useParams, Link } from "react-router-dom"
 import SliceItems from '../component/SliceItems'
 import Loading from '../component/Loading'
 
-const UserPics = ({authorpics, pics, pics_, username_g, image_g, loading}) => {
+const UserPics = ({ authorpics, pics, pics_, username_g, image_g, loading }) => {
     const apiUrl = import.meta.env.VITE_API_URL;
-    const {authorname} = useParams()
+    const { authorname } = useParams()
     const url = `${apiUrl}/api-user-posts/${authorname}/`
     const [profileHead, setProfileHead] = useState(<></>)
     let slicePics = pics && pics.slice(0, 8)
 
-    useEffect(()=>{
+    useEffect(() => {
         authorpics(url)
-        if(username_g === authorname){
-            setProfileHead(<ProfileHead username={authorname} image={image_g} count={pics_.count} test={"number of pics uploads"}/>)
-        }else{
-            setProfileHead(<ProfileHead username={authorname} image={pics&&pics[0].author_image} count={pics_.count} test={"number of pics uploaded"}/>)
+        if (username_g === authorname) {
+            setProfileHead(<ProfileHead username={authorname} image={image_g} />)
+        } else {
+            setProfileHead(<ProfileHead username={authorname} image={pics && pics[0].author_image} />)
         }
     }, [authorname, username_g])
 
     let picsView = <></>
 
-    if(pics && pics.length === 0){
-        picsView= (<h2>no pics</h2>)
-    }else{
+    if (pics && pics.length === 0) {
+        picsView = (<h2>no pics</h2>)
+    } else {
         picsView = (
             <>
-                <SliceItems pics_g={slicePics}/>
-                {pics && pics.length > 8?
-                        <div>
-                            <Link to={`/userallpics/${authorname}`}>
-                                <button className='btn btn-outline-success btn-s px-lg-5'>More results</button>
-                            </Link>
-                        </div>
+                <SliceItems pics_g={slicePics} />
+                {pics && pics.length > 8 ?
+                    <div>
+                        <Link to={`/userallpics/${authorname}`}>
+                            <button className='btn btn-outline-success btn-s px-lg-5'>More results</button>
+                        </Link>
+                    </div>
                     :
-                        <></>
-                }  
+                    <></>
+                }
             </>
-            )
+        )
     }
-
     if (loading) {
-        return <Loading/>;
+        return <Loading />;
     }
-    
     return (
         <>
             {pics &&
@@ -54,7 +52,7 @@ const UserPics = ({authorpics, pics, pics_, username_g, image_g, loading}) => {
                     {profileHead}
                     {picsView}
                 </div>
-            } 
+            }
         </>
     )
 }
@@ -67,4 +65,4 @@ const mapStateToProps = state => ({
     loading: state.pics.loading,
 })
 
-export default connect(mapStateToProps, {authorpics}) (UserPics)
+export default connect(mapStateToProps, { authorpics })(UserPics)

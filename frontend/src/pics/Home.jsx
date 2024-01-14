@@ -1,44 +1,64 @@
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { useState, useEffect } from 'react';
-import { pics, topPics, randomPics } from '../redux/action/pics'
+import { pics } from '../redux/action/pics'
 import Container from 'react-bootstrap/Container';
+import Pagination from '../component/Pagination';
 import Items from '../component/Items';
 import { useParams } from "react-router-dom"
 import { useNavigate } from 'react-router-dom';
+import { setPage, setCurrentPage } from '../redux/action/pages'; // Import your new actions
 import FilterBar from '../component/FilterBar';
 
-
-const Home = ({pics, topPics, randomPics, pics_g, random_g, top_g}) => {
+const Home = ({ pics_g, pics, setCurrentPage, currentPage, count, next, previous }) => {
     const navigate = useNavigate()
     const apiUrl = import.meta.env.VITE_API_URL;
 
+    const { page } = useParams();
+    const isPageProvided = Boolean(page);
+
+
+
+    let url = ``
     useEffect(() => {
+        // setCurrentPage(page)
+        if (currentPage != null) {
+            url = isPageProvided
+                ? `${apiUrl}/api-post/?page=${currentPage}`
+                : `${apiUrl}/api-post/`;
+            navigate(`/${currentPage}`);
+        } else if (currentPage === null & page > 1) {
+            url = `${apiUrl}/api-post/?page=${page}`;
+            navigate(`/${page}`);
+        } else {
+            // navigate(`/`);
+            url = `${apiUrl}/api-post/`;
+        }
 
-        pics(`${apiUrl}/api-post/?page=1`);
-        topPics(`${apiUrl}/api-top-pics/?page=1`);
-        randomPics(`${apiUrl}/api-random-pics/?page=1`);
+        // if (currentPage !== 1) {
+        //     navigate(`/${currentPage}`);
+        // }
+        pics(url);
+        // console.log(url)
+    }, [currentPage, page]);
 
-    }, []);
-
-    return(
-        <>
-            <FilterBar/>
-            <Container className='mt-5'>
-                {/* {loading? <h1>Loading...</h1>: <></>} */}
-                {pics_g &&
-                    <>
-                        <Items pics_g={pics_g} />
-                    </>
-                }
-            </Container>
-        </>
+    return (
+        <div style={{ margin: "0 8%" }}>
+            {pics_g &&
+                <>
+                    <Items pics_g={pics_g} />
+                    <Pagination page={page} count={count} currentPage={currentPage} next={next} previous={previous} />
+                </>
+            }
+        </div>
     )
 }
 
-
 const mapStateToProps = state => ({
     pics_g: state.pics.pics.results,
-    top_g: state.pics.top,
-    random_g: state.pics.random
+    currentPage: state.pages.currentPage,
+    count: state.pics.pics.count,
+    next: state.pics.pics.next,
+    previous: state.pics.pics.previous,
 })
-export default connect(mapStateToProps, {pics, topPics, randomPics}) (Home)
+
+export default connect(mapStateToProps, { pics, setPage, setCurrentPage })(Home)

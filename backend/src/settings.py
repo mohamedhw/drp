@@ -10,13 +10,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!pgyp(dsq)4v)(r&@(q6&tc*bb2)qn$4ved@581v^)1g)n3t=)'
+# SECRET_KEY = 'django-insecure-!pgyp(dsq)4v)(r&@(q6&tc*bb2)qn$4ved@581v^)1g)n3t=)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
-ALLOWED_HOSTS = []
-
+SECRET_KEY = os.environ.get("SECRET_KEY")
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 
 # Application definition
 
@@ -27,7 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'users',
     'posts',
 
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -47,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 ROOT_URLCONF = 'src.urls'
 
@@ -116,6 +119,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/assets/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "dist/assets",
     BASE_DIR / "assets",
@@ -124,8 +128,10 @@ STATICFILES_DIRS = [
 # Media files
 
 MEDIA_URL = 'media/'
+STATICFILES_DIRS = (
+    BASE_DIR / "media",
+)
 MEDIA_ROOT = "media"
-
 
 
 # Default primary key field type
@@ -138,7 +144,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES":[
+    "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated"
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -146,11 +152,8 @@ REST_FRAMEWORK = {
         # "rest_framework.authentication.TokenAuthentication",
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-        'PAGE_SIZE': 24
+    'PAGE_SIZE': 24
 }
-
-
-
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -161,11 +164,9 @@ EMAIL_HOST_PASSWORD = "hdiy rwmy onpx mwuh"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False  # Set to True if you're using SSL
-DEFAULT_FROM_EMAIL = 'waselm991@gmail.com' # The email address from which emails will be sent
+# The email address from which emails will be sent
+DEFAULT_FROM_EMAIL = 'waselm991@gmail.com'
 
 PASSWORD_RESET_TIMEOUT = 14400
 
 CORS_ORIGIN_ALLOW_ALL = True
-
-
-

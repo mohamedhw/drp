@@ -10,8 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { FaBookmark, FaHeart } from "react-icons/fa6";
 import { save, like, delete_pic } from '../redux/action/pics';
 import { RiDeleteBin7Line } from "react-icons/ri";
+import { FaRegHeart } from "react-icons/fa";
 
-const Side = ({setShowCroper, isAuthenticated, user_g, setShowDelete, save, like, post, setAuthor, name, author, ...props }) => {
+
+const Side = ({ setShowCroper, isAuthenticated, user_g, setShowDelete, save, like, post, setAuthor, name, author, ...props }) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -129,15 +131,15 @@ const Side = ({setShowCroper, isAuthenticated, user_g, setShowDelete, save, like
         console.log(saveMark.classList.value)
         if (saveMark.classList.contains("btn-i")) {
             saveMark.classList.remove("btn-i")
-            saveMark.classList.add("btn-i-click")
+            saveMark.classList.add("btn-save-click")
         } else {
-            saveMark.classList.remove("btn-i-click")
+            saveMark.classList.remove("btn-save-click")
             saveMark.classList.add("btn-i")
         }
     }
 
     if (post && post.user_has_saved === true) {
-        saveButton = <button className='btn btn-outline-success btn-i-click mx-2 m-2' onClick={e => handelSave(post.id)} id="save-mark"><FaBookmark /></button>
+        saveButton = <button className='btn btn-outline-success btn-save-click mx-2 m-2' onClick={e => handelSave(post.id)} id="save-mark"><FaBookmark /></button>
     } else {
         saveButton = <button className='btn btn-outline-success btn-i mx-2 m-2' onClick={e => handelSave(post.id)} id="save-mark"><FaBookmark /></button>
     }
@@ -170,8 +172,8 @@ const Side = ({setShowCroper, isAuthenticated, user_g, setShowDelete, save, like
 
             {post &&
                 <div className='' id="menu">
-                   
-                    <h4 className='m-3'>{post.image_width}X{post.image_height}</h4>
+
+                    <h4 className='m-3'>{post.get_width}X{post.get_height}</h4>
                     {tagView}
 
                     <hr />
@@ -193,7 +195,7 @@ const Side = ({setShowCroper, isAuthenticated, user_g, setShowDelete, save, like
                             </div>
                             <div id="dropdown-action-btn" style={{ display: "block" }}>
                                 {post.author == user_g &&
-                                    <Button className='btn btn-outline-danger m-2 btn-d' onClick={handleShow}><RiDeleteBin7Line style={{fontsize: "30px"}}/></Button>
+                                    <Button className='btn btn-outline-danger m-2 btn-d' onClick={handleShow}><RiDeleteBin7Line style={{ fontsize: "30px" }} /></Button>
                                 }
                                 {saveButton}
                                 {likeButton}
@@ -208,13 +210,13 @@ const Side = ({setShowCroper, isAuthenticated, user_g, setShowDelete, save, like
                     <div id="dropdown-author-info" style={{ display: "block" }}>
                         <ul className='profile-info px-4 py-1' style={{ listStyleType: "none", padding: "0" }}>
                             <li style={{ display: "flex", alignItems: "center" }}>
-                                author: 
+                                author:
                                 <Row style={{ textAlign: "end", alignItems: "center", flex: "1", marginRight: "15px" }}>
                                     <Col lg={8} sm={8} xs={7} style={{ padding: "0px" }}>
                                         <Link to={`/userpics/${post.author_name}`}>
                                             <h6 style={{ color: "rgb(210 144 144)", marginBottom: "0px" }}>{post.author_name}</h6>
                                         </Link>
-                                        <small style={{color: "#fff"}}>{timeAgo}</small>
+                                        <small style={{ color: "#fff" }}>{timeAgo}</small>
                                     </Col>
                                     <Col lg={0.5} sm={1} xs={1}>
                                         <Link to={`/userpics/${post.author_name}`}>
@@ -222,16 +224,16 @@ const Side = ({setShowCroper, isAuthenticated, user_g, setShowDelete, save, like
                                         </Link>
                                     </Col>
                                 </Row>
-                                
+
                             </li>
                             <li style={{ display: "inline-block", marginRight: "10px" }} className='mt-3'>size:  <span className="px-4" style={{ color: "#fff" }}>{post.image_size} M</span></li>
-                            <li style={{ display: "inline-block", marginRight: "10px" }} className='mt-3'>views:  <span className="px-4" style={{ color: "#fff" }}>{post.views_count}</span></li>
-                            <li style={{ display: "inline-block", marginRight: "10px" }} className='mt-3'>saved:  <span className="px-4" style={{ color: "#fff" }}>{post.like_count}</span></li>
+                            {/* <li style={{ display: "inline-block", marginRight: "10px" }} className='mt-3'>views:  <span className="px-4" style={{ color: "#fff" }}>{post.views_count}</span></li> */}
+                            <li style={{ display: "inline-block", marginRight: "10px" }} className='mt-3'>favorite:  <span className="px-4" style={{ color: "#fff" }}>{post.like_count}</span></li>
                         </ul>
                     </div>
                     <hr />
-                    <a href={post.image}><h6>display image full screen</h6></a>
-                    <h6 onClick={() => setShowCroper(true)}>crop the image</h6>
+                    <a className='m-5' href={post.image} target="_blank"><h6 className='colored-t'>display image full screen</h6></a>
+                    {/* <h6 onClick={() => setShowCroper(true)}>crop the image</h6> */}
                 </div>
             }
         </>

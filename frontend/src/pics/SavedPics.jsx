@@ -7,47 +7,46 @@ import SliceItems from "../component/SliceItems"
 import Loading from "../component/Loading";
 
 
-const SavedPics = ({savedpics, username_g, image_g, pics, pics_, loading}) => {
+const SavedPics = ({ savedpics, username_g, image_g, pics, pics_, loading }) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const url = `${apiUrl}/api-saved-pics/`
     let slicePics = pics && pics.slice(0, 8)
 
-    useEffect(()=>{
+    useEffect(() => {
         savedpics(url)
-        
     }, [username_g, image_g])
 
 
     let picsView = <></>
-    if(pics && pics.length === 0){
-        picsView= (<h2>no pics</h2>)
-    }else{
+    if (pics && pics.length === 0) {
+        picsView = (<h2>no pics</h2>)
+    } else {
         picsView = (
-            <>                    
-                    <SliceItems pics_g={slicePics}/>
-                    {pics && pics.length > 8?
-                            <div>
-                                <Link to={`/userallpics/${authorname}`}>
-                                    <button className='btn btn-outline-success btn-s px-lg-5'>More results</button>
-                                </Link>
-                            </div>
-                        :
-                            <></>
-                     } 
-                
+            <>
+                <SliceItems pics_g={slicePics} />
+                {pics && pics.length > 8 ?
+                    <div>
+                        <Link to={`/userallpics/${authorname}`}>
+                            <button className='btn btn-outline-success btn-s px-lg-5'>More results</button>
+                        </Link>
+                    </div>
+                    :
+                    <></>
+                }
+
             </>
-            )
+        )
     }
 
     if (loading) {
-        return <Loading/>;
+        return <Loading />;
     }
 
     return (
         <>
             {pics &&
                 <div className="mt-5">
-                    <ProfileHead username={username_g} image={image_g} count={pics_.count} test={"number of pics saved"}/>
+                    <ProfileHead username={username_g} image={image_g} loading={loading} />
                     {picsView}
                 </div>
             }
@@ -63,4 +62,4 @@ const mapStateToProps = state => ({
     loading: state.pics.loading,
 })
 
-export default connect(mapStateToProps, {savedpics}) (SavedPics)
+export default connect(mapStateToProps, { savedpics })(SavedPics)

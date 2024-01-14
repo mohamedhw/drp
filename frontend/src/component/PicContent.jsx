@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import Side from "../component/Side";
 import { detail } from "../redux/action/pics";
 
 
 
 
-const PicContent = ({data, zoom_, setZoom_}) => {
+const PicContent = ({ data, zoom_, setZoom_ }) => {
 
 
     const [isDragging, setIsDragging] = useState(false);
@@ -39,9 +39,8 @@ const PicContent = ({data, zoom_, setZoom_}) => {
     // const handleMouseUp = () => {
     //   setIsDragging(false);
     // };
-    console.log(offset)
     useEffect(() => {
-        
+
         // document.addEventListener('mousemove', handleMouseMove);
         // document.addEventListener('mouseup', handleMouseUp);
         //
@@ -52,7 +51,7 @@ const PicContent = ({data, zoom_, setZoom_}) => {
     }, [isDragging]);
 
     const handleImageLoad = () => {
-        if(zoom_ === "showcase-norm"){
+        if (zoom_ === "showcase-norm") {
             setZoom_("showcase-zoom")
             const imageContainer = document.querySelector('.scrollbox');
             const containerHeight = imageContainer.offsetHeight;
@@ -60,7 +59,7 @@ const PicContent = ({data, zoom_, setZoom_}) => {
             const scrollLeft = (minImageWidth - containerWidth) / 2;
             const scrollTop = (data && data.image_height - containerHeight) / 2;
             imageContainer.scrollTo(scrollLeft, scrollTop);
-        }else if(zoom_ == "showcase-zoom"){
+        } else if (zoom_ == "showcase-zoom") {
             setZoom_("showcase-x-zoom")
             const imageContainer = document.querySelector('.scrollbox');
             const containerWidth = imageContainer.offsetWidth;
@@ -70,7 +69,7 @@ const PicContent = ({data, zoom_, setZoom_}) => {
 
             imageContainer.scrollTo(scrollLeft, scrollTop);
         }
-        else{
+        else {
             setZoom_("showcase-norm")
         }
 
@@ -88,17 +87,21 @@ const PicContent = ({data, zoom_, setZoom_}) => {
 
     return (
 
-        <div 
+        <div
             id="scrollContainer"
             className="scrollbox"
-            style={{marginRight: "-16.8px",
+            style={{
+                marginRight: "-16.8px",
                 marginBottom: "-16.8px",
                 height: '94vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
             }}
-            // onScroll={handelScroll}
-            // onMouseDown={handleMouseDown}
+        // onScroll={handelScroll}
+        // onMouseDown={handleMouseDown}
         >
-            {data && 
+            {data &&
                 <img
                     className={zoom_}
                     onClick={handleImageLoad}
@@ -109,12 +112,12 @@ const PicContent = ({data, zoom_, setZoom_}) => {
                 />
             }
             <div className="scrollbar horizontal both">
-                <div className="scroll-handle" style={{ width: "56.8642%", left: "6.03324%"}}></div>
+                <div className="scroll-handle" style={{ width: "56.8642%", left: "6.03324%" }}></div>
             </div>
             <div className="scrollbar vertical both">
-                <div className="scroll-handle" style={{height: "30.3218%", top: "69.6782%"}}></div>
+                <div className="scroll-handle" style={{ height: "30.3218%", top: "69.6782%" }}></div>
             </div>
-        </div>
+        </div >
     )
 }
 

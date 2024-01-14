@@ -12,26 +12,27 @@ from os.path import join
 
 
 class HashtagManager(models.Manager):
-    
+
     def search(self, query=None):
-        if query is None or query=="":
+        if query is None or query == "":
             return self.get_queryset().none()
         lookups = Q(tag__icontains=query)
         return self.get_queryset().filter(lookups)
-    
+
 
 class PostManager(models.Manager):
 
     def search(self, query=None):
-        if query is None or query=="":
+        if query is None or query == "":
             return self.get_queryset().none()
-        lookups = Q(title__icontains=query) | Q(body__icontains=query) | Q(tags__tag__icontains=query)
+        lookups = Q(title__icontains=query) | Q(
+            body__icontains=query) | Q(tags__tag__icontains=query)
         return self.get_queryset().filter(lookups)
 
 
 class Hashtag(models.Model):
-    tag   = models.CharField(max_length=20, blank=True, null=True)
-    tag_slug    = models.SlugField(null=False, unique=True)
+    tag = models.CharField(max_length=20, blank=True, null=True)
+    tag_slug = models.SlugField(null=False, unique=True)
     objects = HashtagManager()
 
     def get_absolute_url_tag(self):
@@ -49,10 +50,12 @@ class Hashtag(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=100)
     body = models.TextField()
-    image = models.ImageField(default='default.png', blank=True, upload_to='pics/')
+    image = models.ImageField(default='default.png',
+                              blank=True, upload_to='pics/')
     date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    saved_pic = models.ManyToManyField(User, blank=True, related_name="save_pic")
+    saved_pic = models.ManyToManyField(
+        User, blank=True, related_name="save_pic")
     tags = models.ManyToManyField(Hashtag, blank=True, related_name="tags")
     thumb = models.ImageField(blank=True, null=True, upload_to='thumb')
     saved = models.ManyToManyField(User, blank=True, related_name="wish")
@@ -63,11 +66,10 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-
     def save(self, *args, **kwargs):
         # Check if the image needs resizing
         if not self.thumb:
-            img = Image.open(self.image)     
+            img = Image.open(self.image)
             if img.height > 200 or img.width > 300:
                 output_size = (600, 600)
                 img.thumbnail(output_size)
@@ -83,8 +85,7 @@ class Post(models.Model):
                 img.save(os.path.join(settings.MEDIA_ROOT, thumb_path))
                 # Save the thumbnail
                 self.thumb.name = thumb_path
-                super().save(*args, **kwargs) 
-        
+                super().save(*args, **kwargs)
 
     def author_name(self):
         return self.author.username
@@ -93,3 +94,10 @@ class Post(models.Model):
         profile = Profile.objects.get(user=self.author)
         return profile.image.url
 
+    def get_width(self):
+        image_width = self.image.width
+        return image_width
+
+    def get_height(self):
+        image_height = self.image.height
+        return image_height
