@@ -128,4 +128,4 @@ const mapStateToProps = state => ({
     loading: state.pics.loading,
 })
 
-export default connect(mapStateToProps, { authorpics })(PicContent)
+export default connect(mapStateToProps, null)(PicContent)
