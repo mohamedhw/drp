@@ -610,7 +610,7 @@ button {
     /* border: 1px solid #00dba0 !important */
 }
 
-.no-result {
+.loading-more-result {
     color: #00dba0;
     font-size: 20px;
     font-weight: bolder;

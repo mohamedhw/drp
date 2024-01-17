@@ -136,7 +136,7 @@ export const randomPics = (url) => async dispatch => {
 }
 
 
-export const detail = (postId, setLoading, setZoom_) => async dispatch => {
+export const detail = (postId, setZoom_) => async dispatch => {
 
     const url = `${apiUrl}/api-post/${postId}/`
     try {
@@ -158,10 +158,9 @@ export const detail = (postId, setLoading, setZoom_) => async dispatch => {
         dispatch({
             type: DETAIL_FAIL
         });
-    } finally {
-        setLoading(false); // Set loading to false when data fetching is complete
     }
 }
+
 export const tags = () => async dispatch => {
 
 

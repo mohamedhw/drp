@@ -1,17 +1,15 @@
-import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { connect } from 'react-redux'
-import Side from "../component/Side";
-import { detail } from "../redux/action/pics";
+import Loading from "./Loading";
 
 
 
-
-const PicContent = ({ data, zoom_, setZoom_ }) => {
+const PicContent = ({ data, zoom_, setZoom_, loading }) => {
 
 
     const [isDragging, setIsDragging] = useState(false);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
+
     const handleMouseDown = (e) => {
         setIsDragging(true);
         setOffset({
@@ -85,6 +83,10 @@ const PicContent = ({ data, zoom_, setZoom_ }) => {
 
     }
 
+    if (loading) {
+        return <Loading />;
+    }
+
     return (
 
         <div
@@ -96,7 +98,6 @@ const PicContent = ({ data, zoom_, setZoom_ }) => {
                 height: '94vh',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
             }}
         // onScroll={handelScroll}
         // onMouseDown={handleMouseDown}
@@ -123,4 +124,8 @@ const PicContent = ({ data, zoom_, setZoom_ }) => {
 
 
 
-export default PicContent
+const mapStateToProps = state => ({
+    loading: state.pics.loading,
+})
+
+export default connect(mapStateToProps, { authorpics })(PicContent)

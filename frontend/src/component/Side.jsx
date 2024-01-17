@@ -182,7 +182,7 @@ const Side = ({ setShowCroper, isAuthenticated, user_g, setShowDelete, save, lik
                     </div>
                     <div id="dropdown-related" style={{ display: "block" }}>
                         {post.related_pics.map((post) => (
-                            <Link className="" to={`/pic/${post.id}`}>
+                            <Link to={`/pic/${post.id}`}>
                                 <img className='m-1' style={{ width: "70px", height: "70px" }} src={post.thumb} />
                             </Link>
                         ))}

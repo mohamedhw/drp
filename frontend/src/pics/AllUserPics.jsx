@@ -1,6 +1,6 @@
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { useState, useEffect } from 'react';
-import {authorpics} from "../redux/action/pics"
+import { authorpics } from "../redux/action/pics"
 import Container from 'react-bootstrap/Container';
 import Pagination from '../component/Pagination';
 import Items from '../component/Items';
@@ -13,7 +13,7 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import { Link } from "react-router-dom"
 
-const AllUserPics = ({pics, authorpics, setCurrentPage, currentPage, pics_, next, previous}) => {
+const AllUserPics = ({ pics, authorpics, setCurrentPage, currentPage, pics_, next, previous }) => {
     const navigate = useNavigate()
     const apiUrl = import.meta.env.VITE_API_URL;
     const [loading, setLoading] = useState(true)
@@ -31,45 +31,45 @@ const AllUserPics = ({pics, authorpics, setCurrentPage, currentPage, pics_, next
             const nextPage = page + 1;
             // Adjust the API endpoint to include the page parameter
             fetch(`${apiUrl}/api-user-posts/${username}/?page=${page}`)
-            .then(response => response.json())
-            .then(newData => {
-                setItems([...items, ...newData.results]);
-                setPage(nextPage);
-                setHasMore(newData.next !== null);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-                setHasMore(false);
-            });
+                .then(response => response.json())
+                .then(newData => {
+                    setItems([...items, ...newData.results]);
+                    setPage(nextPage);
+                    setHasMore(newData.next !== null);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    setHasMore(false);
+                });
         }, 100);
     };
     useEffect(() => {
         fetchMoreData();
     }, [currentPage])
 
-    return(
+    return (
         <Container className='my-5'>
             <InfiniteScroll
                 className="my-5"
                 dataLength={items.length}
                 next={fetchMoreData}
                 hasMore={hasMore}
-                loader={<h4 className="my-5">Loading...</h4>}
-                endMessage={<p className='mt-lg-5 no-result'>No more pics</p>}
+                loader={<p className="mt-5 loading-more-result">Loading...</p>}
+                endMessage={<p className='mt-5 loading-more-result'>No more pics</p>}
                 scrollThreshold={0.9}
             >
-            <Row style={{ maxWidth: '1308px', minHeight: "700px"}}>
-                {items.map((item, index) => (
-                    // <div key={index}>{/* Render your image component here */}</div>
-                    <Col key={item.id} xs={12} md={6} lg={3} xl={3} xxl={3} className='pic-t mt-3'>
-                        <Link  to={`/pic/${item.id}`} className='article-2' onClick={e => handelClick()}>
-                            <Card className='pic-l' style={{height: "100%"}}>
-                                <Card.Img variant="top" src={item.thumb} style={{height: "100% !important"}}/>
-                            </Card>
-                        </Link>
-                    </Col>
-                ))}
-            </Row>
+                <Row style={{ maxWidth: '1308px', minHeight: "700px" }}>
+                    {items.map((item, index) => (
+                        // <div key={index}>{/* Render your image component here */}</div>
+                        <Col key={item.id} xs={12} md={6} lg={3} xl={3} xxl={3} className='pic-t mt-3'>
+                            <Link to={`/pic/${item.id}`} className='article-2' onClick={e => handelClick()}>
+                                <Card className='pic-l' style={{ height: "100%" }}>
+                                    <Card.Img variant="top" src={item.thumb} style={{ height: "100% !important" }} />
+                                </Card>
+                            </Link>
+                        </Col>
+                    ))}
+                </Row>
             </InfiniteScroll>
 
         </Container>
@@ -86,4 +86,4 @@ const mapStateToProps = state => ({
     next: state.pics.authorPics.next,
     previous: state.pics.authorPics.previous,
 })
-export default connect(mapStateToProps, {authorpics}) (AllUserPics)
+export default connect(mapStateToProps, { authorpics })(AllUserPics)
