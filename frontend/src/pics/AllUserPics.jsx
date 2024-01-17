@@ -48,31 +48,30 @@ const AllUserPics = ({ pics, authorpics, setCurrentPage, currentPage, pics_, nex
     }, [currentPage])
 
     return (
-        <Container className='my-5'>
+
+        <div style={{ margin: "auto", width: "100%", textAlign: "center" }}>
             <InfiniteScroll
-                className="my-5"
                 dataLength={items.length}
                 next={fetchMoreData}
                 hasMore={hasMore}
                 loader={<p className="mt-5 loading-more-result">Loading...</p>}
-                endMessage={<p className='mt-5 loading-more-result'>No more pics</p>}
-                scrollThreshold={0.9}
+                endMessage={<p className="mt-5 loading-more-result">No more items</p>}
             >
-                <Row style={{ maxWidth: '1308px', minHeight: "700px" }}>
-                    {items.map((item, index) => (
-                        // <div key={index}>{/* Render your image component here */}</div>
-                        <Col key={item.id} xs={12} md={6} lg={3} xl={3} xxl={3} className='pic-t mt-3'>
+                <Row style={{ margin: "auto", width: "100%", justifyContent: "center" }}>
+                    {items.map((item) => (
+                        <Col key={item.id} xs={12} sm={5} md={5} lg={3} xl={3} xxl={2} className='mt-4 mt-sm-4 mx-sm-2 mt-md-3 mx-md-1 mt-lg-4 mx-lg-3 p-lg-1'>
+
                             <Link to={`/pic/${item.id}`} className='article-2' onClick={e => handelClick()}>
-                                <Card className='pic-l' style={{ height: "100%" }}>
-                                    <Card.Img variant="top" src={item.thumb} style={{ height: "100% !important" }} />
+                                <Card className='pic-l' style={{ minWidth: "200px", minHight: "100px", maxHeight: "300px", maxWidth: "500px" }}>
+                                    <Card.Img className="lazyload" variant="top" src={item.thumb} style={{ overflow: "hidden" }} loading='lazy' />
                                 </Card>
                             </Link>
                         </Col>
+
                     ))}
                 </Row>
             </InfiniteScroll>
-
-        </Container>
+        </div>
     )
 }
 
