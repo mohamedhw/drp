@@ -41,9 +41,9 @@ const ProfileHead = ({ setShow, isAuthenticated, user_data, user_username, user_
         <Row style={{ width: "100%", margin: "0" }}>
             {isAuthenticated && username_global === username ?
                 <div className="p-0">
-                    <Row style={{ backgroundImage: `url(${apiUrl}/${user_cover})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center center", width: "100%", minHeight: "240px", margin: "0" }}>
+                    <Row style={{ backgroundImage: `url(${apiUrl}${user_cover})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center center", width: "100%", minHeight: "240px", margin: "0" }}>
                         <div style={{ osition: "absolute", top: "0", left: "0", right: "0", bottom: "0", margin: "auto", maxWidth: "200px", maxHeight: "200px" }}>
-                            <img style={{ width: "200px", height: "200px" }} src={`${apiUrl}/${image_global}`} alt='Profile Image' />
+                            <img style={{ width: "200px", height: "200px" }} src={`${apiUrl}${image_global}`} alt='Profile Image' />
                         </div>
                         <Col lg={8} md={6} sm={6} xs={6} className='pt-1'>
                             <div className="py-lg-5 py-md-5 p-1">
