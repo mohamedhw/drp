@@ -140,6 +140,7 @@ export const detail = (postId, setZoom_) => async dispatch => {
 
     const url = `${apiUrl}/api-post/${postId}/`
     try {
+        dispatch({ type: FETCH_DATA_START });
         const res = await axios.get(url, config)
         if (res.data.error) {
             dispatch({

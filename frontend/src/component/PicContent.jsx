@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import Loading from "./Loading";
 
 
-
 const PicContent = ({ data, zoom_, setZoom_, loading }) => {
 
 

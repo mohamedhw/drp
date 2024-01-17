@@ -61,6 +61,7 @@ export default function(state = initialState, action) {
         case DETAIL_SUCCESS:
             return {
                 ...state,
+                loading: false,
                 detail: payload
             }
         case TAGS_SUCCESS:
