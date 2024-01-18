@@ -163,7 +163,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False  # Set to True if you're using SSL
 # The email address from which emails will be sent
-DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_EMAIL_FORM")
 
 PASSWORD_RESET_TIMEOUT = 14400
 
