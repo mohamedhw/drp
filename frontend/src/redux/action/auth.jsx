@@ -1,5 +1,5 @@
 import axios from "axios"
-import {REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, CHECK_AUTH_SUCCESS, CHECK_AUTH_FAIL} from '../action/type'
+import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, CHECK_AUTH_SUCCESS, CHECK_AUTH_FAIL } from '../action/type'
 import Cookies from 'js-cookie'
 import { toast } from 'react-toastify';
 
@@ -11,7 +11,7 @@ const notifyregisterproblem = (res) => toast(`${res.data.error}`, {
 });
 
 const apiUrl = import.meta.env.VITE_API_URL;
-export const checkauth = () => async dispatch =>{
+export const checkauth = () => async dispatch => {
 
     const config = {
         headers: {
@@ -19,19 +19,19 @@ export const checkauth = () => async dispatch =>{
             "Content-Type": "application/json",
         }
     };
-    try{
+    try {
         const res = await axios.get(`${apiUrl}/checkauth/`, config)
-        if (res.data.error || res.data.isAuthenticated === 'error'){ 
+        if (res.data.error || res.data.isAuthenticated === 'error') {
             dispatch({
                 type: CHECK_AUTH_FAIL,
                 payload: false
             });
-        }else if (res.data.isAuthenticated === 'success'){
+        } else if (res.data.isAuthenticated === 'success') {
             dispatch({
                 type: CHECK_AUTH_SUCCESS,
                 payload: true
             })
-        }else{
+        } else {
             dispatch({
                 type: CHECK_AUTH_FAIL,
                 payload: false
@@ -39,7 +39,7 @@ export const checkauth = () => async dispatch =>{
         }
 
     }
-    catch(err) {
+    catch (err) {
         dispatch({
             type: CHECK_AUTH_FAIL,
             payload: false
@@ -47,7 +47,7 @@ export const checkauth = () => async dispatch =>{
     }
 }
 
-export const login = (username, password) => async dispatch =>{
+export const login = (username, password) => async dispatch => {
     const config = {
         headers: {
             "Accept": "application/json",
@@ -55,29 +55,29 @@ export const login = (username, password) => async dispatch =>{
             "X-CSRFToken": Cookies.get('csrftoken')
         }
     }
-    const body = JSON.stringify({username, password})
-    try{
+    const body = JSON.stringify({ username, password })
+    try {
         const res = await axios.post(`${apiUrl}/api-login/`, body, config)
-        if (res.data.success){
+        if (res.data.success) {
             dispatch({
-                type:LOGIN_SUCCESS
+                type: LOGIN_SUCCESS
             })
-        }else{
+        } else {
             notify()
             dispatch({
-                type:LOGIN_FAIL
+                type: LOGIN_FAIL
             })
         }
     }
-    catch{
+    catch {
         notify()
         dispatch({
-            type:LOGIN_FAIL
+            type: LOGIN_FAIL
         })
     }
 }
 
-export const logout = () => async dispatch =>{
+export const logout = () => async dispatch => {
     const config = {
         headers: {
             "Accept": "*/*",
@@ -88,27 +88,27 @@ export const logout = () => async dispatch =>{
     const body = JSON.stringify({
         "withCredentials": true
     })
-    try{
+    try {
         const res = await axios.post(`${apiUrl}/api-logout/`, body, config)
-        if(res.data.success){
+        if (res.data.success) {
             dispatch({
-                type:LOGOUT_SUCCESS,
+                type: LOGOUT_SUCCESS,
                 payload: res.data.username
             })
-        }else{
+        } else {
             dispatch({
-                type:LOGOUT_FAIL
+                type: LOGOUT_FAIL
             })
         }
     }
-    catch{
+    catch {
         dispatch({
-            type:LOGOUT_FAIL
+            type: LOGOUT_FAIL
         })
     }
 }
 
-export const register=(username, email, password, password2)=> async dispatch =>{
+export const register = (username, email, password, password2) => async dispatch => {
 
 
 
@@ -120,16 +120,16 @@ export const register=(username, email, password, password2)=> async dispatch =>
         }
     };
 
-    const body = JSON.stringify({username, email, password, password2})
+    const body = JSON.stringify({ username, email, password, password2 })
     try {
         const res = await axios.post(`${apiUrl}/api-register/`, body, config)
 
-        if (res.data.success){
+        if (res.data.success) {
             dispatch({
                 type: REGISTER_SUCCESS,
                 payload: true
             });
-        }else{
+        } else {
             notifyregisterproblem(res)
             dispatch({
                 type: REGISTER_FAIL,
@@ -137,7 +137,7 @@ export const register=(username, email, password, password2)=> async dispatch =>
             });
         }
     }
-    catch(error){
+    catch (error) {
         dispatch({
             type: REGISTER_FAIL,
             payload: false

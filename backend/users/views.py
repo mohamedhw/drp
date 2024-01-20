@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db.models.query import Expression
 from rest_framework import generics
 from .serializer import UserProfileSerializer, UserSerializer
 from .models import Profile
@@ -15,7 +16,8 @@ from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 User = get_user_model()
 
@@ -207,20 +209,17 @@ class RegisterUser(APIView):
             return Response({"error": "username address must be unique."})
         elif queryset.filter(email=email).exists():
             return Response({"error": "Email address must be unique."})
-        if password == password2:
-            # if User.objects.filter(username==username).exists():
-            #     return Response({"error": "this username already exists!"})
-            # else:
-            if len(password) < 8:
-                return Response({"error": "password is to short!"})
-            else:
+        try:
+            # Validate password using Django's built-in validators
+            validate_password(password, user=None, password_validators=None)
+            if password == password2:
                 user = User.objects.create_user(
                     username=username, email=email, password=password)
                 user.is_active = False
                 user.save()
                 activateEmail(request, user, email)
-                # user = User.objects.get(username=username)
-
-                return Response({"success": "user created successfully!"})
-        else:
-            return Response({"error": "password do not match!"})
+                return Response({"success": "User created successfully!"})
+            else:
+                return Response({"error": "Passwords do not match!"})
+        except ValidationError as e:
+            return Response({"error": e.messages})
