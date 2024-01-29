@@ -13,21 +13,6 @@ const Pic = ({ loading, side_status, setShowCroper, setShowDelete, detail, data,
     const [zoom_, setZoom_] = useState("showcase-norm")
     const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
-    useEffect(() => {
-        detail(postId, setZoom_)
-
-        // Update window height when the window is resized
-        const handleResize = () => {
-            setWindowHeight(window.innerHeight);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        // Remove event listener when the component is unmounted
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, [postId])
 
     const he = window.innerHeight
 
@@ -45,26 +30,26 @@ const Pic = ({ loading, side_status, setShowCroper, setShowDelete, detail, data,
         </svg>
     )
 
-    console.log(side_status)
-    // SIDE BARE
-    const [slid, setSlid] = useState(visContent)
+
+    useEffect(() => {
+        detail(postId, setZoom_)
+        // updateSidebarVisibility()
+
+        // Update window height when the window is resized
+        const handleResize = () => {
+            setWindowHeight(window.innerHeight);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        // Remove event listener when the component is unmounted
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [postId])
+
     const toggleSidebar = () => {
-        const sidebar = document.getElementById("menu");
-        const togglebutton = document.getElementById("togglebutton")
-        const main = document.getElementById("main")
-        if (sidebar.style.display === "block" && side_status) {
-            setSlid(hidContent)
-            sidebar.style.display = "none";
-            togglebutton.classList.replace("vis", "hid");
-            main.classList.replace("vis-main", "hid-main");
-            sideBarStatus()
-        } else {
-            setSlid(visContent)
-            sidebar.style.display = "block";
-            togglebutton.classList.replace("hid", "vis");
-            main.classList.replace("hid-main", "vis-main");
-            sideBarStatus()
-        }
+        sideBarStatus();
     }
 
     if (loading) {
@@ -76,9 +61,9 @@ const Pic = ({ loading, side_status, setShowCroper, setShowDelete, detail, data,
             <>
                 <div>
                     {/* the side bar */}
-                    <aside id="menu" style={{ display: "block" }}>
+                    <aside id="menu" style={{ display: side_status ? "block" : "none" }}>
                         {/* the side body */}
-                        <div id="showcase-sidebar" className=''>
+                        <div id="showcase-sidebar">
                             <div className="lsidebar">
                                 <div className="side">
                                     <Side post={data} toggleSidebar={toggleSidebar} setShowDelete={setShowDelete} setShowCroper={setShowCroper}></Side>
@@ -89,11 +74,11 @@ const Pic = ({ loading, side_status, setShowCroper, setShowDelete, detail, data,
 
                     </aside>
                     {/* the button */}
-                    <div id="togglebutton" style={{ width: "auto", marginTop: he / 5 }} className="vis" onClick={e => toggleSidebar()}>
-                        {slid}
+                    <div id="togglebutton" style={{ width: "auto", marginTop: he / 5 }} className={side_status ? "vis" : "hid"} onClick={e => toggleSidebar()}>
+                        {side_status ? visContent : hidContent}
                     </div>
                 </div>
-                <main id="main" className="vis-main">
+                <main id="main" className={side_status ? "vis-main" : "hid-main"}>
                     <section id="" className="fit showcase" style={{ height: windowHeight - 100, marginRight: "15px" }}>
                         <PicContent data={data} zoom_={zoom_} setZoom_={setZoom_} />
                     </section>
