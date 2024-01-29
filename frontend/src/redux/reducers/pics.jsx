@@ -8,6 +8,7 @@ import {
     SEARCH_FAIL,
     RESET_PARAMETER,
     SET_Q,
+    RESET_SIDE_BAR,
     AUTHOR_PICS_SUCCESS,
     AUTHOR_PICS_FAIL,
     SET_AUTHOR,
@@ -41,6 +42,7 @@ const initialState = {
     taged: [],
     searched: [],
     q: null,
+    side_status: true,
     authorPics: [],
     authorName: null,
     authorImage: null,
@@ -102,6 +104,11 @@ export default function(state = initialState, action) {
                 ...state,
                 q: payload, // Reset the parameter to its initial value.
             };
+        case RESET_SIDE_BAR:
+            return {
+                ...state,
+                side_status: !state.side_status,
+            }
         case RESET_PARAMETER:
             return {
                 ...state,

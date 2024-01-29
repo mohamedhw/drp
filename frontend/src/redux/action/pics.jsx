@@ -2,6 +2,7 @@ import axios from "axios"
 import {
     FETCH_DATA_START,
     SET_Q,
+    RESET_SIDE_BAR,
     PICS_SUCCESS,
     PICS_FAIL,
     TAG_PICS_SUCCESS,
@@ -130,8 +131,6 @@ export const randomPics = (url) => async dispatch => {
         dispatch({
             type: RANDOM_FAIL
         });
-        // } finally {
-        //     setLoading(false); // Set loading to false when data fetching is complete
     }
 }
 
@@ -189,6 +188,10 @@ export const tags = () => async dispatch => {
 
 }
 
+
+export const sideBarStatus = () => ({
+    type: RESET_SIDE_BAR,
+});
 
 export const resetParameter = () => ({
     type: RESET_PARAMETER,

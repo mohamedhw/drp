@@ -2,11 +2,11 @@ import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { connect } from 'react-redux'
 import Side from "../component/Side";
-import { detail } from "../redux/action/pics";
+import { detail, sideBarStatus } from "../redux/action/pics";
 import PicContent from "../component/PicContent";
 import Loading from "../component/Loading";
 
-const Pic = ({ loading, setShowCroper, setShowDelete, detail, data }) => {
+const Pic = ({ loading, side_status, setShowCroper, setShowDelete, detail, data, sideBarStatus }) => {
 
 
     const { postId } = useParams()
@@ -45,22 +45,25 @@ const Pic = ({ loading, setShowCroper, setShowDelete, detail, data }) => {
         </svg>
     )
 
+    console.log(side_status)
     // SIDE BARE
     const [slid, setSlid] = useState(visContent)
     const toggleSidebar = () => {
         const sidebar = document.getElementById("menu");
         const togglebutton = document.getElementById("togglebutton")
         const main = document.getElementById("main")
-        if (sidebar.style.display === "block") {
+        if (sidebar.style.display === "block" && side_status) {
             setSlid(hidContent)
             sidebar.style.display = "none";
             togglebutton.classList.replace("vis", "hid");
             main.classList.replace("vis-main", "hid-main");
+            sideBarStatus()
         } else {
             setSlid(visContent)
             sidebar.style.display = "block";
             togglebutton.classList.replace("hid", "vis");
             main.classList.replace("hid-main", "vis-main");
+            sideBarStatus()
         }
     }
 
@@ -103,6 +106,7 @@ const Pic = ({ loading, setShowCroper, setShowDelete, detail, data }) => {
 
 const mapStateToProps = state => ({
     data: state.pics.detail,
-    loading: state.pics.loading
+    loading: state.pics.loading,
+    side_status: state.pics.side_status,
 })
-export default connect(mapStateToProps, { detail })(Pic)
+export default connect(mapStateToProps, { detail, sideBarStatus })(Pic)
