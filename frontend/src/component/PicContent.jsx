@@ -108,7 +108,7 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
             style={{
                 marginRight: "-16.8px",
                 marginBottom: "-16.8px",
-                height: '94vh',
+                height: '85vh',
                 display: 'flex',
                 alignItems: 'center',
                 scrollBehavior: 'smooth'
