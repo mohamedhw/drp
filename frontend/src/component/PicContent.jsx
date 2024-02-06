@@ -110,8 +110,7 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
                 marginBottom: "-16.8px",
                 height: '85vh',
                 display: 'flex',
-                alignItems: 'center',
-                scrollBehavior: 'smooth'
+                alignItems: 'center'
             }}
             onMouseDown={handleMouseDown}
         >
