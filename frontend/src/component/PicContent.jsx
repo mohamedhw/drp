@@ -1,60 +1,82 @@
-import { useParams } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { connect } from 'react-redux'
-import Side from "../component/Side";
-import { detail } from "../redux/action/pics";
+import Loading from "./Loading";
 
+const PicContent = ({ data, zoom_, setZoom_, loading }) => {
 
-
-
-const PicContent = ({ data, zoom_, setZoom_ }) => {
-
-
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [prevMousePosition, setPrevMousePosition] = useState({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
-    const [offset, setOffset] = useState({ x: 0, y: 0 });
+    const [moved, setMoved] = useState()
+
+    const handleMouseMove = useCallback((e) => {
+        if (!isDragging) return;
+        const deltaX = prevMousePosition.x - e.clientX;
+        const deltaY = prevMousePosition.y - e.clientY;
+        const scrollLeft = position.x + deltaX;
+        const scrollTop = position.y + deltaY;
+
+        e.target.parentElement.scrollTo({
+            left: scrollLeft,
+            top: scrollTop,
+            behavior: 'auto', // or 'smooth' for smooth scrolling
+        });
+
+        setPosition({
+            x: scrollLeft,
+            y: scrollTop,
+        });
+
+
+        setPrevMousePosition({
+            x: e.clientX,
+            y: e.clientY
+        });
+
+        setMoved(true);
+
+    }, [isDragging, prevMousePosition, position]);
+
+    const handleMouseUp = useCallback(() => {
+        if (!moved) {
+            handleImageLoad();
+        }
+        setIsDragging(false);
+        setMoved(false)
+    }, [isDragging, position, prevMousePosition]);
+
+    useEffect(() => {
+        if (isDragging) {
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+        }
+
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isDragging, handleMouseMove, handleMouseUp]);
+
     const handleMouseDown = (e) => {
+        e.preventDefault();
+
         setIsDragging(true);
-        setOffset({
-            x: e.clientX - e.target.offsetLeft,
-            y: e.clientY - e.target.offsetTop
+        setPrevMousePosition({
+            x: e.clientX,
+            y: e.clientY,
+        });
+        setPosition({
+            x: e.target.parentElement.scrollLeft,
+            y: e.target.parentElement.scrollTop,
         });
     };
-
-    // const handleMouseMove = (e) => {
-    //   if (isDragging) {
-    //     const x = e.clientX - offset.x;
-    //     const y = e.clientY - offset.y;
-    //
-    //     // Update the scroll position only if dragging is active
-    //     const imageContainer = document.querySelector(".scrollbox");
-    //     if (imageContainer) {
-    //       const scrollX = x - imageContainer.scrollLeft;
-    //       const scrollY = y - imageContainer.scrollTop;
-    //
-    //       imageContainer.scrollLeft += scrollX;
-    //       imageContainer.scrollTop += scrollY;
-    //     }
-    //   }
-    // };
-    // const handleMouseUp = () => {
-    //   setIsDragging(false);
-    // };
-    useEffect(() => {
-
-        // document.addEventListener('mousemove', handleMouseMove);
-        // document.addEventListener('mouseup', handleMouseUp);
-        //
-        // return () => {
-        //   document.removeEventListener('mousemove', handleMouseMove);
-        //   document.removeEventListener('mouseup', handleMouseUp);
-        // };
-    }, [isDragging]);
 
     const handleImageLoad = () => {
         if (zoom_ === "showcase-norm") {
             setZoom_("showcase-zoom")
             const imageContainer = document.querySelector('.scrollbox');
             const containerHeight = imageContainer.offsetHeight;
+            const containerWidth = imageContainer.offsetWidth;
             const minImageWidth = Math.max(data && data.image_width, containerWidth);
             const scrollLeft = (minImageWidth - containerWidth) / 2;
             const scrollTop = (data && data.image_height - containerHeight) / 2;
@@ -72,17 +94,10 @@ const PicContent = ({ data, zoom_, setZoom_ }) => {
         else {
             setZoom_("showcase-norm")
         }
-
     }
-    const handelScroll = () => {
-        let scrollContainer = document.getElementById("scrollContainer");
 
-        // Get scroll position of the scroll container
-        let scrollX = scrollContainer.scrollLeft;
-        let scrollY = scrollContainer.scrollTop;
-        scrollContainer.scrollX = offset.x;
-        scrollContainer.scrollY = offset.y;
-
+    if (loading) {
+        return <Loading />;
     }
 
     return (
@@ -93,34 +108,29 @@ const PicContent = ({ data, zoom_, setZoom_ }) => {
             style={{
                 marginRight: "-16.8px",
                 marginBottom: "-16.8px",
-                height: '94vh',
+                height: '85vh',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                alignItems: 'center'
             }}
-        // onScroll={handelScroll}
-        // onMouseDown={handleMouseDown}
+            onMouseDown={handleMouseDown}
         >
             {data &&
                 <img
                     className={zoom_}
-                    onClick={handleImageLoad}
                     id="img-content"
                     src={data.image}
                     alt="Image Description"
                     autoFocus
                 />
             }
-            <div className="scrollbar horizontal both">
-                <div className="scroll-handle" style={{ width: "56.8642%", left: "6.03324%" }}></div>
-            </div>
-            <div className="scrollbar vertical both">
-                <div className="scroll-handle" style={{ height: "30.3218%", top: "69.6782%" }}></div>
-            </div>
-        </div >
+        </div>
     )
 }
 
 
 
-export default PicContent
+const mapStateToProps = state => ({
+    loading: state.pics.loading,
+})
+
+export default connect(mapStateToProps, null)(PicContent)

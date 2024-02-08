@@ -305,23 +305,6 @@ div.wrapper>h1 {
     height: 100% !important;
 }
 
-.pic-t {
-    /* max-width:300px !important;
-  max-height:300px !important;
-  min-width:300px !important;
-  min-height:300px !important; */
-
-}
-
-/* .article-2 {
-  padding: 10px;
-  position: relative;
-  padding-bottom: 40px;
-} */
-
-
-
-
 #main {
     position: relative;
     height: 100%;
@@ -610,7 +593,7 @@ button {
     /* border: 1px solid #00dba0 !important */
 }
 
-.no-result {
+.loading-more-result {
     color: #00dba0;
     font-size: 20px;
     font-weight: bolder;

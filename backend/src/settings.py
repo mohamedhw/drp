@@ -1,23 +1,13 @@
-
-
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-!pgyp(dsq)4v)(r&@(q6&tc*bb2)qn$4ved@581v^)1g)n3t=)'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-
 SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+
 
 # Application definition
 
@@ -118,7 +108,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/assets/'
+STATIC_URL = 'assets/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "dist/assets",
@@ -127,11 +117,9 @@ STATICFILES_DIRS = [
 
 # Media files
 
-MEDIA_URL = 'media/'
-STATICFILES_DIRS = (
-    BASE_DIR / "media",
-)
-MEDIA_ROOT = "media"
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 # Default primary key field type
@@ -158,14 +146,14 @@ REST_FRAMEWORK = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_FROM = 'waselm991@gmail.com'
-EMAIL_HOST_USER = 'waselm991@gmail.com'
-EMAIL_HOST_PASSWORD = "hdiy rwmy onpx mwuh"
+EMAIL_FROM = os.environ.get("DEFAULT_EMAIL_FORM")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False  # Set to True if you're using SSL
 # The email address from which emails will be sent
-DEFAULT_FROM_EMAIL = 'waselm991@gmail.com'
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_EMAIL_FORM")
 
 PASSWORD_RESET_TIMEOUT = 14400
 

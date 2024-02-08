@@ -1,16 +1,6 @@
-import { Container } from "react-bootstrap"
-
-
-
-
 const Loading = () => {
-
-
-
-  return (
-    <div class="spinner"></div>
-  )
-
+    return (
+        <div className="spinner"></div>
+    )
 }
-
 export default Loading

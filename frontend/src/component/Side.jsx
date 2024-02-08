@@ -182,7 +182,7 @@ const Side = ({ setShowCroper, isAuthenticated, user_g, setShowDelete, save, lik
                     </div>
                     <div id="dropdown-related" style={{ display: "block" }}>
                         {post.related_pics.map((post) => (
-                            <Link className="" to={`/pic/${post.id}`}>
+                            <Link to={`/pic/${post.id}`}>
                                 <img className='m-1' style={{ width: "70px", height: "70px" }} src={post.thumb} />
                             </Link>
                         ))}
@@ -220,7 +220,7 @@ const Side = ({ setShowCroper, isAuthenticated, user_g, setShowDelete, save, lik
                                     </Col>
                                     <Col lg={0.5} sm={1} xs={1}>
                                         <Link to={`/userpics/${post.author_name}`}>
-                                            <img onClick={e => handelAuthorPage(post.author_name, post.author_image)} style={{ width: "45px", height: "45px", borderRadius: "1%" }} src={`${apiUrl}/${post.author_image}`} />
+                                            <img onClick={e => handelAuthorPage(post.author_name, post.author_image)} style={{ width: "45px", height: "45px", borderRadius: "1%" }} src={`${apiUrl}${post.author_image}`} />
                                         </Link>
                                     </Col>
                                 </Row>

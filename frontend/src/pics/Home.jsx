@@ -43,6 +43,7 @@ const Home = ({ pics_g, pics, setCurrentPage, currentPage, count, next, previous
 
     return (
         <div style={{ margin: "0 8%" }}>
+            <FilterBar />
             {pics_g &&
                 <>
                     <Items pics_g={pics_g} />

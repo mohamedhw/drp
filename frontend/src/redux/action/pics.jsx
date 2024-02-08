@@ -2,6 +2,7 @@ import axios from "axios"
 import {
     FETCH_DATA_START,
     SET_Q,
+    RESET_SIDE_BAR,
     PICS_SUCCESS,
     PICS_FAIL,
     TAG_PICS_SUCCESS,
@@ -130,16 +131,15 @@ export const randomPics = (url) => async dispatch => {
         dispatch({
             type: RANDOM_FAIL
         });
-        // } finally {
-        //     setLoading(false); // Set loading to false when data fetching is complete
     }
 }
 
 
-export const detail = (postId, setLoading, setZoom_) => async dispatch => {
+export const detail = (postId, setZoom_) => async dispatch => {
 
     const url = `${apiUrl}/api-post/${postId}/`
     try {
+        dispatch({ type: FETCH_DATA_START });
         const res = await axios.get(url, config)
         if (res.data.error) {
             dispatch({
@@ -158,10 +158,9 @@ export const detail = (postId, setLoading, setZoom_) => async dispatch => {
         dispatch({
             type: DETAIL_FAIL
         });
-    } finally {
-        setLoading(false); // Set loading to false when data fetching is complete
     }
 }
+
 export const tags = () => async dispatch => {
 
 
@@ -189,6 +188,10 @@ export const tags = () => async dispatch => {
 
 }
 
+
+export const sideBarStatus = () => ({
+    type: RESET_SIDE_BAR,
+});
 
 export const resetParameter = () => ({
     type: RESET_PARAMETER,

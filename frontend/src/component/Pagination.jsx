@@ -12,8 +12,7 @@ const Pagination = ({ previous, next, currentPage, setCurrentPage, count }) => {
     const params = currentUrl.split('/');
     const first_param = params[1]
     const second_param = params[2]
-    console.log(first_param)
-    console.log(currentPage)
+
     const handelFirstPage = () => {
         setCurrentPage(1)
         {
@@ -44,14 +43,11 @@ const Pagination = ({ previous, next, currentPage, setCurrentPage, count }) => {
 
     const handelNextPage = () => {
         if (!first_param) {
-            console.log("test3")
             navigate('/2')
         } else if (first_param === "top" || first_param === "random") {
             if (!second_param) {
-                console.log("test2")
                 navigate(`/${first_param}/2/`)
             } else {
-                console.log("test")
                 setCurrentPage(parseInt(next.match(/page=(\d+)/)[1]))
             }
         } else {
@@ -122,7 +118,7 @@ const Pagination = ({ previous, next, currentPage, setCurrentPage, count }) => {
                         }
                     </ul>
                 </nav >
-                : <></>
+                : <div className='m-5'></div>
             }
         </>
 

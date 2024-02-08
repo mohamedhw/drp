@@ -1,9 +1,9 @@
 import Container from 'react-bootstrap/esm/Container';
 import CSRFToken from '../component/CSRFToken'
 import Modal from 'react-bootstrap/Modal';
-import {register} from '../redux/action/auth'
-import {connect} from 'react-redux'
-import {useState, useEffect} from 'react';
+import { register } from '../redux/action/auth'
+import { connect } from 'react-redux'
+import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 
@@ -27,9 +27,9 @@ const Register = ({ isAuthenticated, isRegistered, register, onHide, setModalSho
     });
 
     const [accountCreated, setAccountCreated] = useState(false)
-    const [username, setUsername]=useState("")
+    const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
-    const [password, setPassword]=useState("")
+    const [password, setPassword] = useState("")
     const [password2, setPassword2] = useState("")
     const navigate = useNavigate()
 
@@ -41,7 +41,7 @@ const Register = ({ isAuthenticated, isRegistered, register, onHide, setModalSho
         passwordMatch: 'Passwords do not match',
     };
 
-    const handleSubmit=(e)=>{
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         if (!username) {
@@ -65,52 +65,52 @@ const Register = ({ isAuthenticated, isRegistered, register, onHide, setModalSho
         setAccountCreated(true)
 
     }
-    useEffect(()=>{
-        if (isAuthenticated){
+    useEffect(() => {
+        if (isAuthenticated) {
             navigate('/profile')
-        }else if (isRegistered){
+        } else if (isRegistered) {
             onHide()
             setModalShow(true)
             notify()
         }
-    },[isRegistered])
+    }, [isRegistered])
 
 
-    return(
-        
+    return (
+
         <Container>
-                <Modal
+            <Modal
                 {...props}
                 onHide={onHide}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
-                >
+            >
 
                 <Modal.Body className="custom-modal">
 
                     <h2>Register</h2>
-                    <form className="site-form" onSubmit={e=>handleSubmit(e)} method="post">
-                        <CSRFToken/>
+                    <form className="site-form" onSubmit={e => handleSubmit(e)} method="post">
+                        <CSRFToken />
                         <div className='m-lg-4 m-2 p-lg-2 pt-3 form-group'>
-                            <input type='text' className="form-control p-2" placeholder="username" onChange={ e => setUsername(e.target.value)}/>
+                            <input type='text' className="form-control p-2" placeholder="username" onChange={e => setUsername(e.target.value)} />
                         </div>
                         <div className='m-lg-4 m-2 p-lg-2 pt-3 form-group'>
-                            <input type='email' className="form-control p-2" placeholder="email" onChange={ e => setEmail(e.target.value)}/>
+                            <input type='email' className="form-control p-2" placeholder="email" onChange={e => setEmail(e.target.value)} />
                         </div>
                         <div className='m-lg-4 m-2 p-lg-2 pt-3 form-group'>
-                            <input type='password' className="form-control p-2" placeholder="password" onChange={ e => setPassword(e.target.value)}/>
-                        </div>                
-                        <div className='m-lg-4 m-2 p-lg-2 pt-3 form-group'>
-                            <input type='password' className="form-control p-2" placeholder="confirm password" onChange={ e => setPassword2(e.target.value)}/>
+                            <input type='password' className="form-control p-2" placeholder="password" onChange={e => setPassword(e.target.value)} />
                         </div>
-                        <input className="btn btn-outline-success btn-s px-4 mt-4 m-1"  type="submit" value="Register" />
+                        <div className='m-lg-4 m-2 p-lg-2 pt-3 form-group'>
+                            <input type='password' className="form-control p-2" placeholder="confirm password" onChange={e => setPassword2(e.target.value)} />
+                        </div>
+                        <input className="btn btn-outline-success btn-s px-4 mt-4 m-1" type="submit" value="Register" />
                         {/* <Link to="/" ><small className='p-2 p-lg-5' style={{}}>alrdy have an account?</small></Link> */}
                     </form>
                 </Modal.Body>
             </Modal>
         </Container>
-        
+
     )
 }
 
@@ -119,4 +119,4 @@ const mapStateToProps = state => ({
     isRegistered: state.auth.isRegistered
 })
 
-export default connect(mapStateToProps, {register})(Register);
+export default connect(mapStateToProps, { register })(Register);
