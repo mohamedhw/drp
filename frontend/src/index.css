@@ -199,6 +199,7 @@ div.wrapper>h1 {
   cursor: pointer !important;
 }
 
+.btn-s:active,
 .btn-s:hover {
   color: #0f121f !important;
   background-color: #00dba0 !important;

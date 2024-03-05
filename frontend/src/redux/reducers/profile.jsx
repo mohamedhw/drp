@@ -1,4 +1,14 @@
-import { PROFILE_FAIL, PROFILE_SUCCESS, PROFILE_UPDATE_SUCCESS, PROFILE_UPDATE_FAIL, USER_UPDATE_SUCCESS, USER_UPDATE_FAIL, USER_DATA_SUCCESS, USER_DATA_FAIL } from "../action/type";
+import {
+  FETCH_DATA_START,
+  PROFILE_FAIL,
+  PROFILE_SUCCESS,
+  PROFILE_UPDATE_SUCCESS,
+  PROFILE_UPDATE_FAIL,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_FAIL,
+  USER_DATA_SUCCESS,
+  USER_DATA_FAIL
+} from "../action/type";
 
 
 
@@ -18,6 +28,11 @@ const initialState = {
 export default function(state = initialState, action) {
     const { type, payload } = action
     switch (type) {
+        case FETCH_DATA_START:
+            return {
+                ...state,
+                loading: true,
+            }
         case USER_DATA_SUCCESS:
             return {
                 ...state,

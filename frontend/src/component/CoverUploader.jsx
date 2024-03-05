@@ -7,7 +7,8 @@ import { connect } from 'react-redux'
 
 
 function Cover({ show, setShow, coverPic, profile, profile_update, image_global }) {
-
+    const [buttonDisabled, setButtonDisabled] = useState(false); // Add state for button disabled status
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const apiUrl = import.meta.env.VITE_API_URL;
     const [initialCover, setInitalCover] = useState()
     const [crop, setCrop] = useState({
@@ -51,7 +52,6 @@ function Cover({ show, setShow, coverPic, profile, profile_update, image_global 
         return imageName;
     };
 
-    console.log(completedCrop)
     // Example usage:
     const randomImageName = generateRandomImageName();
     const getCroppedImg = (image, completedCrop, fileName) => {
@@ -61,11 +61,9 @@ function Cover({ show, setShow, coverPic, profile, profile_update, image_global 
             const img = new Image();
 
             img.onload = () => {
-                console.log('Image Natural Dimensions:', img.naturalWidth, img.naturalHeight);
 
                 const scaleX = img.naturalWidth / cover_.width;
                 const scaleY = img.naturalHeight / cover_.height;
-                console.log('cr', img.width)
                 canvas.width = completedCrop.width * scaleX;
                 canvas.height = completedCrop.height * scaleY;
                 const ctx = canvas.getContext('2d');
@@ -105,41 +103,47 @@ function Cover({ show, setShow, coverPic, profile, profile_update, image_global 
     const [uploadError, setUploadError] = useState(null);
 
     const submitcroppedimage = async () => {
-        try {
-            if (initialCover && completedCrop) {
-                // Start the uploading process
-                setUploading(true);
 
-                // Call getCroppedImg and handle the returned Blob
-                const croppedImageBlob = await getCroppedImg(initialCover, completedCrop, randomImageName);
-                // Create a File object from the Blob
-                console.log(croppedImageBlob)
-                const croppedImageFile = new File([croppedImageBlob], randomImageName, {
-                    type: 'image/jpeg',
-                    lastModified: Date.now(),
-                });
+          setIsSubmitting(true);
+          setButtonDisabled(true); // Disable the button when submitting
+          try {
+              if (initialCover && completedCrop) {
+                  // Start the uploading process
+                  setUploading(true);
 
-                // Create a FormData object to send the image as part of the request payload
-                const form_data = new FormData();
-                form_data.append('cover', croppedImageFile);
-                // Dispatch the Redux action to update the cover image
-                await profile_update(form_data);
+                  // Call getCroppedImg and handle the returned Blob
+                  const croppedImageBlob = await getCroppedImg(initialCover, completedCrop, randomImageName);
+                  // Create a File object from the Blob
+                  const croppedImageFile = new File([croppedImageBlob], randomImageName, {
+                      type: 'image/jpeg',
+                      lastModified: Date.now(),
+                  });
 
-                // Fetch the updated profile data after the image is uploaded
-                await profile();
+                  // Create a FormData object to send the image as part of the request payload
+                  const form_data = new FormData();
+                  form_data.append('cover', croppedImageFile);
+                  // Dispatch the Redux action to update the cover image
+                  await profile_update(form_data);
 
-                // Reset the component state and close the modal
-                setUploading(false);
-                setShow(false);
-            }
-        } catch (error) {
-            console.error('Error during image upload:', error);
-            // Set the upload error state to display an error message to the user
-            setUploadError('Failed to upload image. Please try again.');
-            // Reset the uploading state
-            setUploading(false);
-        }
+
+                  // Reset the component state and close the modal
+                  setUploading(false);
+                  setIsSubmitting(false);
+                  // Fetch the updated profile data after the image is uploaded
+                  profile();
+                  setShow(false);
+              }
+          } catch (error) {
+              console.error('Error during image upload:', error);
+              // Set the upload error state to display an error message to the user
+              setUploadError('Failed to upload image. Please try again.');
+              // Reset the uploading state
+              setUploading(false);
+              setIsSubmitting(false);
+          }
     };
+
+
     return (
         <>
             {initialCover &&
@@ -153,29 +157,31 @@ function Cover({ show, setShow, coverPic, profile, profile_update, image_global 
                 >
                     <Modal.Header closeButton>
                         <Modal.Title id="example-custom-modal-styling-title">
-                            Custom Modal Styling
+                            Cover update
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <div>
-                            <ReactCrop
-                                aspect={4 / 1}
-                                src={initialCover}
-                                crop={crop}
-                                onChange={c => setCrop(c)}
+                      
+                        {isSubmitting && <h1>Loading...</h1> }
+                          <div>
+                                <ReactCrop
+                                    aspect={4 / 1}
+                                    src={initialCover}
+                                    crop={crop}
+                                    onChange={c => setCrop(c)}
 
-                                onComplete={(e) => {
-                                    setCompletedCrop(e)
-                                }}
-                            // onImageLoaded={handleImageLoaded} // Add this line
-                            // locked={true} // Set this to true to disable cropping
-                            >
-                                <img id="cover" src={initialCover} style={{ width: "auto" }} />
-                            </ReactCrop>
-                        </div>
+                                    onComplete={(e) => {
+                                        setCompletedCrop(e)
+                                    }}
+                                // onImageLoaded={handleImageLoaded} // Add this line
+                                // locked={true} // Set this to true to disable cropping
+                                >
+                                    <img id="cover" src={initialCover} style={{ width: "auto" }} />
+                                </ReactCrop>
+                          </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={submitcroppedimage}>submit</Button>
+                        <Button onClick={submitcroppedimage} disabled={buttonDisabled}>submit</Button>
                     </Modal.Footer>
                 </Modal>
             }
@@ -184,8 +190,5 @@ function Cover({ show, setShow, coverPic, profile, profile_update, image_global 
 }
 
 
-const mapStateToProps = state => ({
-    image_global: state.profile.image,
-})
 export default connect(null, { profile, profile_update })(Cover);
 

@@ -1,14 +1,18 @@
+backend check for request.method == 'POST' and improve error return text
+
 Pics App
 
 	Home Page
 
-		Search Pics
+		* Search Pics
 
-		filter Pics Using Hashtag
+		* filter Pics Using Hashtag
 
 *	Detail Page
 
 *	Upload Pic
+    check the tag for any chars other than _ and " "
+    improve the tag add methods
 
 *	Update Pic
 
@@ -25,4 +29,4 @@ Pics App
 
 *	Logout User
 
-	update Profile
+	*update Profile

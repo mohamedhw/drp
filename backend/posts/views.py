@@ -108,7 +108,7 @@ def like_pic(request, pk):
         return Response({"error": "error"})
 
 
-@api_view(["POST", "GET"])
+@api_view(["POST"])
 def save_pic(request, pk):
     try:
         post = Post.objects.get(pk=pk)
@@ -269,54 +269,44 @@ class AllTags(generics.ListAPIView):
 
 @method_decorator(csrf_protect, name='dispatch')
 class PostCreate(generics.CreateAPIView):
-    # queryset = Post.objects.all()
     authentication_classes = [authentication.SessionAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = PostSerializers
 
     def post(self, request):
-        data = request.data
-        tag_data = data.get('tag')
-        print(tag_data)
-        if tag_data:
-            tags_ = Hashtag.objects.all()
-            tags_data = data.pop('tag', [])
-            if tags_data == ['undefined']:
-                post_serializer = PostSerializers(data=data)
+        if request.method == 'POST':
+            data = request.data
+            tag_data = data.get('tag')
+            if tag_data:
+                # Extract the tag data from the request, default to an empty list if not present
+                tags_data = data.pop('tag', [])
+                tags_data = tag_data.split(',') if tag_data != ['undefined'] else []
 
-                if post_serializer.is_valid():
-                    post = post_serializer.save()
-                    return redirect('/')
-            else:
-                tags_data = tags_data[0].split(',')
                 post_serializer = PostSerializers(data=data)
-
+                # Check if the data provided is valid according to the serializer
                 if post_serializer.is_valid():
                     # Create and associate tags with the post
                     post = post_serializer.save()
-
                     for tag_data in tags_data:
+                        #checking every tag for # or spaces at the start or the end and remvoe them
                         if '#' in tag_data:
                             tag_data = tag_data.lstrip('#')
                         tag_data = tag_data.strip()
-                        tag, created = Hashtag.objects.get_or_create(
+                        # geting the tag if it exists befor if not create it
+                        tag, _ = Hashtag.objects.get_or_create(
                             tag=tag_data)
 
-                        if not created:
-                            post.tags.add(tag)
-                            # pass
                         post.tags.add(tag)
                     return redirect('/')
+            else:
+                post_serializer = PostSerializers(data=data)
+                if post_serializer.is_valid():
+                    post = post_serializer.save()
+                    return redirect('/')
+
+            return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-
-            post_serializer = PostSerializers(data=data)
-
-            if post_serializer.is_valid():
-                post = post_serializer.save()
-                return redirect('/')
-
-        return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+            return Response({"detail": "Method not allowed."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 class TagsSuggestion(generics.ListAPIView):
     queryset = Hashtag.objects.all()

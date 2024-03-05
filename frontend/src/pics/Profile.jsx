@@ -9,6 +9,7 @@ import Loading from "../component/Loading";
 
 const Profile = ({ profile, profile_update, user_update, username_g, image_g, email_g, setShow, setCoverPic, loading }) => {
 
+    const [buttonDisabled, setButtonDisabled] = useState(false); // Add state for button disabled status
     const [username, setUsername] = useState()
     const [email, setEmail] = useState()
     const [image, setImage] = useState()
@@ -19,8 +20,6 @@ const Profile = ({ profile, profile_update, user_update, username_g, image_g, em
     };
 
     const handelImage = (e) => {
-        e.preventDefault();
-
         const file = e.target.files[0]
         if (file && isImageFile(file) && acceptedFileArray.includes(file.type)) {
             setImage(file)
@@ -32,41 +31,25 @@ const Profile = ({ profile, profile_update, user_update, username_g, image_g, em
 
 
     const handelSubmit = (e) => {
-        e.preventDefault();
-        let form_data = new FormData();
-        if (image && email && username) {
-            form_data.append('image', image)
-            user_update(username, email)
-            profile_update(form_data)
-        } else if (username && email) {
-            user_update(username, email)
-        } else if (image && username) {
-            form_data.append('image', image)
-            user_update(username, email_g)
-            profile_update(form_data)
-        } else if (image && email) {
-            form_data.append('image', image)
-            user_update(username_g, email)
-            profile_update(form_data)
-        } else if (image) {
-            form_data.append('image', image)
-            profile_update(form_data)
-        } else if (username) {
-            user_update(username, email_g)
-        } else if (email) {
-            user_update(username_g, email)
-        } else {
-            const notifyproblem = () => toast(`error could not update the profile!!`, {
-                type: "error",
-            });
-            notifyproblem()
-        }
-        profile()
+      e.preventDefault();
+
+      setButtonDisabled(true); // Disable the button when submitting
+      const form_data = new FormData();
+      if (image || username || email) {
+        if (image) form_data.append('image', image);
+        user_update(username || username_g, email || email_g);
+        profile_update(form_data).then(() => {
+          profile(); // Fetch updated profile data after successful update
+
+          setButtonDisabled(false); // Disable the button when submitting
+        });
+      } else {
+        toast('Please provide at least one field to update', { type: "error" });
+
+        setButtonDisabled(false); // Disable the button when submitting
+      }
     }
 
-    useEffect(() => {
-        profile()
-    }, [test, username_g, image_g]);
 
     return (
         <div className='mt-5'>
@@ -83,7 +66,7 @@ const Profile = ({ profile, profile_update, user_update, username_g, image_g, em
                         <input id='profileimage' className='form-control' type='file' accept="image/*" placeholder='test' name='image' onChange={e => handelImage(e)} />
                     </div>
 
-                    <button onClick={e => setTest(test + 1)} type="submit" className='btn btn-outline-success btn-s px-4 mt-3'>Update</button>
+                    <button onClick={e => setTest(test + 1)} type="submit" className='btn btn-outline-success btn-s px-4 mt-3' disabled={buttonDisabled}>Update</button>
                 </form>
             </Container>
 
