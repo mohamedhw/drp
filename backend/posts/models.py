@@ -50,14 +50,12 @@ class Hashtag(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=100)
     body = models.TextField()
-    image = models.ImageField(default='default.png',
-                              blank=True, upload_to='pics/')
+    image = models.ImageField(default='default.png', blank=True, upload_to='image_gallery/original_images')
     date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    saved_pic = models.ManyToManyField(
-        User, blank=True, related_name="save_pic")
+    saved_pic = models.ManyToManyField(User, blank=True, related_name="save_pic")
     tags = models.ManyToManyField(Hashtag, blank=True, related_name="tags")
-    thumb = models.ImageField(blank=True, null=True, upload_to='thumb')
+    thumb = models.ImageField(blank=True, null=True, upload_to='image_gallery/thumbnails')
     saved = models.ManyToManyField(User, blank=True, related_name="wish")
     like = models.ManyToManyField(User, blank=True, related_name="like")
     views = models.ManyToManyField(User, blank=True, related_name="views")
@@ -81,7 +79,7 @@ class Post(models.Model):
                 img = img.crop((left, top, right, bottom))
 
                 thumb_filename = f"thumb_{self.image.name.split('/')[-1]}"
-                thumb_path = join("thumb/", thumb_filename)
+                thumb_path = join("image_gallery/thumbnails/", thumb_filename)
                 img.save(os.path.join(settings.MEDIA_ROOT, thumb_path))
                 # Save the thumbnail
                 self.thumb.name = thumb_path
