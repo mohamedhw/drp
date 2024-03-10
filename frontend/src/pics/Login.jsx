@@ -59,10 +59,10 @@ const Login = (props) => {
                             <input type='password' className="form-control p-2" placeholder="password" onChange={e => setPassword(e.target.value)} />
                         </div>
                         <div className='mt-5 m-1'>
-                            <input className="btn btn-outline-success btn-s px-4" type="submit" value="Login" />
+                            <button className="btn btn-outline-success btn-s px-4" type="submit" >Login</button>
                             <span className='m-lg-5 m-md-2 m-sm-1'></span>
-                            <div className='p-1' style={{ display: 'inline-block' }}>
-                                <a href="/reset_password/"><b className='' style={{}}>forgot your password?</b></a>
+                            <div className='p-1' style={{ display: 'inline-block', verticalAlign: "bottom"}}>
+                                <a href="/reset_password/"><b>forgot your password?</b></a>
                             </div>
                         </div>
                     </form>

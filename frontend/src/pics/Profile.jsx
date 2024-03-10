@@ -82,8 +82,13 @@ const Profile = ({ profile, profile_update, user_update, username_g, image_g, em
                     <div className='form-group m-lg-4 m-2 p-lg-1 pt-3'>
                         <input id='profileimage' className='form-control' type='file' accept="image/*" placeholder='test' name='image' onChange={e => handelImage(e)} />
                     </div>
-
-                    <button onClick={e => setTest(test + 1)} type="submit" className='btn btn-outline-success btn-s px-4 mt-3'>Update</button>
+                      <div className='mt-5 m-1'>
+                          <button style={{display: "inline-block"}} onClick={() => setTest(test + 1)} type="submit" className='btn btn-outline-success btn-s px-4 mt-3'>Update</button>
+                          <span className='m-lg-5 m-md-2 m-sm-1'></span>
+                          <div className='p-1' style={{ display: 'inline-block', verticalAlign: "bottom" }}>
+                              <a href="/reset_password/"><b>forgot your password?</b></a>
+                          </div>
+                      </div>
                 </form>
             </Container>
 
