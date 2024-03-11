@@ -1,35 +1,23 @@
 import { connect } from 'react-redux'
 import { useState, useEffect } from 'react';
 import { authorpics } from "../redux/action/pics"
-import Container from 'react-bootstrap/Container';
-import Pagination from '../component/Pagination';
-import Items from '../component/Items';
 import { useParams } from "react-router-dom"
-import { useNavigate } from 'react-router-dom';
-import { setPage, setCurrentPage } from '../redux/action/pages'; // Import your new actions
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import { Link } from "react-router-dom"
 
-const AllUserPics = ({ pics, authorpics, setCurrentPage, currentPage, pics_, next, previous }) => {
-    const navigate = useNavigate()
+const AllUserPics = ({ currentPage }) => {
     const apiUrl = import.meta.env.VITE_API_URL;
-    const [loading, setLoading] = useState(true)
 
-    const { username, s } = useParams();
-    const isPageProvided = Boolean(s);
-    let url = ``
-    const [userpics, setUserPics] = useState()
+    const { username } = useParams();
     const [items, setItems] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(1);
     const fetchMoreData = () => {
-
         setTimeout(() => {
             const nextPage = page + 1;
-            // Adjust the API endpoint to include the page parameter
             fetch(`${apiUrl}/api-user-posts/${username}/?page=${page}`)
                 .then(response => response.json())
                 .then(newData => {

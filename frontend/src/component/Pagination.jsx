@@ -1,36 +1,23 @@
 import { connect } from 'react-redux'
-import { setCurrentPage } from '../redux/action/pages'; // Import your new actions
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { setCurrentPage } from '../redux/action/pages';
+// import { useNavigate, useLocation } from 'react-router-dom';
 
 
 
 const Pagination = ({ previous, next, currentPage, setCurrentPage, count }) => {
-    const navigate = useNavigate()
-    const { username } = useParams();
-    const location = useLocation();
-    const currentUrl = location.pathname;
-    const params = currentUrl.split('/');
-    const first_param = params[1]
-    const second_param = params[2]
+    // const navigate = useNavigate()
+    // const location = useLocation();
+    // const currentUrl = location.pathname;
+    // const params = currentUrl.split('/');
+    // const first_param = params[1]
+    // const second_param = params[2]
 
     const handelFirstPage = () => {
         setCurrentPage(1)
-        {
-            username ?
-                navigate(`/userpics/${username}/`)
-                :
-                navigate(`/${first_param}/`)
-        }
     }
 
     const handelPageNumber = (index) => {
         setCurrentPage(index + 1)
-        {
-            username ?
-                navigate(`/userpics/${username}/${currentPage}`)
-                :
-                navigate(currentPage)
-        }
     }
 
     const handelPreviousPage = () => {
@@ -42,17 +29,22 @@ const Pagination = ({ previous, next, currentPage, setCurrentPage, count }) => {
     }
 
     const handelNextPage = () => {
-        if (!first_param) {
-            navigate('/2')
-        } else if (first_param === "top" || first_param === "random") {
-            if (!second_param) {
-                navigate(`/${first_param}/2/`)
-            } else {
-                setCurrentPage(parseInt(next.match(/page=(\d+)/)[1]))
-            }
-        } else {
+        try {
             setCurrentPage(parseInt(next.match(/page=(\d+)/)[1]))
+        } catch {
+            handelFirstPage()
         }
+        // if (!first_param) {
+        //     setCurrentPage(parseInt(next.match(/page=(\d+)/)[1]))
+        // } else if (first_param === "top" || first_param === "random") {
+        //     if (!second_param) {
+        //         navigate(`/${first_param}/?page=2`)
+        //     } else {
+        //         setCurrentPage(parseInt(next.match(/page=(\d+)/)[1]))
+        //     }
+        // } else {
+        //     setCurrentPage(parseInt(next.match(/page=(\d+)/)[1]))
+        // }
     }
 
     const numberOfPages = Math.ceil(count / 24)
@@ -102,10 +94,10 @@ const Pagination = ({ previous, next, currentPage, setCurrentPage, count }) => {
                                 {next ?
                                     <>
                                         <li className="page-item">
-                                            <a className="btn btn-outline-success btn-sm mb-4 pg-lin btn-s" onClick={e => handelNextPage()}>Next</a>
+                                            <a className="btn btn-outline-success btn-sm mb-4 pg-lin btn-s" onClick={() => handelNextPage()}>Next</a>
                                         </li>
                                         <li className="page-item">
-                                            <a className="btn btn-outline-success btn-sm mb-4 pg-lin btn-s" onClick={e => setCurrentPage(numberOfPages)}>&raquo;</a>
+                                            <a className="btn btn-outline-success btn-sm mb-4 pg-lin btn-s" onClick={() => setCurrentPage(numberOfPages)}>&raquo;</a>
                                         </li>
                                     </>
                                     :

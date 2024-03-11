@@ -64,7 +64,7 @@ const App = () => {
                     <Route exact path='/top/:page?' element={<TopPics />} />
                     <Route exact path='/random/:page?' element={<RandomPics />} />
                     <Route exact path='/latest/:page?' element={<LatestPics />} />
-                    <Route exact path='/:page?' element={<Home />} />
+                    <Route exact path='/' element={<Home />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </Layout>
