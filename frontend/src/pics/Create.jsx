@@ -4,25 +4,22 @@ import Cookies from 'js-cookie'
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux"
 import Container from "react-bootstrap/esm/Container";
-// import {create} from '../redux/action'
 import { tags, tag_suggestion } from "../redux/action/pics"
 import Form from 'react-bootstrap/Form';
 import { IoIosCloseCircle } from "react-icons/io";
 import Badge from 'react-bootstrap/Badge';
+import Loading from "../component/Loading";
 
-
-const Create = ({ user_g, tags_g, tags, tag_suggestion, tag_suggestions }) => {
+const Create = ({ user_g, tag_suggestion, tag_suggestions }) => {
     const user = user_g
     const apiUrl = import.meta.env.VITE_API_URL;
-
+    const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(false)
     const [title, setTitle] = useState()
     const [body, setBody] = useState()
     const [image, setImage] = useState(null)
     const [tag, setTag] = useState([])
     const [handleErr, setErr] = useState(null)
-    const navigate = useNavigate()
-    const tagList = tags_g && tags_g.map((item) => (item.tag))
-    const [suggestions, setSuggestions] = useState();
     const [qs, setQs] = useState([])
 
 
@@ -30,24 +27,24 @@ const Create = ({ user_g, tags_g, tags, tag_suggestion, tag_suggestions }) => {
 
     useEffect(() => {
         tag_suggestion(qs)
-
     }, [qs])
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setIsLoading(true)
         let form_data = new FormData();
         form_data.append('author', user);
         form_data.append('title', title);
         form_data.append('body', body);
         form_data.append('image', image);
         form_data.append('tag', tag);
-
         const config = {
             headers: { 'content-type': 'multipart/form-data', 'X-CSRFToken': Cookies.get('csrftoken') }
         }
         axios.post(`${apiUrl}/api-create/`, form_data, config)
             .then(() => {
+                setIsLoading(false)
                 setErr(null);
                 navigate('/')
             })
@@ -55,24 +52,6 @@ const Create = ({ user_g, tags_g, tags, tag_suggestion, tag_suggestions }) => {
                 setErr(err.message);
             })
     }
-    // const handleInputChange = (e) => {
-    //   const inputValue = e.target.value;
-    //
-    //   // Check if the input contains a space
-    //   if (inputValue.includes(' ')) {
-    //     // Reset suggestions when a space is detected
-    //     
-    //       // Find the index of the first space
-    //       const spaceIndex = inputValue.indexOf(' ');
-    //
-    //       // Extract the portion after the space (if any)
-    //       const valueAfterSpace = spaceIndex !== -1 ? inputValue.substring(spaceIndex + 1) : inputValue;
-    //       setQs(valueAfterSpace);
-    //   } else {
-    //     setQs(inputValue);
-    //   }
-    //
-    // };
     const removeTags = (e) => {
         setTag(tag.filter((_, index) => index != e))
     }
@@ -84,8 +63,9 @@ const Create = ({ user_g, tags_g, tags, tag_suggestion, tag_suggestions }) => {
             e.target.value = "";
         }
     };
-
-    console.log(tag)
+    if(isLoading){
+      return (<Loading />)
+    }
     return (
         <Container>
             {handleErr && { handleErr }}
@@ -124,6 +104,7 @@ const Create = ({ user_g, tags_g, tags, tag_suggestion, tag_suggestions }) => {
                 <input className="btn btn-outline-success btn-s px-4" type="submit" value="Post" />
 
             </Form>
+            
         </Container>
     )
 }
