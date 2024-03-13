@@ -32,6 +32,7 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 image: payload.profile.image,
+                user_cover: payload.profile.cover,
                 username: payload.username,
                 email: payload.email,
                 user: payload.profile.user,

@@ -216,7 +216,6 @@ export const search = (url) => async dispatch => {
             })
         }
         else {
-            console.log(res.data)
             dispatch({
                 type: SEARCH_SUCCESS,
                 payload: res.data
@@ -235,7 +234,6 @@ export const tagpics = (url, setLoading) => async dispatch => {
 
 
     try {
-        console.log("test")
 
         const res = await axios.get(url, config)
         if (res.data.error) {
@@ -252,7 +250,6 @@ export const tagpics = (url, setLoading) => async dispatch => {
         }
     }
     catch (err) {
-        console.log("test1")
 
         dispatch({
             type: TAG_PICS_FAIL

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ReactCrop from 'react-image-crop'
@@ -6,21 +6,17 @@ import { profile, profile_update } from '../redux/action/profile'
 import { connect } from 'react-redux'
 
 
-function Cover({ show, setShow, coverPic, profile, profile_update, image_global }) {
-
-    const apiUrl = import.meta.env.VITE_API_URL;
+function Cover({ show, setShow, coverPic, profile, profile_update}) {
     const [initialCover, setInitalCover] = useState()
     const [crop, setCrop] = useState({
         unit: '%',
-        // x: 25,
-        // y: 25,
         width: 100,
         height: 45,
     });
     const [completedCrop, setCompletedCrop] = useState(null);
-    const [height, setHeight] = useState('')
-    const [width, setWidth] = useState('')
-
+    const handleCropComplete = (crop) => {
+        setCompletedCrop(crop);
+    };
 
 
     // Check if coverPic is a Blob or File before using FileReader
@@ -51,7 +47,6 @@ function Cover({ show, setShow, coverPic, profile, profile_update, image_global 
         return imageName;
     };
 
-    console.log(completedCrop)
     // Example usage:
     const randomImageName = generateRandomImageName();
     const getCroppedImg = (image, completedCrop, fileName) => {
@@ -61,11 +56,9 @@ function Cover({ show, setShow, coverPic, profile, profile_update, image_global 
             const img = new Image();
 
             img.onload = () => {
-                console.log('Image Natural Dimensions:', img.naturalWidth, img.naturalHeight);
 
                 const scaleX = img.naturalWidth / cover_.width;
                 const scaleY = img.naturalHeight / cover_.height;
-                console.log('cr', img.width)
                 canvas.width = completedCrop.width * scaleX;
                 canvas.height = completedCrop.height * scaleY;
                 const ctx = canvas.getContext('2d');
@@ -101,43 +94,35 @@ function Cover({ show, setShow, coverPic, profile, profile_update, image_global 
             img.src = image;
         });
     };
-    const [uploading, setUploading] = useState(false);
-    const [uploadError, setUploadError] = useState(null);
 
     const submitcroppedimage = async () => {
         try {
             if (initialCover && completedCrop) {
                 // Start the uploading process
-                setUploading(true);
 
                 // Call getCroppedImg and handle the returned Blob
                 const croppedImageBlob = await getCroppedImg(initialCover, completedCrop, randomImageName);
                 // Create a File object from the Blob
-                console.log(croppedImageBlob)
                 const croppedImageFile = new File([croppedImageBlob], randomImageName, {
                     type: 'image/jpeg',
                     lastModified: Date.now(),
                 });
 
                 // Create a FormData object to send the image as part of the request payload
-                const form_data = new FormData();
+                let form_data = new FormData();
                 form_data.append('cover', croppedImageFile);
                 // Dispatch the Redux action to update the cover image
                 await profile_update(form_data);
 
-                // Fetch the updated profile data after the image is uploaded
                 await profile();
-
+                // setCoverPic(null)
                 // Reset the component state and close the modal
-                setUploading(false);
                 setShow(false);
             }
         } catch (error) {
             console.error('Error during image upload:', error);
             // Set the upload error state to display an error message to the user
-            setUploadError('Failed to upload image. Please try again.');
             // Reset the uploading state
-            setUploading(false);
         }
     };
     return (
@@ -163,12 +148,7 @@ function Cover({ show, setShow, coverPic, profile, profile_update, image_global 
                                 src={initialCover}
                                 crop={crop}
                                 onChange={c => setCrop(c)}
-
-                                onComplete={(e) => {
-                                    setCompletedCrop(e)
-                                }}
-                            // onImageLoaded={handleImageLoaded} // Add this line
-                            // locked={true} // Set this to true to disable cropping
+                                onComplete={handleCropComplete}
                             >
                                 <img id="cover" src={initialCover} style={{ width: "auto" }} />
                             </ReactCrop>
@@ -184,8 +164,5 @@ function Cover({ show, setShow, coverPic, profile, profile_update, image_global 
 }
 
 
-const mapStateToProps = state => ({
-    image_global: state.profile.image,
-})
 export default connect(null, { profile, profile_update })(Cover);
 

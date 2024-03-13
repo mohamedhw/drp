@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import { user_data } from '../redux/action/profile';
-import { useEffect, useState } from 'react'
+import { user_data, profile } from '../redux/action/profile';
+import { useEffect } from 'react'
+import { toast } from "react-toastify";
 
-const ProfileHead = ({ setShow, isAuthenticated, user_data, user_username, user_image, user_cover, username, username_global, image_global, email_global, setCoverPic }) => {
+const ProfileHead = ({ setShow, isAuthenticated, user_data, user_image, user_cover, username, username_global, image_global, setCoverPic }) => {
     const apiUrl = import.meta.env.VITE_API_URL;
-
     const currentUrl = location.pathname;
     const params = currentUrl.split('/');
     const first_param = params[1]
@@ -31,6 +31,7 @@ const ProfileHead = ({ setShow, isAuthenticated, user_data, user_username, user_
         if (file && isImageFile(file) && acceptedFileArray.includes(file.type)) {
             setShow(true);
             setCoverPic(e.target.files[0])
+            e.target.value = null;
         } else {
             document.getElementById('profileimage').value = null;
             toast('Invalid file type. Please select a valid image (png, x-png, jpg, jpeg', { type: "error" })
@@ -99,4 +100,4 @@ const mapStateToProps = state => ({
     user_cover: state.profile.user_cover,
 })
 
-export default connect(mapStateToProps, { user_data })(ProfileHead);
+export default connect(mapStateToProps, { user_data, profile })(ProfileHead);
