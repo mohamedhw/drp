@@ -342,12 +342,12 @@ div.wrapper>h1 {
   background: none !important;
   color: #00dba0 !important;
   border: 1px solid #00bda0 !important;
-  height: auto;
   width: 248px;
   border-radius: 1%;
   text-align: center;
   padding: 0px !important;
   margin: 0;
+  overflow: scroll;
 }
 
 .side {

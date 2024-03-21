@@ -51,7 +51,7 @@ export const USER_DATA_FAIL = 'USER_FAIL';
 export const RESET_PARAMETER = 'RESET_PARAMETER';
 export const SET_Q = 'SET_Q';
 export const RESET_SIDE_BAR = 'RESET_SIDE_BAR';
-
+export const HOLD_SIDE_BAR = 'HOLD_SIDE_BAR';
 export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE"
 export const SET_PAGE = "SET_PAGE"
 

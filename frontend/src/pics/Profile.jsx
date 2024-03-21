@@ -144,7 +144,7 @@ const Profile = ({
               style={{ display: "inline-block", verticalAlign: "bottom" }}
             >
               <a href="/reset_password/">
-                <b>forgot your password?</b>
+                <b>Update your password?</b>
               </a>
             </div>
           </div>

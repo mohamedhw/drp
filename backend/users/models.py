@@ -9,8 +9,8 @@ def upload_to(instance, filename):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(null=True, upload_to=upload_to, default='default.jpg')
-    cover = models.ImageField(null=True, upload_to='profile_images/cover', default='default.jpg')
+    image = models.ImageField(null=True, upload_to=upload_to, default='profile_default.jpg')
+    cover = models.ImageField(null=True, upload_to='profile_images/cover', default='cover_default.jpg')
 
     def user_u(self):
         return self.user.username

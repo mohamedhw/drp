@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 
 const PrivateRoute = ({isAuthenticated, setModalShow}) => {
-    console.log(isAuthenticated)
     if (isAuthenticated){
         return (
             <Outlet/>

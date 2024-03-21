@@ -3,6 +3,7 @@ import {
     FETCH_DATA_START,
     SET_Q,
     RESET_SIDE_BAR,
+    HOLD_SIDE_BAR,
     PICS_SUCCESS,
     PICS_FAIL,
     TAG_PICS_SUCCESS,
@@ -191,6 +192,10 @@ export const tags = () => async dispatch => {
 
 export const sideBarStatus = () => ({
     type: RESET_SIDE_BAR,
+});
+
+export const sideBarHolder = () => ({
+    type: HOLD_SIDE_BAR,
 });
 
 export const resetParameter = () => ({

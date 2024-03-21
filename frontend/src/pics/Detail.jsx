@@ -2,20 +2,16 @@ import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { connect } from 'react-redux'
 import Side from "../component/Side";
-import { detail, sideBarStatus } from "../redux/action/pics";
+import { detail, sideBarStatus, sideBarHolder } from "../redux/action/pics";
 import PicContent from "../component/PicContent";
 import Loading from "../component/Loading";
 
-const Pic = ({ loading, side_status, setShowCroper, setShowDelete, detail, data, sideBarStatus }) => {
-
+const Pic = ({ loading, side_status, side_holder, setShowCroper, setShowDelete, detail, data, sideBarStatus, sideBarHolder }) => {
 
     const { postId } = useParams()
     const [zoom_, setZoom_] = useState("showcase-norm")
     const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-
-
-    const he = window.innerHeight
-
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
 
     const hidContent = (
@@ -33,11 +29,10 @@ const Pic = ({ loading, side_status, setShowCroper, setShowDelete, detail, data,
 
     useEffect(() => {
         detail(postId, setZoom_)
-        // updateSidebarVisibility()
-
         // Update window height when the window is resized
         const handleResize = () => {
             setWindowHeight(window.innerHeight);
+            setWindowWidth(window.innerWidth);
         };
 
         window.addEventListener('resize', handleResize);
@@ -46,10 +41,32 @@ const Pic = ({ loading, side_status, setShowCroper, setShowDelete, detail, data,
         return () => {
             window.removeEventListener('resize', handleResize);
         };
+
     }, [postId])
 
-    const toggleSidebar = () => {
+
+    useEffect(()=>{
+
+      // Check window size and sidebar status, toggle sidebar accordingly
+      if (side_holder && windowWidth < 1000 && side_status) {
         sideBarStatus();
+      } else if (side_holder && windowWidth >= 1000 && !side_status) {
+        sideBarStatus();
+      }
+
+    }, [windowWidth])
+
+    useEffect(() => {
+      // Check window size when the component mounts
+      // if (windowWidth < 1000 && side_status) {
+      setWindowWidth(window.innerWidth);
+      // }
+    }, []);
+
+
+    const toggleSidebar = () => {
+      sideBarStatus();
+      sideBarHolder()
     }
 
     if (loading) {
@@ -63,7 +80,7 @@ const Pic = ({ loading, side_status, setShowCroper, setShowDelete, detail, data,
                     {/* the side bar */}
                     <aside id="menu" style={{ display: side_status ? "block" : "none" }}>
                         {/* the side body */}
-                        <div id="showcase-sidebar">
+                        <div id="showcase-sidebar" style={{maxHeight: windowHeight - 100}}>
                             <div className="lsidebar">
                                 <div className="side">
                                     <Side post={data} toggleSidebar={toggleSidebar} setShowDelete={setShowDelete} setShowCroper={setShowCroper}></Side>
@@ -74,7 +91,7 @@ const Pic = ({ loading, side_status, setShowCroper, setShowDelete, detail, data,
 
                     </aside>
                     {/* the button */}
-                    <div id="togglebutton" style={{ width: "auto", marginTop: he / 5 }} className={side_status ? "vis" : "hid"} onClick={e => toggleSidebar()}>
+                    <div id="togglebutton" style={{ width: "auto", marginTop: windowHeight / 5 }} className={side_status ? "vis" : "hid"} onClick={e => toggleSidebar()}>
                         {side_status ? visContent : hidContent}
                     </div>
                 </div>
@@ -93,5 +110,6 @@ const mapStateToProps = state => ({
     data: state.pics.detail,
     loading: state.pics.loading,
     side_status: state.pics.side_status,
+    side_holder: state.pics.side_holder,
 })
-export default connect(mapStateToProps, { detail, sideBarStatus })(Pic)
+export default connect(mapStateToProps, { detail, sideBarStatus, sideBarHolder })(Pic)

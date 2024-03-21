@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ReactCrop from 'react-image-crop'
@@ -21,17 +21,14 @@ function Cover({ show, setShow, coverPic, profile, profile_update}) {
 
     // Check if coverPic is a Blob or File before using FileReader
     if (coverPic instanceof Blob || coverPic instanceof File) {
-        const reader = new FileReader();
-        // Set up an event listener for when the FileReader has finished reading
-        reader.onloadend = function() {
-            // Do something with the data URL
-            const result = reader.result;
-            setInitalCover(result)
-
-        };
-        reader.readAsDataURL(coverPic);
-    } else {
-        console.error("Invalid coverPic type. Expected Blob or File.");
+      const reader = new FileReader();
+      // Set up an event listener for when the FileReader has finished reading
+      reader.onloadend = function() {
+        // Do something with the data URL
+        const result = reader.result;
+        setInitalCover(result)
+      };
+      reader.readAsDataURL(coverPic);
     }
 
     const generateRandomImageName = () => {
@@ -94,12 +91,13 @@ function Cover({ show, setShow, coverPic, profile, profile_update}) {
             img.src = image;
         });
     };
+    const [uploading, setUploading] = useState(false);
 
     const submitcroppedimage = async () => {
         try {
             if (initialCover && completedCrop) {
                 // Start the uploading process
-
+                setUploading(true);
                 // Call getCroppedImg and handle the returned Blob
                 const croppedImageBlob = await getCroppedImg(initialCover, completedCrop, randomImageName);
                 // Create a File object from the Blob
@@ -115,14 +113,15 @@ function Cover({ show, setShow, coverPic, profile, profile_update}) {
                 await profile_update(form_data);
 
                 await profile();
-                // setCoverPic(null)
                 // Reset the component state and close the modal
+                setUploading(false);
                 setShow(false);
             }
         } catch (error) {
             console.error('Error during image upload:', error);
             // Set the upload error state to display an error message to the user
             // Reset the uploading state
+            setUploading(false)
         }
     };
     return (

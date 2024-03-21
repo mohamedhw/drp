@@ -25,8 +25,7 @@ class PostManager(models.Manager):
     def search(self, query=None):
         if query is None or query == "":
             return self.get_queryset().none()
-        lookups = Q(title__icontains=query) | Q(
-            body__icontains=query) | Q(tags__tag__icontains=query)
+        lookups = Q(title__icontains=query) | Q(tags__tag__icontains=query)
         return self.get_queryset().filter(lookups)
 
 
@@ -49,16 +48,14 @@ class Hashtag(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
-    body = models.TextField()
     image = models.ImageField(default='default.png', blank=True, upload_to='image_gallery/original_images')
     date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    saved_pic = models.ManyToManyField(User, blank=True, related_name="save_pic")
     tags = models.ManyToManyField(Hashtag, blank=True, related_name="tags")
     thumb = models.ImageField(blank=True, null=True, upload_to='image_gallery/thumbnails')
-    saved = models.ManyToManyField(User, blank=True, related_name="wish")
+    saved = models.ManyToManyField(User, blank=True, related_name="save_pic")
     like = models.ManyToManyField(User, blank=True, related_name="like")
-    views = models.ManyToManyField(User, blank=True, related_name="views")
+    watched = models.ManyToManyField(User, blank=True, related_name="watched")
     objects = PostManager()
 
     def __str__(self):

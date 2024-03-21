@@ -26,21 +26,10 @@ class Home(generics.ListAPIView):
         qs = Post.objects.all()
         # Retrieve the 'category' and 'label' query parameters from the request
         query = self.request.GET.get('q')
-        # category = self.request.GET.get('category')
-        # label = self.request.GET.get('label')
-        # Apply filters if 'category' and 'label' are provided
-        # if category and label:
-        #     qs = qs.filter(category=category, label=label)
-        # elif category:
-        #     qs = qs.filter(category=category)
-        # elif label:
-        #     qs = qs.filter(label=label)
 
         if query:
             lookups = (
-                Q(title__icontains=query) |
-                Q(body__icontains=query)
-                # Q(author__icontains=query)
+                Q(title__icontains=query)
             )
             qs = qs.filter(lookups)
         qs = qs.order_by('-date')
@@ -56,14 +45,11 @@ class TopPics(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         # Start with all items
         qs = Post.objects.all()
-        # like_count = qs.like.all().count()
         # Retrieve the 'category' and 'label' query parameters from the request
         query = self.request.GET.get('q')
         if query:
             lookups = (
-                Q(title__icontains=query) |
-                Q(body__icontains=query)
-                # Q(author__icontains=query)
+                Q(title__icontains=query)
             )
             qs = qs.filter(lookups)
         qs = qs.annotate(like_count=Count('like'))
@@ -80,14 +66,11 @@ class RandomPics(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         # Start with all items
         qs = Post.objects.all()
-        # like_count = qs.like.all().count()
         # Retrieve the 'category' and 'label' query parameters from the request
         query = self.request.GET.get('q')
         if query:
             lookups = (
-                Q(title__icontains=query) |
-                Q(body__icontains=query)
-                # Q(author__icontains=query)
+                Q(title__icontains=query)
             )
             qs = qs.filter(lookups)
         qs = qs.order_by('?')
@@ -121,7 +104,6 @@ def save_pic(request, pk):
     except:
         return Response({"error": "error"})
 
-# WISH LIST VIEWS
 
 
 class SavedPics(generics.ListAPIView):
@@ -146,8 +128,7 @@ class Search(generics.ListAPIView):
         query = self.request.GET.get('search')
         if query:
             lookups = (
-                Q(title__icontains=query) |
-                Q(body__icontains=query)
+                Q(title__icontains=query)
             )
             qs = qs.filter(lookups)
         return qs
@@ -168,7 +149,6 @@ class Detail(generics.RetrieveAPIView):
     def get_related_pics(self, item):
 
         item_tags = item.tags.all()  # get the item tags
-        all_tags = Hashtag.objects.all()  # get all tags
 
         related_pics = Post.objects.filter(
             tags__in=item_tags).exclude(pk=item.pk)[:6]
@@ -178,22 +158,22 @@ class Detail(generics.RetrieveAPIView):
         if related_items_count < 6:
             additional_items_needed = 6 - related_items_count
 
+             # Extract primary keys from related_pics
+            related_pics_pks = related_pics.values_list('pk', flat=True)
+
             additional_items = Post.objects.exclude(
-                Q(title__icontains=item.title) | Q(pk=item.pk)
+                Q(title__icontains=item.title) | Q(pk=item.pk) | Q(pk__in=related_pics_pks)
             )[:additional_items_needed]
             related_pics = list(related_pics) + list(additional_items)
 
-            # related_items_count = related_pics.count()
 
         return related_pics
 
     def add_view(self, item):
         try:
             post = Post.objects.get(pk=item.pk)
-            if self.request.user in post.views.all():
-                pass
-            else:
-                post.views.add(self.request.user)
+            if not self.request.user in post.watched.all():
+                post.watched.add(self.request.user)
         except:
             return Response({"error": "error"})
 
@@ -213,16 +193,6 @@ class Detail(generics.RetrieveAPIView):
         data['related_pics'] = self.get_serializer(
             related_pics, many=True).data
         return Response(data)
-
-
-# class SavedPicsView(generics.ListAPIView):
-#     model = Post.objects.all()
-#     serializer_class = PostSerializers
-#     lookup_field = 'pk'
-
-#     def get_queryset(self):
-#         user = self.request.user
-#         return user.save_pic.all()
 
 
 class TagFilterView(generics.ListAPIView):
@@ -269,7 +239,6 @@ class AllTags(generics.ListAPIView):
 
 @method_decorator(csrf_protect, name='dispatch')
 class PostCreate(generics.CreateAPIView):
-    # queryset = Post.objects.all()
     authentication_classes = [authentication.SessionAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = PostSerializers
@@ -388,9 +357,3 @@ class UserPics(generics.ListAPIView):
         qs = Post.objects.filter(author=user)
         return qs
 
-    # def get_context_data(self, **kwargs):
-    #     user = get_object_or_404(User, username=self.kwargs.get('username'))
-    #     print("test")
-    #     profile = Profile.objects.get(user=user)
-    #     print("test")
-    #     return {'profile': profile}

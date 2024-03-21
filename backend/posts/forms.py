@@ -5,7 +5,7 @@ from . import models
 class CreateArticle(forms.ModelForm):
     class Meta:
         model = models.Article
-        fields = ['title', 'body', 'thumb']
+        fields = ['title', 'thumb']
 
 class HashTagForm(forms.ModelForm):
     class Meta:

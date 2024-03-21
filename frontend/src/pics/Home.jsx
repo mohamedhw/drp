@@ -29,8 +29,8 @@ const Home = ({ pics_g, pics, setCurrentPage, currentPage, count, next, previous
             url = `${apiUrl}/api-post/?page=${page}`;
             navigate(`/?page=${page}`);
         } else {
-            navigate(`/`);
             url = `${apiUrl}/api-post/`;
+            navigate(`/`);
         }
 
         pics(url);
