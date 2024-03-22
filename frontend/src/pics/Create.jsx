@@ -15,7 +15,6 @@ const Create = ({ user_g, tag_suggestion, tag_suggestions }) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(false)
-    const [title, setTitle] = useState()
     const [image, setImage] = useState(null)
     const [tag, setTag] = useState([])
     const [handleErr, setErr] = useState(null)
@@ -34,7 +33,6 @@ const Create = ({ user_g, tag_suggestion, tag_suggestions }) => {
         setIsLoading(true)
         let form_data = new FormData();
         form_data.append('author', user);
-        form_data.append('title', title);
         form_data.append('image', image);
         form_data.append('tag', tag);
         const config = {
@@ -68,9 +66,6 @@ const Create = ({ user_g, tag_suggestion, tag_suggestions }) => {
         <Container>
             {handleErr && { handleErr }}
             <Form className='mt-5' onSubmit={handleSubmit} >
-                <Form.Group className="mb-5">
-                    <input className="form-control" type='text' placeholder='title' onChange={e => { setTitle(e.target.value) }} />
-                </Form.Group>
                 <Form.Group className="mb-5">
                     <input type='file' className="form-control" accept="image/png, image/jpeg" onChange={e => { setImage(e.target.files[0]) }} />
                 </Form.Group>

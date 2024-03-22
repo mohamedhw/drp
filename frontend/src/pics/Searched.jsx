@@ -1,9 +1,8 @@
-import Container from "react-bootstrap/esm/Container"
 import Items from "../component/Items"
 import { connect } from 'react-redux'
 import { useParams } from "react-router-dom"
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { search } from '../redux/action/pics'
 import Pagination from "../component/Pagination";
 
@@ -14,11 +13,9 @@ const Searched = ({ pics_g, q, currentPage, search, count, previous, next }) => 
 
     const { searchpage } = useParams();
     const isPageProvided = Boolean(searchpage);
-    console.log(count)
     let url = ""
 
     useEffect(() => {
-        // setCurrentPage(1)
         if (currentPage != null) {
             url = isPageProvided
                 ? `${apiUrl}/api-post/?q=${q}&page=${currentPage}`
@@ -31,10 +28,6 @@ const Searched = ({ pics_g, q, currentPage, search, count, previous, next }) => 
             navigate(`/search`);
             url = `${apiUrl}/api-post/?q=${q}`;
         }
-
-        // if (currentPage !== 1) {
-        //     navigate(`/${currentPage}`);
-        // }
 
         search(url);
     }, [currentPage, searchpage]);

@@ -25,7 +25,7 @@ class PostManager(models.Manager):
     def search(self, query=None):
         if query is None or query == "":
             return self.get_queryset().none()
-        lookups = Q(title__icontains=query) | Q(tags__tag__icontains=query)
+        lookups = Q(tags__tag__icontains=query)
         return self.get_queryset().filter(lookups)
 
 
@@ -47,7 +47,6 @@ class Hashtag(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=100)
     image = models.ImageField(default='default.png', blank=True, upload_to='image_gallery/original_images')
     date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
@@ -58,8 +57,6 @@ class Post(models.Model):
     watched = models.ManyToManyField(User, blank=True, related_name="watched")
     objects = PostManager()
 
-    def __str__(self):
-        return self.title
 
     def save(self, *args, **kwargs):
         # Check if the image needs resizing

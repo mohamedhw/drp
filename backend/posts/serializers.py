@@ -1,4 +1,3 @@
-from dataclasses import fields
 from rest_framework import serializers
 from .models import Post, Hashtag
 
@@ -13,7 +12,7 @@ class PostSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ["id", "title", "image", "thumb",  "date", "author", "author_name",
+        fields = ["id", "image", "thumb",  "date", "author", "author_name",
                   "author_image", "user_has_saved", "user_has_liked", "like_count", "watched_count", "get_width", "get_height"]
 
     def get_user_has_saved(self, obj):

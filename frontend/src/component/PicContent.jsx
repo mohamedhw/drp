@@ -88,7 +88,6 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
             const containerHeight = imageContainer.offsetHeight;
             const scrollLeft = (data && data.image_width - containerWidth) / 2;
             const scrollTop = (data && data.image_height - containerHeight) / 2;
-
             imageContainer.scrollTo(scrollLeft, scrollTop);
         }
         else {

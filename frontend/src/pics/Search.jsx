@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/esm/Container';
@@ -28,20 +27,6 @@ const Search = ({q, setQ, show, setShow, pics_g, search, setCurrentPage}) => {
             url = `${apiUrl}/api-post/?q=${q}`;
         }
         
-        // if (currentPage != null) {
-        //     navigate(`/${currentPage}`);
-        //     url = isPageProvided
-        //     ? `${apiUrl}/api-post/?page=${currentPage}`
-        //     : `${apiUrl}/api-post/`;
-        // }else if (currentPage === null & page > 1){
-        //     navigate(`/${page}`);
-        //     url = `${apiUrl}/api-post/?page=${page}`;
-        // }else {
-        //     // navigate(`/`);
-        //     url = `${apiUrl}/api-post/`; 
-        // }
-        
-
         search(url);
         
 
@@ -53,7 +38,6 @@ const Search = ({q, setQ, show, setShow, pics_g, search, setCurrentPage}) => {
         setCurrentPage(1)
     }
     const handelSearch = (e) => {
-        // setCurrentPage(1)
         setQ(e.target.value)
 
     }

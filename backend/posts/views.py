@@ -1,14 +1,13 @@
 from rest_framework import status
 from django.db.models import Count
 from rest_framework.decorators import api_view
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import permissions, authentication
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
-from .models import HashtagManager, Post, Hashtag
-from users.models import Profile
+from .models import Post, Hashtag
 from .serializers import PostSerializers, HashtagSerializers
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
@@ -23,18 +22,15 @@ class Home(generics.ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         # Start with all items
-        qs = Post.objects.all()
+        qs = super().get_queryset()
         # Retrieve the 'category' and 'label' query parameters from the request
         query = self.request.GET.get('q')
 
         if query:
-            lookups = (
-                Q(title__icontains=query)
-            )
-            qs = qs.filter(lookups)
+            tags = Hashtag.objects.filter(tag__icontains=query)
+            qs = qs.filter(tags__in=tags).distinct()
         qs = qs.order_by('-date')
         return qs
-
 
 # most liked pics
 class TopPics(generics.ListAPIView):
@@ -43,15 +39,7 @@ class TopPics(generics.ListAPIView):
     permission_classes = (permissions.AllowAny, )
 
     def get_queryset(self, *args, **kwargs):
-        # Start with all items
         qs = Post.objects.all()
-        # Retrieve the 'category' and 'label' query parameters from the request
-        query = self.request.GET.get('q')
-        if query:
-            lookups = (
-                Q(title__icontains=query)
-            )
-            qs = qs.filter(lookups)
         qs = qs.annotate(like_count=Count('like'))
         qs = qs.order_by('-like_count')
         return qs
@@ -64,15 +52,7 @@ class RandomPics(generics.ListAPIView):
     permission_classes = (permissions.AllowAny, )
 
     def get_queryset(self, *args, **kwargs):
-        # Start with all items
         qs = Post.objects.all()
-        # Retrieve the 'category' and 'label' query parameters from the request
-        query = self.request.GET.get('q')
-        if query:
-            lookups = (
-                Q(title__icontains=query)
-            )
-            qs = qs.filter(lookups)
         qs = qs.order_by('?')
         return qs
 
@@ -127,10 +107,9 @@ class Search(generics.ListAPIView):
         qs = Post.objects.all()
         query = self.request.GET.get('search')
         if query:
-            lookups = (
-                Q(title__icontains=query)
-            )
-            qs = qs.filter(lookups)
+            tags = Hashtag.objects.filter(tag__icontains=query)
+            qs = qs.filter(tags__in=tags).distinct()
+        qs = qs.order_by('-date')
         return qs
 
 
@@ -162,7 +141,7 @@ class Detail(generics.RetrieveAPIView):
             related_pics_pks = related_pics.values_list('pk', flat=True)
 
             additional_items = Post.objects.exclude(
-                Q(title__icontains=item.title) | Q(pk=item.pk) | Q(pk__in=related_pics_pks)
+                Q(pk=item.pk) | Q(pk__in=related_pics_pks)
             )[:additional_items_needed]
             related_pics = list(related_pics) + list(additional_items)
 
@@ -246,9 +225,7 @@ class PostCreate(generics.CreateAPIView):
     def post(self, request):
         data = request.data
         tag_data = data.get('tag')
-        print(tag_data)
         if tag_data:
-            tags_ = Hashtag.objects.all()
             tags_data = data.pop('tag', [])
             if tags_data == ['undefined']:
                 post_serializer = PostSerializers(data=data)
