@@ -54,7 +54,7 @@ export const profile_update = (form_data) => async dispatch => {
 
     const body = form_data
     try {
-        dispatch({ type: FETCH_DATA_START });
+        // dispatch({ type: FETCH_DATA_START });
 
         const res = await axios.put(`${apiUrl}/api-profile-update/`, body, config)
 
