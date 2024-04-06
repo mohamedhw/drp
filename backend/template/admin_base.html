@@ -1,0 +1,9 @@
+<!-- admin_base.html -->
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="icon" type="image/png" href="{% static 'favicon.png' %}" />
+{% endblock %}
+

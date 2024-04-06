@@ -86,7 +86,6 @@ const Register = ({ isAuthenticated, isRegistered, register, onHide, setModalSho
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
             >
-
                 <Modal.Body className="custom-modal">
 
                     <h2>Register</h2>

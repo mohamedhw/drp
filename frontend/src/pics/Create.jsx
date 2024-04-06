@@ -20,13 +20,9 @@ const Create = ({ user_g, tag_suggestion, tag_suggestions }) => {
     const [handleErr, setErr] = useState(null)
     const [qs, setQs] = useState([])
 
-
-
-
     useEffect(() => {
         tag_suggestion(qs)
     }, [qs])
-
 
     const handleSubmit = (e) => {
         e.preventDefault();

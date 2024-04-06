@@ -4,9 +4,10 @@ import Modal from 'react-bootstrap/Modal';
 import ReactCrop from 'react-image-crop'
 import { profile, profile_update } from '../redux/action/profile'
 import { connect } from 'react-redux'
+import Loading from './Loading';
 
 
-function Cover({ show, setShow, coverPic, profile, profile_update}) {
+function Cover({loading, show, setShow, coverPic, profile, profile_update}) {
     const [initialCover, setInitalCover] = useState()
     const [crop, setCrop] = useState({
         unit: '%',
@@ -114,7 +115,6 @@ function Cover({ show, setShow, coverPic, profile, profile_update}) {
 
                 await profile();
                 // Reset the component state and close the modal
-                setUploading(false);
                 setShow(false);
             }
         } catch (error) {
@@ -124,9 +124,13 @@ function Cover({ show, setShow, coverPic, profile, profile_update}) {
             setUploading(false)
         }
     };
+    console.log(loading)
+    if (loading) {
+        return <Loading />;
+    }
     return (
         <>
-            {initialCover &&
+            { initialCover &&
                 <Modal
                     size="lg"
                     show={show}
@@ -162,6 +166,9 @@ function Cover({ show, setShow, coverPic, profile, profile_update}) {
     );
 }
 
+const mapStateToProps = state => ({
+    loading: state.pics.loading
+})
 
-export default connect(null, { profile, profile_update })(Cover);
+export default connect(mapStateToProps, { profile, profile_update })(Cover);
 

@@ -1,6 +1,5 @@
-import process from "process";
 import axios from "axios"
-import { PROFILE_SUCCESS, PROFILE_FAIL, PROFILE_UPDATE_SUCCESS, PROFILE_UPDATE_FAIL, USER_UPDATE_SUCCESS, USER_UPDATE_FAIL, USER_DATA_FAIL, USER_DATA_SUCCESS } from './type';
+import { FETCH_DATA_START, PROFILE_SUCCESS, PROFILE_FAIL, PROFILE_UPDATE_SUCCESS, PROFILE_UPDATE_FAIL, USER_UPDATE_SUCCESS, USER_UPDATE_FAIL, USER_DATA_FAIL, USER_DATA_SUCCESS } from './type';
 import Cookies from 'js-cookie'
 import { toast } from 'react-toastify';
 
@@ -55,9 +54,9 @@ export const profile_update = (form_data) => async dispatch => {
 
     const body = form_data
     try {
+        dispatch({ type: FETCH_DATA_START });
 
         const res = await axios.put(`${apiUrl}/api-profile-update/`, body, config)
-
 
         if (res.data.success) {
             notifysuccess(res)
@@ -92,6 +91,7 @@ export const user_update = (username, email) => async dispatch => {
     const body = JSON.stringify({ username, email })
     try {
 
+        dispatch({ type: FETCH_DATA_START });
         const res = await axios.put(`${apiUrl}/api-profile-user-update/`, body, config)
 
 
