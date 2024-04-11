@@ -124,8 +124,7 @@ function Cover({loading, show, setShow, coverPic, profile, profile_update}) {
             setUploading(false)
         }
     };
-    console.log(loading)
-    if (loading) {
+    if (uploading) {
         return <Loading />;
     }
     return (

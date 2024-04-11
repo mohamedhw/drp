@@ -130,6 +130,7 @@ const Profile = ({
               onChange={(e) => handelImage(e)}
             />
           </div>
+          <small>the image will be resized to 200*200 & 200kb</small>
           <div className="mt-5 m-1">
             <button
               style={{ display: "inline-block" }}

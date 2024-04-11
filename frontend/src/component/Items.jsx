@@ -14,9 +14,6 @@ const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
         }
     }
 
-    if (loading) {
-        return <Loading />;
-    }
 
     return (
         <div style={{ margin: "auto", width: "100%", textAlign: "center" }}>
@@ -26,10 +23,14 @@ const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
 
                         <Link to={`/pic/${post.id}`} className='article-2' onClick={e => handelClick()}>
                             <Card className='pic-l' style={{ minWidth: "200px", minHight: "100px", maxHeight: "300px", maxWidth: "500px" }}>
-                                <Card.Img className="lazyload" variant="top" src={post.thumb} style={{ overflow: "hidden" }} loading='lazy' />
-                                <div className="thumb-info">
-                                    <span className="">{post.get_width} X {post.get_height}</span>
-                                </div>
+                                  { loading ? <Loading />:
+                                    <>
+                                      <Card.Img className="lazyload" variant="top" src={post.thumb} style={{ overflow: "hidden" }} loading='lazy' />
+                                      <div className="thumb-info">
+                                          <span className="">{post.get_width} X {post.get_height}</span>
+                                      </div>
+                                    </>
+                                  }
                             </Card>
                         </Link>
                     </Col>
@@ -43,7 +44,7 @@ const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
 
 
 const mapStateToProps = state => ({
-    loading: state.pics.loading
+    loading: state.pics.pics_loading
 })
 
 export default connect(mapStateToProps, {})(Items)

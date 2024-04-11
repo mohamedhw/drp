@@ -7,7 +7,7 @@ import {useNavigate, useLocation} from "react-router-dom"
 import { setPage, setCurrentPage } from '../redux/action/pages';
 import FilterBar from '../component/FilterBar';
 
-const Home = ({ pics_g, pics, setCurrentPage, currentPage, count, next, previous }) => {
+const Home = ({ pics_g, pics, currentPage }) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const navigate = useNavigate()
     const location = useLocation();
@@ -42,7 +42,7 @@ const Home = ({ pics_g, pics, setCurrentPage, currentPage, count, next, previous
             {pics_g &&
                 <>
                     <Items pics_g={pics_g} />
-                    <Pagination page={page} count={count} currentPage={currentPage} next={next} previous={previous} />
+                    <Pagination page={page} />
                 </>
             }
         </div>
@@ -52,9 +52,6 @@ const Home = ({ pics_g, pics, setCurrentPage, currentPage, count, next, previous
 const mapStateToProps = state => ({
     pics_g: state.pics.pics.results,
     currentPage: state.pages.currentPage,
-    count: state.pics.pics.count,
-    next: state.pics.pics.next,
-    previous: state.pics.pics.previous,
 })
 
 export default connect(mapStateToProps, { pics, setPage, setCurrentPage })(Home)

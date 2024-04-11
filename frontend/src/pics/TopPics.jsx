@@ -6,7 +6,7 @@ import Items from '../component/Items';
 import { useNavigate, useLocation } from "react-router-dom"
 import { setPage } from '../redux/action/pages';
 
-const TopPics = ({ pics_g, topPics, currentPage, count, next, previous }) => {
+const TopPics = ({ pics_g, topPics, currentPage }) => {
     const navigate = useNavigate()
     const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -34,14 +34,14 @@ const TopPics = ({ pics_g, topPics, currentPage, count, next, previous }) => {
         topPics(url);
     }, [currentPage, page]);
 
-    return (
 
+    return (
         <div style={{ margin: "0 8%" }}>
             <h1 style={{ float: "left", color: "#00bda0" }} className="mb-5">Top Pics</h1>
             {pics_g &&
                 <>
                     <Items pics_g={pics_g} />
-                    <Pagination page={page} count={count} currentPage={currentPage} next={next} previous={previous} />
+                    <Pagination page={page} />
                 </>
             }
         </div>
@@ -50,10 +50,7 @@ const TopPics = ({ pics_g, topPics, currentPage, count, next, previous }) => {
 
 
 const mapStateToProps = state => ({
-    pics_g: state.pics.top.results,
+    pics_g: state.pics.pics.results,
     currentPage: state.pages.currentPage,
-    count: state.pics.top.count,
-    next: state.pics.top.next,
-    previous: state.pics.top.previous,
 })
 export default connect(mapStateToProps, { topPics, setPage })(TopPics)

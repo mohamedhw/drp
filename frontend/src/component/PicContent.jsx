@@ -95,9 +95,6 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
         }
     }
 
-    if (loading) {
-        return <Loading />;
-    }
 
     return (
 
@@ -113,7 +110,8 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
             }}
             onMouseDown={handleMouseDown}
         >
-            {data &&
+        {loading ? <Loading /> :
+            data &&
                 <img
                     className={zoom_}
                     id="img-content"
@@ -121,7 +119,8 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
                     alt="Image Description"
                     autoFocus
                 />
-            }
+            
+        }
         </div>
     )
 }
@@ -129,7 +128,7 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
 
 
 const mapStateToProps = state => ({
-    loading: state.pics.loading,
+    loading: state.pics.detail_loading,
 })
 
 export default connect(mapStateToProps, null)(PicContent)

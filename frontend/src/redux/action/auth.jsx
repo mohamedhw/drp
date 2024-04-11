@@ -37,7 +37,6 @@ export const checkauth = () => async dispatch => {
                 payload: false
             });
         }
-
     }
     catch (err) {
         dispatch({

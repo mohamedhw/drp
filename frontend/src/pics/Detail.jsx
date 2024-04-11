@@ -69,9 +69,6 @@ const Pic = ({ loading, side_status, side_holder, setShowCroper, setShowDelete, 
       sideBarHolder()
     }
 
-    if (loading) {
-        return <Loading />;
-    }
 
     return (
         <main>
@@ -83,7 +80,9 @@ const Pic = ({ loading, side_status, side_holder, setShowCroper, setShowDelete, 
                         <div id="showcase-sidebar" style={{maxHeight: windowHeight - 100}}>
                             <div className="lsidebar">
                                 <div className="side">
-                                    <Side post={data} toggleSidebar={toggleSidebar} setShowDelete={setShowDelete} setShowCroper={setShowCroper}></Side>
+                                    {loading? <Loading />:
+                                      <Side post={data} toggleSidebar={toggleSidebar} setShowDelete={setShowDelete} setShowCroper={setShowCroper}></Side>
+                                      }
                                     <div className="sidebar-content" style={{ marginRight: "-16.8px" }}></div>
                                 </div>
                             </div>
@@ -91,13 +90,15 @@ const Pic = ({ loading, side_status, side_holder, setShowCroper, setShowDelete, 
 
                     </aside>
                     {/* the button */}
-                    <div id="togglebutton" style={{ width: "auto", marginTop: windowHeight / 5 }} className={side_status ? "vis" : "hid"} onClick={e => toggleSidebar()}>
-                        {side_status ? visContent : hidContent}
-                    </div>
+                    {loading? <></>:
+                      <div id="togglebutton" style={{ width: "auto", marginTop: windowHeight / 5 }} className={side_status ? "vis" : "hid"} onClick={e => toggleSidebar()}>
+                          {side_status ? visContent : hidContent}
+                      </div>
+                    }
                 </div>
                 <main id="main" className={side_status ? "vis-main" : "hid-main"}>
                     <section id="" className="fit showcase" style={{ height: windowHeight - 100, marginRight: "15px" }}>
-                        <PicContent data={data} zoom_={zoom_} setZoom_={setZoom_} />
+                          <PicContent data={data} zoom_={zoom_} setZoom_={setZoom_} />
                     </section>
                 </main>
             </>
@@ -108,7 +109,7 @@ const Pic = ({ loading, side_status, side_holder, setShowCroper, setShowDelete, 
 
 const mapStateToProps = state => ({
     data: state.pics.detail,
-    loading: state.pics.loading,
+    loading: state.pics.detail_loading,
     side_status: state.pics.side_status,
     side_holder: state.pics.side_holder,
 })

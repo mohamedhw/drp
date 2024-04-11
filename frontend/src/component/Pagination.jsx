@@ -1,16 +1,9 @@
 import { connect } from 'react-redux'
 import { setCurrentPage } from '../redux/action/pages';
-// import { useNavigate, useLocation } from 'react-router-dom';
 
 
 
 const Pagination = ({ previous, next, currentPage, setCurrentPage, count }) => {
-    // const navigate = useNavigate()
-    // const location = useLocation();
-    // const currentUrl = location.pathname;
-    // const params = currentUrl.split('/');
-    // const first_param = params[1]
-    // const second_param = params[2]
 
     const handelFirstPage = () => {
         setCurrentPage(1)
@@ -34,17 +27,6 @@ const Pagination = ({ previous, next, currentPage, setCurrentPage, count }) => {
         } catch {
             handelFirstPage()
         }
-        // if (!first_param) {
-        //     setCurrentPage(parseInt(next.match(/page=(\d+)/)[1]))
-        // } else if (first_param === "top" || first_param === "random") {
-        //     if (!second_param) {
-        //         navigate(`/${first_param}/?page=2`)
-        //     } else {
-        //         setCurrentPage(parseInt(next.match(/page=(\d+)/)[1]))
-        //     }
-        // } else {
-        //     setCurrentPage(parseInt(next.match(/page=(\d+)/)[1]))
-        // }
     }
 
     const numberOfPages = Math.ceil(count / 24)
@@ -118,4 +100,10 @@ const Pagination = ({ previous, next, currentPage, setCurrentPage, count }) => {
 }
 
 
-export default connect(null, { setCurrentPage })(Pagination)
+const mapStateToProps = state => ({
+    currentPage: state.pages.currentPage,
+    count: state.pics.pics.count,
+    next: state.pics.pics.next,
+    previous: state.pics.pics.previous,
+})
+export default connect(mapStateToProps, { setCurrentPage })(Pagination)

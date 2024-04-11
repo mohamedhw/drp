@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 import { checkauth, login } from './redux/action/auth';
 import { profile } from './redux/action/profile';
 
-const LayOut = ({children, checkauth, profile}) => {
+const LayOut = ({children, checkauth}) => {
 
     useEffect(() => {
         checkauth();
-        profile()
     }, [])
     return(
         <Fragment>
@@ -16,4 +15,4 @@ const LayOut = ({children, checkauth, profile}) => {
     )
 }
 
-export default connect(null, {checkauth, profile})(LayOut)
+export default connect(null, {checkauth})(LayOut)

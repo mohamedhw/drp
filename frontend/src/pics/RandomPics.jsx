@@ -40,7 +40,7 @@ const RandomPics = ({ pics_g, randomPics,  currentPage, count, next, previous })
             {pics_g &&
                 <>
                     <Items pics_g={pics_g} />
-                    <Pagination page={page} count={count} currentPage={currentPage} next={next} previous={previous} />
+                    <Pagination page={page} />
                 </>
             }
         </div>
@@ -49,10 +49,7 @@ const RandomPics = ({ pics_g, randomPics,  currentPage, count, next, previous })
 
 
 const mapStateToProps = state => ({
-    pics_g: state.pics.random.results,
+    pics_g: state.pics.pics.results,
     currentPage: state.pages.currentPage,
-    count: state.pics.random.count,
-    next: state.pics.random.next,
-    previous: state.pics.random.previous,
 })
 export default connect(mapStateToProps, { randomPics, setPage })(RandomPics)

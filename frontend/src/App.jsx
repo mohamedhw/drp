@@ -55,7 +55,7 @@ const App = () => {
                         <Route path='/saved' element={<SavedPics />} />
                         <Route path='/moresaved' element={<AllSavedPics />} />
                     </Route>
-                    <Route path='/tags' element={<Tags />} />
+                    <Route exact path='/tags' element={<Tags />} />
                     <Route path='/userpics/:authorname' element={<UserPics />} />
                     <Route exact path='/search/:searchpage?' element={<Searched />} />
                     <Route exact path='/tag/:tagSlug' element={<TagFiltered />} />
