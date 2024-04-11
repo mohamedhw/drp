@@ -1,2 +1,7 @@
 .env
 env/
+media/image_gallery/original_images/*
+media/image_gallery/thumbnails/*
+media/profile_images/cover/*
+media/profile_images/image/*
+db.sqlite3

@@ -70,7 +70,6 @@ export default function (state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case TAG_PICS_START:
-    case DETAIL_START:
     case TOP_START:
     case RANDOM_START:
     case PICS_START:
@@ -79,6 +78,11 @@ export default function (state = initialState, action) {
         ...state,
         pics_loading: true,
       };
+    case DETAIL_START:
+      return {
+        ...state,
+        detail_loading: true,
+      }
     case DETAIL_SUCCESS:
       return {
         ...state,
