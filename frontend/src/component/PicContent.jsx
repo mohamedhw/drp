@@ -110,8 +110,8 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
             }}
             onMouseDown={handleMouseDown}
         >
-        {loading ? <Loading /> :
-            data &&
+        {data &&
+            loading ? <Loading /> :
                 <img
                     className={zoom_}
                     id="img-content"
