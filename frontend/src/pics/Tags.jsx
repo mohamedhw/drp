@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { tags } from "../redux/action/pics"
 import {connect} from 'react-redux'
 import Row from 'react-bootstrap/Row';
@@ -8,19 +8,23 @@ import Card from 'react-bootstrap/Card';
 import { Link } from "react-router-dom"
 import Loading from "../component/Loading";
 
-const Tags = ({tags, tags_g, loading}) => {
+const Tags = ({tags, tags_g}) => {
+
+    const [loading, setLoading] = useState(true)
+
     useEffect(() => {
         tags();
+        setLoading(false);
     }, []);
 
-    // if(loading){return <Loading />}
+    if(loading){return <div className='loading-s'><Loading /></div>}
     return (
         <>
             <h2 style={{color: "#00bda0"}}>Tags</h2>
                     <Container>
                         <Row className="m-5" style={{}}>
-                            {loading ? <Loading /> :
-                              tags_g && tags_g.map((tag) =>(
+                            {/* {loading ? <Loading /> : */}
+                              {tags_g && tags_g.map((tag) =>(
                                   <Col key={tag.tag} xl={3} md={6} sm={12}>
                                       <Link to={`/tag/${tag.tag_slug}`}>
                                           <Card className="tag-card p-1">
@@ -30,7 +34,7 @@ const Tags = ({tags, tags_g, loading}) => {
                                       </Link>
                                   </Col>
                               ))
-                            }
+                           }
                         </Row>
                     </Container>
         </>
@@ -40,6 +44,6 @@ const Tags = ({tags, tags_g, loading}) => {
 
 const mapStateToProps = state => ({
     tags_g: state.pics.tags,
-    loading: state.pics.tags_loading
+    // loading: state.pics.tags_loading
 })
 export default connect(mapStateToProps, {tags}) (Tags)

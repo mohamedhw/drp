@@ -9,8 +9,10 @@ import {
   TAG_PICS_START,
   TAG_PICS_FAIL,
   TAG_PICS_SUCCESS,
+  SEARCH_START,
   SEARCH_SUCCESS,
   SEARCH_FAIL,
+  SEARCH_CLEAR,
   RESET_PARAMETER,
   SET_Q,
   RESET_SIDE_BAR,
@@ -37,11 +39,18 @@ import {
   DELETE_FAIL,
   TAG_SUGGESTION_SUCCESS,
   TAG_SUGGESTION_FAIL,
+  PICS_UPLOAD_PROGRESS,
 } from "../action/type";
 
 const initialState = {
   pics_loading: true,
   pics: [],
+
+  all_pics: [],
+  hasMore: true,
+  author_pics: [],
+
+  savedPics: [],
 
   detail_loading: true,
   detail: null,
@@ -58,18 +67,17 @@ const initialState = {
   q: null,
   side_status: true,
   side_holder: true,
-  authorPics: [],
+
   authorName: null,
   authorImage: null,
-  savedPics: [],
   loading: true,
   tag_suggestion: [],
+  create_progress: null
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
-    case TAG_PICS_START:
     case TOP_START:
     case RANDOM_START:
     case PICS_START:
@@ -82,7 +90,23 @@ export default function (state = initialState, action) {
       return {
         ...state,
         detail_loading: true,
-      }
+      };
+    case TAG_PICS_START:
+      return {
+        ...state,
+        taged_loading: true,
+      };
+    case SEARCH_START:
+      return {
+        ...state,
+        searched_loading: false,
+      };
+    // case TAGS_START:
+    //   console.log("str")
+    //   return {
+    //     ...state,
+    //     tags_loading: true,
+    //   };
     case DETAIL_SUCCESS:
       return {
         ...state,
@@ -107,10 +131,13 @@ export default function (state = initialState, action) {
         savedPics: payload,
       };
     case AUTHOR_PICS_SUCCESS:
+      // const { results } = payload;
+      // const flattenedResults = results.flat();
       return {
         ...state,
         loading: false,
-        authorPics: payload,
+        // all_pics: [...state.all_pics, ...results],
+        author_pics: payload,
       };
     case SET_AUTHOR:
       return {
@@ -141,6 +168,7 @@ export default function (state = initialState, action) {
     case RESET_PARAMETER:
       return {
         ...state,
+        searched_loading: false,
         searched: initialState, // Reset the parameter to its initial value.
       };
     case TOP_SUCCESS:
@@ -166,6 +194,11 @@ export default function (state = initialState, action) {
         ...state,
         searched: payload,
       };
+    case SEARCH_CLEAR:
+      return {
+        ...state,
+        searched: [],
+      }
     case TAG_PICS_SUCCESS:
       return {
         ...state,
@@ -176,6 +209,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
       };
+    case PICS_UPLOAD_PROGRESS:
+      return {
+        ...state,
+        create_progress: payload
+      }
     case RANDOM_FAIL:
     case AUTHOR_PICS_FAIL:
     case TOP_FAIL:

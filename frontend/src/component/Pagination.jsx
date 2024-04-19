@@ -2,7 +2,6 @@ import { connect } from 'react-redux'
 import { setCurrentPage } from '../redux/action/pages';
 
 
-
 const Pagination = ({ previous, next, currentPage, setCurrentPage, count }) => {
 
     const handelFirstPage = () => {
@@ -100,10 +99,4 @@ const Pagination = ({ previous, next, currentPage, setCurrentPage, count }) => {
 }
 
 
-const mapStateToProps = state => ({
-    currentPage: state.pages.currentPage,
-    count: state.pics.pics.count,
-    next: state.pics.pics.next,
-    previous: state.pics.pics.previous,
-})
-export default connect(mapStateToProps, { setCurrentPage })(Pagination)
+export default connect(null, { setCurrentPage })(Pagination)

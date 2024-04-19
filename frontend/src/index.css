@@ -417,6 +417,9 @@ div.wrapper>h1 {
   padding: 0;
   border-width: 0;
 }
+.scrollbox ~ .showcase-zoom {
+  cursor: zoom-in;
+}
 
 .showcase-x-zoom {
   display: block;
@@ -431,6 +434,9 @@ div.wrapper>h1 {
   border-width: 0;
 }
 
+.scrollbox ~ .showcase-x-zoom {
+  cursor: zoom-out;
+}
 
 .vis {
   background: none;
@@ -641,6 +647,12 @@ button {
   display: inline-block
 }
 
+.loading-s {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
 
 .spinner {
   border: 8px solid rgba(0, 0, 0, 0.1);
@@ -651,6 +663,8 @@ button {
   animation: spin 1s linear infinite;
   margin: auto;
 }
+
+
 
 @keyframes spin {
   0% {

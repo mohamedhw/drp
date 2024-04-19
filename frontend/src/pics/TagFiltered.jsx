@@ -1,46 +1,63 @@
-import {connect} from 'react-redux'
-import { useParams, Link } from "react-router-dom"
-import { useState, useEffect } from 'react';
-import {tagpics} from '../redux/action/pics'
-import Card from 'react-bootstrap/Card';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Loading from '../component/Loading';
+import { connect } from "react-redux";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { tagpics } from "../redux/action/pics";
+import Loading from "../component/Loading";
+import Items from "../component/Items";
+import Pagination from "../component/Pagination"
 
-const TagFiltered = ({pics, tagpics, loading}) => {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const {tagSlug} = useParams()
-    const url = `${apiUrl}/api-tag/${tagSlug}/`
+const TagFiltered = ({ pics_g, next, previous, currentPage, count, tagpics, loading }) => {
+  const { tagSlug } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const page = queryParams.get("page");
 
-    useEffect(()=>{
-        tagpics(url)
-    },[])
+  let apiUrl = `${import.meta.env.VITE_API_URL}/api-tag/${tagSlug}/`;
 
+  useEffect(() => {
     
-    return(
-        <Container className='mt-5'>
-                  <Row className=''>
-                    {pics && pics.map((post) => (
-                          <Col xs={12} md={6} lg={3} xl={3} xxl={3} className='p-1 pic-t'>
-                              <Link to={`/pic/${post.id}`} className='article-2'>
-                                  <Card className='pic-l' key={post.id} style={{height: "100%"}}>
-                                    {loading? <Loading />:
-                                      <Card.Img variant="top" src={post.thumb} style={{height: "100% !important"}}/>
-                                    }
-                                  </Card>
-                              </Link>
-                          </Col>
-                      ))
-                    }
-                  </Row>
-        </Container>
-    )
-}
+    if (currentPage != null) {
+      apiUrl += `?page=${currentPage}`;
+      navigate(`/tag/${tagSlug}/?page=${currentPage}`);
+    } else if (page && page > 1) {
+      apiUrl += `?page=${page}`;
+      navigate(`/tag/${tagSlug}/?page=${page}`);
+    } else {
+      navigate(`/tag/${tagSlug}/`);
+    }
 
+    tagpics(apiUrl);
+  }, [currentPage]);
 
-const mapStateToProps = state => ({
-    pics: state.pics.taged.results,
-    loading: state.pics.taged_loading
-})
-export default connect(mapStateToProps, {tagpics}) (TagFiltered)
+  if (loading) {
+    return <div className='loading-s'><Loading /></div>;
+  }
+  return (
+    <div style={{ margin: "0 8%" }}>
+      {pics_g && (
+        <>
+          <Items pics_g={pics_g} loading={loading} />
+          <Pagination
+            page={page}
+            loading={loading}
+            count={count}
+            currentPage={currentPage}
+            next={next}
+            previous={previous}
+          />
+        </>
+      )}
+    </div>
+  );
+};
+
+const mapStateToProps = (state) => ({
+  pics_g: state.pics.taged.results,
+  currentPage: state.pages.currentPage,
+  count: state.pics.taged.count,
+  next: state.pics.taged.next,
+  previous: state.pics.taged.previous,
+  loading: state.pics.taged_loading,
+});
+export default connect(mapStateToProps, { tagpics })(TagFiltered);

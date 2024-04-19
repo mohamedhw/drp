@@ -57,7 +57,7 @@ const App = () => {
                     </Route>
                     <Route exact path='/tags' element={<Tags />} />
                     <Route path='/userpics/:authorname' element={<UserPics />} />
-                    <Route exact path='/search/:searchpage?' element={<Searched />} />
+                    <Route exact path='/search' element={<Searched />} />
                     <Route exact path='/tag/:tagSlug' element={<TagFiltered />} />
                     <Route exact path='/pic/:postId' element={<Pic setShowDelete={setShowDelete} setShowCroper={setShowCroper} />} />
                     <Route exact path='/userallpics/:username/' element={<AllUserPics />} />

@@ -4,13 +4,11 @@ import { Button } from 'react-bootstrap';
 import { Link } from "react-router-dom"
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Fa500Px, FaAngleDown } from 'react-icons/fa6';
+import { FaAngleDown } from 'react-icons/fa6';
 import { setAuthor } from '../redux/action/pics'
-import { useNavigate } from 'react-router-dom';
 import { FaBookmark, FaHeart } from "react-icons/fa6";
-import { save, like, delete_pic } from '../redux/action/pics';
+import { save, like } from '../redux/action/pics';
 import { RiDeleteBin7Line } from "react-icons/ri";
-import { FaRegHeart } from "react-icons/fa";
 
 
 const Side = ({ setShowCroper, isAuthenticated, user_g, setShowDelete, save, like, post, setAuthor, name, author, ...props }) => {
@@ -104,7 +102,7 @@ const Side = ({ setShowCroper, isAuthenticated, user_g, setShowDelete, save, lik
             </div>
             <div id="dropdown-tags" style={{ display: "block", paddingTop: "5px" }}>
               {post.related_tags.map((tag) => (
-                <Link to={`/tag/${tag.tag_slug}`} className='side-tag-link'>
+                <Link key={tag.tag_slug} to={`/tag/${tag.tag_slug}`} className='side-tag-link'>
                   <span className="m-1 my-tag p-1 px-3">{tag.tag}</span>
                 </Link>
               ))}
@@ -176,7 +174,7 @@ const Side = ({ setShowCroper, isAuthenticated, user_g, setShowDelete, save, lik
               </div>
               <div id="dropdown-related" style={{ display: "block" }}>
                 {post.related_pics.map((post) => (
-                  <Link to={`/pic/${post.id}`}>
+                  <Link key={post.id} to={`/pic/${post.id}`}>
                     <img className='m-1' style={{ width: "70px", height: "70px" }} src={post.thumb} />
                   </Link>
                 ))}

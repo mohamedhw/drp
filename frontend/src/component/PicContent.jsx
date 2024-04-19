@@ -46,6 +46,7 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
   }, [isDragging, position, prevMousePosition]);
 
   useEffect(() => {
+
     if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
@@ -81,7 +82,7 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
       const scrollLeft = (minImageWidth - containerWidth) / 2;
       const scrollTop = (data && data.image_height - containerHeight) / 2;
       imageContainer.scrollTo(scrollLeft, scrollTop);
-    } else if (zoom_ == "showcase-zoom") {
+    } else if (zoom_ === "showcase-zoom") {
       setZoom_("showcase-x-zoom");
       const imageContainer = document.querySelector(".scrollbox");
       const containerWidth = imageContainer.offsetWidth;
@@ -105,13 +106,13 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
         display: "flex",
         alignItems: "center",
       }}
-      onMouseDown={handleMouseDown}
     >
       {loading ? (
         <Loading />
       ) : (
         data && (
           <img
+            onMouseDown={handleMouseDown}
             className={zoom_}
             id="img-content"
             src={data.image}
@@ -125,7 +126,7 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
 };
 
 const mapStateToProps = (state) => ({
-  loading: state.pics.detail_loading,
+  loading: state.pics.detail_loading
 });
 
 export default connect(mapStateToProps, null)(PicContent);

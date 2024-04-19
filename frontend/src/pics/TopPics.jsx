@@ -1,12 +1,13 @@
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import { useEffect } from 'react';
-import { topPics } from '../redux/action/pics'
+import { topPics } from '../redux/action/pics';
 import Pagination from '../component/Pagination';
 import Items from '../component/Items';
-import { useNavigate, useLocation } from "react-router-dom"
+import Loading from '../component/Loading';
+import { useNavigate, useLocation } from "react-router-dom";
 import { setPage } from '../redux/action/pages';
 
-const TopPics = ({ pics_g, topPics, currentPage }) => {
+const TopPics = ({ pics_g, loading, topPics, currentPage, count, next, previous }) => {
     const navigate = useNavigate()
     const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -35,13 +36,16 @@ const TopPics = ({ pics_g, topPics, currentPage }) => {
     }, [currentPage, page]);
 
 
+    if (loading) {
+      return <div className='loading-s'><Loading /></div>;
+    }
     return (
         <div style={{ margin: "0 8%" }}>
             <h1 style={{ float: "left", color: "#00bda0" }} className="mb-5">Top Pics</h1>
             {pics_g &&
                 <>
-                    <Items pics_g={pics_g} />
-                    <Pagination page={page} />
+                    <Items pics_g={pics_g} loading={loading} />
+                    <Pagination page={page} loading={loading} count={count} currentPage={currentPage} next={next} previous={previous} />
                 </>
             }
         </div>
@@ -51,6 +55,10 @@ const TopPics = ({ pics_g, topPics, currentPage }) => {
 
 const mapStateToProps = state => ({
     pics_g: state.pics.pics.results,
+    loading: state.pics.pics_loading,
     currentPage: state.pages.currentPage,
+    count: state.pics.pics.count,
+    next: state.pics.pics.next,
+    previous: state.pics.pics.previous,
 })
 export default connect(mapStateToProps, { topPics, setPage })(TopPics)

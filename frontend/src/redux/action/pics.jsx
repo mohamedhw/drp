@@ -15,8 +15,11 @@ import {
   TAG_PICS_FAIL,
   CREATE_PICS_SUCCESS,
   CREATE_PICS_FAIL,
+  PICS_UPLOAD_PROGRESS,
+  SEARCH_START,
   SEARCH_SUCCESS,
   SEARCH_FAIL,
+  SEARCH_CLEAR,
   RESET_PARAMETER,
   AUTHOR_PICS_SUCCESS,
   AUTHOR_PICS_FAIL,
@@ -126,6 +129,7 @@ export const randomPics = (url) => async (dispatch) => {
   }
 };
 
+
 export const detail = (postId, setZoom_) => async (dispatch) => {
   const url = `${apiUrl}/api-post/${postId}/`;
   try {
@@ -151,17 +155,18 @@ export const detail = (postId, setZoom_) => async (dispatch) => {
 
 // Get a list of all available tags
 export const tags = () => async (dispatch) => {
+  const url = `${apiUrl}/api-tags/`;
   try {
     dispatch({ type: TAGS_START });
-    const res = await axios.get(`${apiUrl}/api-tags/`, config);
-    if (res.data) {
+    const res = await axios.get(url, config);
+    if (res.data.error) {
       dispatch({
-        type: TAGS_SUCCESS,
-        payload: res.data,
+        type: TAGS_FAIL,
       });
     } else {
       dispatch({
-        type: TAGS_FAIL,
+        type: TAGS_SUCCESS,
+        payload: res.data,
       });
     }
   } catch (err) {
@@ -188,6 +193,10 @@ export const setQ = (q) => ({
   payload: q,
 });
 
+export const clearQueryString = () => ({
+  type: SEARCH_CLEAR,
+});
+
 export const setAuthor = (username, image) => ({
   type: SET_AUTHOR,
   payload: { username, image },
@@ -195,6 +204,7 @@ export const setAuthor = (username, image) => ({
 
 export const search = (url) => async (dispatch) => {
   try {
+    dispatch({ type: SEARCH_START });
     const res = await axios.get(url, config);
     if (res.data.error) {
       dispatch({
@@ -235,41 +245,48 @@ export const tagpics = (url) => async (dispatch) => {
   }
 };
 
-export const createpics =
-  (setLoading, title, body, image, tags) => async (dispatch) => {
-    const config_ = {
-      headers: {
-        "content-type": "multipart/form-data",
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
-      },
-    };
+export const createpics = (setLoading, image, tags) => async (dispatch) => {
+  const config_ = {
+    headers: {
+      "content-type": "multipart/form-data",
+      // "Content-Type": "application/json",
+      "X-CSRFToken": Cookies.get("csrftoken"),
+    },
+    onUploadProgress: (progressEvent) => {
+      const { loaded, total } = progressEvent;
+      const percentCompleted = Math.round((loaded / total) * 100);
+      dispatch({
+        type: PICS_UPLOAD_PROGRESS,
+        payload: percentCompleted,
+      });
+    },
+  };
 
-    const body = JSON.stringify({ title, body, image, tags });
+  const body = JSON.stringify({ tags });
 
-    try {
-      const res = await axios.get(`${apiUrl}/api-create`, body, config_);
-      if (res.data.error) {
-        dispatch({
-          type: CREATE_PICS_FAIL,
-        });
-      } else {
-        dispatch({
-          type: CREATE_PICS_SUCCESS,
-          payload: res.data,
-        });
-        setLoading(false);
-      }
-    } catch (err) {
+  try {
+    const res = await axios.post(`${apiUrl}/api-create`, body, config_);
+    if (res.data.error) {
       dispatch({
         type: CREATE_PICS_FAIL,
       });
+    } else {
+      dispatch({
+        type: CREATE_PICS_SUCCESS,
+        payload: res.data,
+      });
+      setLoading(false);
     }
-  };
+  } catch (err) {
+    dispatch({
+      type: CREATE_PICS_FAIL,
+    });
+  }
+};
 
-export const authorpics = (url) => async (dispatch) => {
+export const authorPics = (url) => async (dispatch) => {
   try {
-    dispatch({ type: FETCH_DATA_START });
+    // dispatch({ type: FETCH_DATA_START });
     const res = await axios.get(url, config);
     if (res.data.error) {
       dispatch({
@@ -445,3 +462,5 @@ export const tag_suggestion = (qs) => async (dispatch) => {
     });
   }
 };
+
+

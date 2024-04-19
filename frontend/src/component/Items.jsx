@@ -43,8 +43,5 @@ const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
 
 
 
-const mapStateToProps = state => ({
-    loading: state.pics.pics_loading
-})
 
-export default connect(mapStateToProps, {})(Items)
+export default connect(null, {})(Items)

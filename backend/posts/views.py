@@ -177,25 +177,15 @@ class Detail(generics.RetrieveAPIView):
 class TagFilterView(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializers
-    pagination_class = PageNumberPagination
     lookup_field = 'tag_slug'
     permission_classes = (permissions.AllowAny, )
 
-    def get_queryset(self, *args, **kwargs):
+    def get_queryset(self):
         tag_slug = self.kwargs.get('tag_slug')
         tag = get_object_or_404(Hashtag, tag_slug=tag_slug)
         queryset = Post.objects.filter(tags=tag)
         return queryset
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset(*args, **kwargs)
-
-        paginator = PageNumberPagination()
-        paginator.page_size = 12  # You can adjust the page size here
-        result_page = paginator.paginate_queryset(queryset, request)
-        serializer = self.serializer_class(
-            result_page, many=True, context={'request': request})
-        return paginator.get_paginated_response(serializer.data)
 
 
 class AllTags(generics.ListAPIView):
