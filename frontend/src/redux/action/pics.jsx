@@ -65,68 +65,33 @@ const config = {
 };
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export const pics = (url) => async (dispatch) => {
+const fetchPicsData = async (url, type, dispatch) => {
+  dispatch({ type: `${type}_START` });
   try {
-    dispatch({ type: PICS_START });
-
     const res = await axios.get(url, config);
     if (res.data.error) {
-      dispatch({
-        type: PICS_FAIL,
-      });
+      dispatch({ type: `${type}_FAIL` });
     } else {
-      dispatch({
-        type: PICS_SUCCESS,
-        payload: res.data,
-      });
+      dispatch({ type: `${type}_SUCCESS`, payload: res.data });
     }
   } catch (err) {
-    dispatch({
-      type: PICS_FAIL,
-    });
+    dispatch({ type: `${type}_FAIL` });
   }
 };
+
+
+export const pics = (url) => async (dispatch) => {
+    await fetchPicsData(url, 'PICS', dispatch);
+};
+
 
 export const topPics = (url) => async (dispatch) => {
-  dispatch({ type: TOP_START });
-  try {
-    const res = await axios.get(url, config);
-    if (res.data.error) {
-      dispatch({
-        type: TOP_FAIL,
-      });
-    } else {
-      dispatch({
-        type: TOP_SUCCESS,
-        payload: res.data,
-      });
-    }
-  } catch (err) {
-    dispatch({
-      type: TOP_FAIL,
-    });
-  }
+    await fetchPicsData(url, 'TOP', dispatch);
 };
 
+
 export const randomPics = (url) => async (dispatch) => {
-  dispatch({ type: RANDOM_START });
-  try {
-    const res = await axios.get(url, config);
-    if (res.data.error) {
-      dispatch({
-        type: RANDOM_FAIL,
-      });
-    } else {
-      dispatch({
-        type: RANDOM_SUCCESS,
-        payload: res.data,
-      });
-    }
-  } catch (err) {
-    dispatch({
-      type: RANDOM_FAIL,
-    });
-  }
+    await fetchPicsData(url, 'RANDOM', dispatch);
 };
 
 

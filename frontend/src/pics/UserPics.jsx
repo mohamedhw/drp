@@ -42,12 +42,14 @@ const UserPics = ({
   } else {
     picsView = (
       <>
-        <SliceItems pics_g={slicePics} />
+        <div className={username_g !== authorname && 'mt-4'}>
+          <SliceItems pics_g={slicePics}/>
+        </div>
 
         {pics && pics.length > 8 ? (
           <div>
             <Link to={`/userallpics/${authorname}`}>
-              <button className="btn btn-outline-success btn-s px-lg-5">
+              <button className="btn btn-outline-success btn-s px-lg-5 mb-5 mt-3">
                 More results
               </button>
             </Link>
@@ -64,7 +66,7 @@ const UserPics = ({
   return (
     <>
       {pics && (
-        <div className="mt-5">
+        <div className="mt-4">
           {profileHead}
           {picsView}
         </div>

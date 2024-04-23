@@ -46,6 +46,7 @@ const initialState = {
   pics_loading: true,
   pics: [],
 
+
   all_pics: [],
   hasMore: true,
   author_pics: [],
@@ -172,22 +173,12 @@ export default function(state = initialState, action) {
         searched: initialState, // Reset the parameter to its initial value.
       };
     case TOP_SUCCESS:
-      return {
-        ...state,
-        pics_loading: false,
-        pics: payload,
-      };
     case RANDOM_SUCCESS:
-      return {
-        ...state,
-        pics_loading: false,
-        pics: payload,
-      };
     case PICS_SUCCESS:
       return {
         ...state,
         pics_loading: false,
-        pics: payload,
+        pics: payload
       };
     case SEARCH_SUCCESS:
       return {

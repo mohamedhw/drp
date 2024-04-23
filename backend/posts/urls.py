@@ -15,6 +15,7 @@ from .views import (
     TopPics,
     TagsSuggestion,
     RandomPics,
+    Latest,
     )
 
 
@@ -22,6 +23,7 @@ from .views import (
 
 urlpatterns = [
     path('api-post/', Home.as_view()),
+    path('api-latest/', Latest.as_view()),
     path('api-post/<str:pk>/', Detail.as_view()),
     path('api-tag/<slug:tag_slug>/', TagFilterView.as_view()),
     path('api-search/', Search.as_view()),

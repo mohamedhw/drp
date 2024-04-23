@@ -89,7 +89,7 @@ const Profile = ({
   }, [username_g, image_g]);
 
   return (
-    <div className="mt-5">
+    <div className="mt-4">
       {loading ? (
         <Loading />
       ) : (

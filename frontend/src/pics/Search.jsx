@@ -33,7 +33,7 @@ const Search = ({
   }
 
   useEffect(() => {
-    if (q) {
+    if (q && show) {
       url = `${apiUrl}/api-post/?q=${q}`;
     }
     search(url);

@@ -22,14 +22,14 @@ const LatestPics = ({ pics_g, loading, pics, currentPage, count, next, previous 
     useEffect(() => {
         if (currentPage != null) {
             url = isPageProvided
-                ? `${apiUrl}/api-post/?page=${currentPage}`
-                : `${apiUrl}/api-post/`;
+                ? `${apiUrl}/api-latest/?page=${currentPage}`
+                : `${apiUrl}/api-latest/`;
             navigate(`/latest/?page=${currentPage}`);
         } else if (currentPage === null & page > 1) {
-            url = `${apiUrl}/api-post/?page=${page}`;
+            url = `${apiUrl}/api-latest/?page=${page}`;
             navigate(`/latest/?page=${page}`);
         } else {
-            url = `${apiUrl}/api-post/`;
+            url = `${apiUrl}/api-latest/`;
         }
 
         pics(url);
