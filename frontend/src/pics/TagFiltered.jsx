@@ -11,24 +11,26 @@ const TagFiltered = ({ pics_g, next, previous, currentPage, count, tagpics, load
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const page = queryParams.get("page");
+  const pageParam = currentPage || queryParams.get("page");
 
-  let apiUrl = `${import.meta.env.VITE_API_URL}/api-tag/${tagSlug}/`;
+  const apiUrl = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    
-    if (currentPage != null) {
-      apiUrl += `?page=${currentPage}`;
-      navigate(`/tag/${tagSlug}/?page=${currentPage}`);
-    } else if (page && page > 1) {
-      apiUrl += `?page=${page}`;
-      navigate(`/tag/${tagSlug}/?page=${page}`);
-    } else {
-      navigate(`/tag/${tagSlug}/`);
+  const buildUrl = () => {
+    let url = `${apiUrl}/api-tag/${tagSlug}/`;
+    let params = "";
+
+    if (pageParam) {
+      url += `?page=${pageParam}`;
+      params += `?page=${pageParam}`;
     }
 
-    tagpics(apiUrl);
-  }, [currentPage]);
+    navigate(params);
+    return url;
+  };
+  useEffect(() => {
+    const url = buildUrl()   
+    tagpics(url);
+  }, [pageParam]);
 
   if (loading) {
     return <div className='loading-s'><Loading /></div>;
@@ -39,7 +41,7 @@ const TagFiltered = ({ pics_g, next, previous, currentPage, count, tagpics, load
         <>
           <Items pics_g={pics_g} loading={loading} />
           <Pagination
-            page={page}
+            page={pageParam}
             loading={loading}
             count={count}
             currentPage={currentPage}

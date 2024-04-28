@@ -1,9 +1,6 @@
 import { connect } from 'react-redux'
 import { useState, useEffect } from 'react';
 import { authorPics } from "../redux/action/pics"
-import Container from 'react-bootstrap/Container';
-import { useParams } from "react-router-dom"
-import { useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';

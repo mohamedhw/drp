@@ -6,18 +6,20 @@ import Items from "../component/Items";
 import Loading from "../component/Loading";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { setCurrentPage, setPage } from "../redux/action/pages";
+import { setCurrentPage } from "../redux/action/pages";
 
 const TopPics = ({
   pics_g,
   loading,
   topPics,
   currentPage,
+  setCurrentPage,
   count,
   next,
   previous,
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const apiUrl = import.meta.env.VITE_API_URL;
   let ranges = {
     "1d": "Last Day",
@@ -28,54 +30,47 @@ const TopPics = ({
     "all": "All",
   };
 
-  const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const page = queryParams.get("page") || 1; // Default to page 1 if 'page' query parameter is not provided
-  const topRangeTag = queryParams.get("topRange"); // Default to page 1 if 'page' query parameter is not provided
-  const isPageProvided = Boolean(page);
+  const pageParam = currentPage || queryParams.get("page");
+  const topRangeParam = queryParams.get("topRange");
 
   const [topRange, setTopRange] = useState("Last Month");
   const [selectedRange, setSelectedRange] = useState("Last Month");
 
-  const handleDropdownChange = (eventKey, event) => {
-    setTopRange(eventKey);
-    setSelectedRange(event.target.innerText);
+  const handleDropdownChange = (eventKey) => {
+    setTopRange(ranges[eventKey]);
+    setSelectedRange(ranges[eventKey]);
+    setCurrentPage(0);
+    navigate(`?topRange=${topRange}`);
   };
 
-  let url = ``;
-  useEffect(() => {
-    if (topRangeTag) {
-      setTopRange(ranges[topRangeTag]);
-      setSelectedRange(ranges[topRangeTag]);
-    }
-    if (topRangeTag) {
-      if (currentPage != null) {
-        url = isPageProvided
-          ? `${apiUrl}/api-top-pics/?topRange=${topRangeTag}&page=${currentPage}`
-          : `${apiUrl}/api-top-pics/?topRange=${topRangeTag}`;
-        navigate(`/top/?topRange=${topRangeTag}&page=${currentPage}`);
-      } else if ((currentPage === null) & (page > 1)) {
-        url = `${apiUrl}/api-top-pics/?topRange=${topRangeTag}&page=${page}`;
-        navigate(`/top/?topRange=${topRangeTag}&page=${page}`);
-      } else {
-        url = `${apiUrl}/api-top-pics/?topRange=${topRangeTag}`;
+  const buildUrl = () => {
+    let url = `${apiUrl}/api-top-pics/`;
+    let params = "?";
+    if (topRangeParam) {
+      setTopRange(ranges[topRangeParam] || "Last Month");
+      setSelectedRange(ranges[topRangeParam] || "Last Month");
+      url += `?topRange=${topRangeParam}`;
+      params += `topRange=${topRangeParam}`;
+      if (pageParam) {
+        url += `&page=${pageParam}`;
+        params += `&page=${pageParam}`;
       }
+      navigate(`${params}`);
     } else {
-      if (currentPage != null) {
-        url = isPageProvided
-          ? `${apiUrl}/api-top-pics/?page=${currentPage}`
-          : `${apiUrl}/api-top-pics/`;
-        navigate(`/top/?page=${currentPage}`);
-      } else if ((currentPage === null) & (page > 1)) {
-        url = `${apiUrl}/api-top-pics/?page=${page}`;
-        navigate(`/top/?page=${page}`);
-      } else {
-        url = `${apiUrl}/api-top-pics/`;
+      if (pageParam) {
+        url += `?page=${pageParam}`;
+        params += `page=${pageParam}`;
       }
+      navigate(`${params}`);
     }
+    return url;
+  };
 
+  useEffect(() => {
+    const url = buildUrl();
     topPics(url);
-  }, [topRange, currentPage, page]);
+  }, [topRange, pageParam, topRangeParam]);
 
   if (loading) {
     return (
@@ -84,6 +79,7 @@ const TopPics = ({
       </div>
     );
   }
+
   return (
     <div style={{ margin: "0 8%" }}>
       <h1
@@ -120,7 +116,7 @@ const TopPics = ({
         <>
           <Items pics_g={pics_g} loading={loading} />
           <Pagination
-            page={page}
+            page={pageParam || 1}
             loading={loading}
             count={count}
             currentPage={currentPage}
@@ -141,4 +137,4 @@ const mapStateToProps = (state) => ({
   next: state.pics.pics.next,
   previous: state.pics.pics.previous,
 });
-export default connect(mapStateToProps, { topPics, setPage })(TopPics);
+export default connect(mapStateToProps, { topPics, setCurrentPage })(TopPics);

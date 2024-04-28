@@ -74,7 +74,6 @@ const Pic = ({
   }, [postId]);
 
   useEffect(() => {
-    console.log(side_holder);
     // Check window size and sidebar status, toggle sidebar accordingly
     if (side_holder && windowWidth < 1000 && side_status) {
       sideBarStatus();

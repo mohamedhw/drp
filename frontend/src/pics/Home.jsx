@@ -17,31 +17,30 @@ const Home = ({
   next,
   previous,
 }) => {
+
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const page = queryParams.get("page") || 1; // Default to page 1 if 'page' query parameter is not provided
-  const isPageProvided = Boolean(page);
+  const pageParam = currentPage || queryParams.get("page"); // Default to page 1 if 'page' query parameter is not provided
 
-  let url = ``;
-  useEffect(() => {
-    // setCurrentPage(page)
-    if (currentPage != null) {
-      url = isPageProvided
-        ? `${apiUrl}/api-post/?page=${currentPage}`
-        : `${apiUrl}/api-post/`;
-      navigate(`/?page=${currentPage}`);
-    } else if ((currentPage === null) & (page > 1)) {
-      url = `${apiUrl}/api-post/?page=${page}`;
-      navigate(`/?page=${page}`);
-    } else {
-      url = `${apiUrl}/api-post/`;
-      navigate(`/`);
+  const buildUrl = () => {
+    let url = `${apiUrl}/api-post/`;
+    let params = "";
+
+    if (pageParam) {
+      url += `?page=${pageParam}`;
+      params += `?page=${pageParam}`;
     }
 
+    navigate(`${params}` || '/');
+    return url;
+  };
+
+  useEffect(() => {
+    const url = buildUrl();
     pics(url);
-  }, [currentPage, page]);
+  }, [pageParam]);
 
   if (loading) {
     return (
@@ -58,7 +57,7 @@ const Home = ({
         <>
           <Items pics_g={pics_g} loading={loading} />
           <Pagination
-            page={page}
+            page={pageParam}
             loading={loading}
             count={count}
             currentPage={currentPage}

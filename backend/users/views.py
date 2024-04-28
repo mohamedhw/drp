@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.db.models.query import Expression
 from rest_framework import generics
 from .serializer import UserProfileSerializer, UserSerializer
 from .models import Profile
@@ -11,7 +10,7 @@ from rest_framework.response import Response
 from django.contrib import auth
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode

@@ -45,6 +45,8 @@ import {
 const initialState = {
   pics_loading: true,
   pics: [],
+  top_pics: [],
+  page: 1,
 
 
   all_pics: [],

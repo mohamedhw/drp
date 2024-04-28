@@ -22,24 +22,27 @@ const Searched = ({
 
   const queryParams = new URLSearchParams(location.search);
   const q = queryParams.get("q");
-  const page = queryParams.get("page");
+  const pageParam = currentPage || queryParams.get("page");
 
-  let apiUrl = `${import.meta.env.VITE_API_URL}/api-post/?q=${q}`;
+  const apiUrl = import.meta.env.VITE_API_URL;
 
+  const buildUrl = () => {
+    let url = `${apiUrl}/api-post/?q=${q}`;
+    let params = `?q=${q}`;
 
-  useEffect(() => {
-    if (currentPage != null) {
-      apiUrl += `&page=${currentPage}`;
-      navigate(`/search/?q=${q}&page=${currentPage}`);
-    } else if (page && page > 1) {
-      apiUrl += `&page=${page}`;
-      navigate(`/search/?q=${q}&page=${page}`);
-    } else {
-      navigate(`/search/?q=${q}`);
+    if (pageParam) {
+      url += `&page=${pageParam}`;
+      params += `&page=${pageParam}`;
     }
 
-    search(apiUrl)
-  }, [page, currentPage]);
+    navigate(params);
+    return url;
+  };
+
+  useEffect(() => {
+    const url = buildUrl()
+    search(url)
+  }, [pageParam]);
 
   if (loading) {
     return (
@@ -56,7 +59,7 @@ const Searched = ({
           <h4 className="m-4">Number of results {count}</h4>
           <Items pics_g={pics_g} loading={loading} />
           <Pagination
-            page={page}
+            page={pageParam}
             count={count}
             currentPage={currentPage}
             next={next}

@@ -93,6 +93,7 @@ class Home(generics.ListAPIView):
                 qs_day = qs.order_by("-like_count")
                 related_items_count = qs_day.count()  # number of related pics
 
+                additional_items_needed = 24 - related_items_count
                 if related_items_count < 24:
                     # Define the date range
                     now = timezone.now()
