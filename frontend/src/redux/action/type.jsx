@@ -2,17 +2,17 @@ export const FETCH_DATA_START = 'FETCH_DATA_START';
 
 
 
-export const PICS_START = 'PICS_START';
-export const PICS_SUCCESS = 'PICS_SUCCESS';
-export const PICS_FAIL = 'PICS_FAIL';
+export const LATEST_PICS_START = 'LATEST_PICS_START';
+export const LATEST_PICS_SUCCESS = 'LATEST_PICS_SUCCESS';
+export const LATEST_PICS_FAIL = 'LATEST_PICS_FAIL';
 
-export const RANDOM_START = 'RANDOM_START';
-export const RANDOM_SUCCESS = 'RANDOM_SUCCESS'
-export const RANDOM_FAIL = 'RANDOM_FAIL'
+export const RANDOM_PICS_START = 'RANDOM_PICS_START';
+export const RANDOM_PICS_SUCCESS = 'RANDOM_PICS_SUCCESS'
+export const RANDOM_PICS_FAIL = 'RANDOM_PICS_FAIL'
 
-export const TOP_START = 'TOP_START';
-export const TOP_SUCCESS = 'TOP_SUCCESS'
-export const TOP_FAIL = 'TOP_FAIL'
+export const TOP_PICS_START = 'TOP_PICS_START';
+export const TOP_PICS_SUCCESS = 'TOP_PICS_SUCCESS'
+export const TOP_PICS_FAIL = 'TOP_PICS_FAIL'
 
 
 // All available tags
@@ -88,7 +88,11 @@ export const USER_DATA_FAIL = 'USER_FAIL';
 
 export const RESET_PARAMETER = 'RESET_PARAMETER';
 export const SET_Q = 'SET_Q';
+export const SET_TOP_RANGE = 'SET_TOP_RANGE';
+
 export const RESET_SIDE_BAR = 'RESET_SIDE_BAR';
+export const RESET_PICS_ITEMS = 'RESET_PICS_ITEMS';
+
 export const HOLD_SIDE_BAR = 'HOLD_SIDE_BAR';
 export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE"
 export const SET_PAGE = "SET_PAGE"

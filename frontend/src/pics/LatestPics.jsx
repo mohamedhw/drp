@@ -1,81 +1,75 @@
 import { connect } from "react-redux";
-import { useEffect } from "react";
-import { pics } from "../redux/action/pics";
-import Pagination from "../component/Pagination";
+import { useEffect, useState } from "react";
+import { latestPics, resetPicsItems } from "../redux/action/pics";
+import InfiniteScroll from "react-infinite-scroll-component";
 import Items from "../component/Items";
 import Loading from "../component/Loading";
 import { useNavigate, useLocation } from "react-router-dom";
-import { setPage } from "../redux/action/pages";
 
-const LatestPics = ({
-  pics_g,
-  loading,
-  pics,
-  currentPage,
-  count,
-  next,
-  previous,
-}) => {
+
+const LatestPics = ({ hasMore, pics, loading, resetPicsItems, latestPics}) => {
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const pageParam = currentPage || queryParams.get("page") || 1; // Default to page 1 if 'page' query parameter is not provided
+  const pageParam = queryParams.get("page");
+  const [page, setPage] = useState(pageParam || 1);
 
   const buildUrl = () => {
     let url = `${apiUrl}/api-latest/`;
-    let params = "";
-
-    if (pageParam) {
-      url += `?page=${pageParam}`;
-      params += `?page=${pageParam}`;
+    if (page) {
+      url += `?page=${page}`;
     }
-
-    navigate(`${params}`);
     return url;
   };
 
-  useEffect(() => {
+  const fetchMoreData = async () => {
     const url = buildUrl();
-    pics(url);
-  }, [pageParam]);
+    if (page === 1 ) {
+      await resetPicsItems();
+    }
+    if (hasMore || page === 1) {
+      await latestPics(url);
+      const nextPage = page + 1;
+      if (page > 1) {
+        navigate(`?page=${page}`);
+      }
+      setPage(nextPage);
+    }
+  };
+
+  useEffect(() => {
+    fetchMoreData();
+  }, []);
 
   if (loading) {
-    return (
-      <div className="loading-s">
-        <Loading />
-      </div>
-    );
+    return <Loading />;
   }
+
+
   return (
     <div style={{ margin: "0 8%" }}>
-      <h1 style={{ float: "left", color: "#00bda0" }} className="mb-5">
-        Latest Pics
-      </h1>
-      {pics_g && (
-        <>
-          <Items pics_g={pics_g} loading={loading} />
-          <Pagination
-            page={pageParam}
-            loading={loading}
-            count={count}
-            currentPage={currentPage}
-            next={next}
-            previous={previous}
-          />
-        </>
-      )}
+      <InfiniteScroll
+        dataLength={pics.length}
+        next={fetchMoreData}
+        hasMore={hasMore}
+        loader={<p className="mt-5 loading-more-result">Loading...</p>}
+        endMessage={<p className="mt-5 loading-more-result">No more items</p>}
+      >
+        {pics && <Items pics_g={pics} loading={false} />}
+      </InfiniteScroll>
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
-  pics_g: state.pics.pics.results,
+  pics: state.pics.pics,
   loading: state.pics.pics_loading,
   currentPage: state.pages.currentPage,
-  count: state.pics.pics.count,
-  next: state.pics.pics.next,
-  previous: state.pics.pics.previous,
+  hasMore: state.pics.hasMore,
 });
-export default connect(mapStateToProps, { pics, setPage })(LatestPics);
+
+export default connect(mapStateToProps, { latestPics, resetPicsItems })(
+  LatestPics,
+);

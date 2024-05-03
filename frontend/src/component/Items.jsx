@@ -1,47 +1,91 @@
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
-import { Link } from "react-router-dom"
-import { connect } from 'react-redux'
-import Loading from '../component/Loading'
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import { Link, useLocation } from "react-router-dom";
+import { connect } from "react-redux";
+import Loading from "../component/Loading";
+import FilterBar from "./FilterBar";
 
 const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
-
-    const handelClick = () => {
-        if (setShow) {
-            setZoom_("showcase-norm")
-            setShow(false)
-        }
+  const handelClick = () => {
+    if (setShow) {
+      setZoom_("showcase-norm");
+      setShow(false);
     }
+  };
 
+  const filters = {
+    top: "Top Pics",
+    random: "Random",
+    latest: "Latest",
+  };
+  const location = useLocation();
+  const routParam = location.pathname.split("/").filter(Boolean).pop();
 
-    return (
-        <div style={{ margin: "auto", width: "100%", textAlign: "center" }}>
-            <Row style={{ margin: "auto", width: "100%", justifyContent: "center" }}>
-                {pics_g.map((post) => (
-                    <Col key={post.id} xs={12} sm={5} md={5} lg={3} xl={3} xxl={2} className='mt-4 mt-sm-4 mx-sm-2 mt-md-3 mx-md-1 mt-lg-4 mx-lg-3 p-lg-1'>
+  return (
+    <div style={{ margin: "auto", width: "100%", textAlign: "center" }}>
+      <FilterBar />
+      <h1
+        style={{ float: "left", color: "#00bda0", display: "inline" }}
+        className="mb-5"
+      >
+        {filters[routParam]}
+      </h1>
+      <Row style={{ margin: "auto", width: "100%", justifyContent: "center" }}>
+        {pics_g.length > 0 ? (
+          pics_g.map((post) => (
+            <Col
+              key={post.id}
+              xs={12}
+              sm={5}
+              md={5}
+              lg={3}
+              xl={3}
+              xxl={2}
+              className="mt-4 mt-sm-4 mx-sm-2 mt-md-3 mx-md-1 mt-lg-4 mx-lg-3 p-lg-1"
+            >
+              <Link
+                to={`/pic/${post.id}`}
+                className="article-2"
+                onClick={() => handelClick()}
+              >
+                <Card
+                  className="pic-l"
+                  style={{
+                    minWidth: "auto",
+                    minHight: "100px",
+                    maxHeight: "300px",
+                    maxWidth: "500px",
+                  }}
+                >
+                  {loading ? (
+                    <Loading />
+                  ) : (
+                    <>
+                      <Card.Img
+                        className="lazyload"
+                        variant="top"
+                        src={post.thumb}
+                        style={{ overflow: "hidden" }}
+                        loading="lazy"
+                      />
+                      <div className="thumb-info">
+                        <span className="">
+                          {post.get_width} X {post.get_height}
+                        </span>
+                      </div>
+                    </>
+                  )}
+                </Card>
+              </Link>
+            </Col>
+          ))
+        ) : (
+          <h1>No Results</h1>
+        )}
+      </Row>
+    </div>
+  );
+};
 
-                        <Link to={`/pic/${post.id}`} className='article-2' onClick={e => handelClick()}>
-                            <Card className='pic-l' style={{ minWidth: "200px", minHight: "100px", maxHeight: "300px", maxWidth: "500px" }}>
-                                  { loading ? <Loading />:
-                                    <>
-                                      <Card.Img className="lazyload" variant="top" src={post.thumb} style={{ overflow: "hidden" }} loading='lazy' />
-                                      <div className="thumb-info">
-                                          <span className="">{post.get_width} X {post.get_height}</span>
-                                      </div>
-                                    </>
-                                  }
-                            </Card>
-                        </Link>
-                    </Col>
-
-                ))}
-            </Row>
-        </div>
-    )
-}
-
-
-
-
-export default connect(null, {})(Items)
+export default connect(null, {})(Items);

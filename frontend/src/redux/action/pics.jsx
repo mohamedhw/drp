@@ -2,11 +2,19 @@ import axios from "axios";
 import {
   FETCH_DATA_START,
   SET_Q,
+  SET_TOP_RANGE,
   RESET_SIDE_BAR,
+  RESET_PICS_ITEMS,
   HOLD_SIDE_BAR,
-  PICS_START,
-  PICS_SUCCESS,
-  PICS_FAIL,
+  LATEST_PICS_START,
+  LATEST_PICS_SUCCESS,
+  LATEST_PICS_FAIL,
+  RANDOM_PICS_START,
+  RANDOM_PICS_SUCCESS,
+  RANDOM_PICS_FAIL,
+  TOP_PICS_START,
+  TOP_PICS_SUCCESS,
+  TOP_PICS_FAIL,
   TAGS_START,
   TAGS_SUCCESS,
   TAGS_FAIL,
@@ -33,12 +41,6 @@ import {
   DETAIL_START,
   DETAIL_SUCCESS,
   DETAIL_FAIL,
-  RANDOM_START,
-  RANDOM_SUCCESS,
-  RANDOM_FAIL,
-  TOP_START,
-  TOP_SUCCESS,
-  TOP_FAIL,
   DELETE_SUCCESS,
   DELETE_FAIL,
   TAG_SUGGESTION_SUCCESS,
@@ -65,34 +67,54 @@ const config = {
 };
 const apiUrl = import.meta.env.VITE_API_URL;
 
+export const resetPicsItems = () => async (dispatch) => {
+    dispatch ({
+      type: RESET_PICS_ITEMS
+    })
+}
+
 const fetchPicsData = async (url, type, dispatch) => {
-  dispatch({ type: `${type}_START` });
+  dispatch({ type: `${type}_PICS_START` });
   try {
     const res = await axios.get(url, config);
     if (res.data.error) {
-      dispatch({ type: `${type}_FAIL` });
+      dispatch({ type: `${type}_PICS_FAIL` });
     } else {
-      dispatch({ type: `${type}_SUCCESS`, payload: res.data });
+      dispatch({ type: `${type}_PICS_SUCCESS`, payload: res.data });
     }
   } catch (err) {
-    dispatch({ type: `${type}_FAIL` });
+    dispatch({ type: `${type}_PICS_FAIL` });
   }
 };
 
 
-export const pics = (url) => async (dispatch) => {
-    await fetchPicsData(url, 'PICS', dispatch);
-};
+// Action creator to fetch more data
+// export const fetchPicsData = (url) => async (dispatch) => {
+//   dispatch({ type: `${type}_START`});
+//   try {
+//     const response = await fetch(`${url}`, config);
+//     const newData = await response.json();
+//     dispatch({ type: 'PICS_SUCCESS', payload: newData });
+//   } catch (error) {
+//     dispatch({ type: 'PICS_FAIL', error: error.message });
+//   }
+// };
 
+export const randomPics = (url) => async (dispatch) => {
+    await fetchPicsData(url, 'RANDOM', dispatch);
+};
+export const latestPics = (url) => async (dispatch) => {
+    await fetchPicsData(url, 'LATEST', dispatch);
+};
 
 export const topPics = (url) => async (dispatch) => {
     await fetchPicsData(url, 'TOP', dispatch);
 };
 
 
-export const randomPics = (url) => async (dispatch) => {
-    await fetchPicsData(url, 'RANDOM', dispatch);
-};
+// export const randomPics = (url) => async (dispatch) => {
+//     await fetchMoreData(url, 'RANDOM', dispatch);
+// };
 
 
 export const detail = (postId, setZoom_) => async (dispatch) => {
@@ -157,6 +179,13 @@ export const setQ = (q) => ({
   type: SET_Q,
   payload: q,
 });
+
+export const setTopRange = (topRange) => (dispatch) => {
+  dispatch({
+    type: SET_TOP_RANGE,
+    payload: topRange,
+  })
+};
 
 export const clearQueryString = () => ({
   type: SEARCH_CLEAR,

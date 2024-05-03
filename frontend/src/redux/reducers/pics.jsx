@@ -1,8 +1,14 @@
 import {
   FETCH_DATA_START,
-  PICS_START,
-  PICS_FAIL,
-  PICS_SUCCESS,
+  LATEST_PICS_START,
+  LATEST_PICS_FAIL,
+  LATEST_PICS_SUCCESS,
+  RANDOM_PICS_START,
+  RANDOM_PICS_SUCCESS,
+  RANDOM_PICS_FAIL,
+  TOP_PICS_START,
+  TOP_PICS_SUCCESS,
+  TOP_PICS_FAIL,
   TAGS_START,
   TAGS_SUCCESS,
   TAGS_FAIL,
@@ -14,7 +20,9 @@ import {
   SEARCH_FAIL,
   SEARCH_CLEAR,
   RESET_PARAMETER,
+  RESET_PICS_ITEMS,
   SET_Q,
+  SET_TOP_RANGE,
   RESET_SIDE_BAR,
   HOLD_SIDE_BAR,
   AUTHOR_PICS_SUCCESS,
@@ -29,12 +37,6 @@ import {
   DETAIL_START,
   DETAIL_SUCCESS,
   DETAIL_FAIL,
-  RANDOM_START,
-  RANDOM_SUCCESS,
-  RANDOM_FAIL,
-  TOP_START,
-  TOP_SUCCESS,
-  TOP_FAIL,
   DELETE_SUCCESS,
   DELETE_FAIL,
   TAG_SUGGESTION_SUCCESS,
@@ -46,11 +48,12 @@ const initialState = {
   pics_loading: true,
   pics: [],
   top_pics: [],
-  page: 1,
 
-
+  items: [],
   all_pics: [],
+  page: 1,
   hasMore: true,
+
   author_pics: [],
 
   savedPics: [],
@@ -68,6 +71,7 @@ const initialState = {
   searched: [],
 
   q: null,
+  top_range: null,
   side_status: true,
   side_holder: true,
 
@@ -75,19 +79,24 @@ const initialState = {
   authorImage: null,
   loading: true,
   tag_suggestion: [],
-  create_progress: null
+  create_progress: null,
 };
 
 export default function(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
-    case TOP_START:
-    case RANDOM_START:
-    case PICS_START:
+    case RESET_PICS_ITEMS:
+      return {
+        ...state,
+        pics: [],
+        pics_loading: true,
+      };
+    case LATEST_PICS_START:
+    case TOP_PICS_START:
+    case RANDOM_PICS_START:
     case FETCH_DATA_START:
       return {
         ...state,
-        pics_loading: true,
       };
     case DETAIL_START:
       return {
@@ -158,6 +167,11 @@ export default function(state = initialState, action) {
         ...state,
         q: payload, // Reset the parameter to its initial value.
       };
+    case SET_TOP_RANGE:
+      return {
+        ...state,
+        top_range: payload, // Reset the parameter to its initial value.
+      };
     case RESET_SIDE_BAR:
       return {
         ...state,
@@ -174,13 +188,19 @@ export default function(state = initialState, action) {
         searched_loading: false,
         searched: initialState, // Reset the parameter to its initial value.
       };
-    case TOP_SUCCESS:
-    case RANDOM_SUCCESS:
-    case PICS_SUCCESS:
+    case LATEST_PICS_SUCCESS:
+    case TOP_PICS_SUCCESS:
+    case RANDOM_PICS_SUCCESS:
+      // filter the payload to get only the new pics
+      const newPics = payload.results.filter((result) => {
+        return !state.pics.some((pic) => pic.id === result.id);
+      });
+
       return {
         ...state,
         pics_loading: false,
-        pics: payload
+        pics: [...state.pics, ...newPics],
+        hasMore: !!payload.next,
       };
     case SEARCH_SUCCESS:
       return {
@@ -191,7 +211,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         searched: [],
-      }
+      };
     case TAG_PICS_SUCCESS:
       return {
         ...state,
@@ -205,15 +225,15 @@ export default function(state = initialState, action) {
     case PICS_UPLOAD_PROGRESS:
       return {
         ...state,
-        create_progress: payload
-      }
-    case RANDOM_FAIL:
+        create_progress: payload,
+      };
+    case LATEST_PICS_FAIL:
+    case RANDOM_PICS_FAIL:
+    case TOP_PICS_FAIL:
     case AUTHOR_PICS_FAIL:
-    case TOP_FAIL:
     case DETAIL_FAIL:
     case TAGS_FAIL:
     case LIKE_FAIL:
-    case PICS_FAIL:
     case SEARCH_FAIL:
     case TAG_PICS_FAIL:
     case SAVED_PICS_FAIL:

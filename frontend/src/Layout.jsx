@@ -1,10 +1,8 @@
 import React, {Fragment, useEffect} from 'react';
 import { connect } from 'react-redux';
-import { checkauth, login } from './redux/action/auth';
-import { profile } from './redux/action/profile';
+import { checkauth } from './redux/action/auth';
 
 const LayOut = ({children, checkauth}) => {
-
     useEffect(() => {
         checkauth();
     }, [])

@@ -3,16 +3,16 @@ import Modal from 'react-bootstrap/Modal';
 import { delete_pic } from '../redux/action/pics'
 import { connect } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-import { pics } from '../redux/action/pics';
+import { latestPics } from '../redux/action/pics';
 
-function Delete({ show, setShow, delete_pic, pics, data }) {
+function Delete({ show, setShow, delete_pic, latestPics, data }) {
     const navigate = useNavigate(); // Get the history object
     const apiUrl = import.meta.env.VITE_API_URL;
 
     const handleDelete = () => {
         setShow(false);
         delete_pic(data.id)
-        pics(`${apiUrl}/api-post/`)
+        latestPics(`${apiUrl}/api-post/`)
         navigate('/');
     }
 
@@ -36,4 +36,4 @@ function Delete({ show, setShow, delete_pic, pics, data }) {
 const mapStateToProps = state => ({
     data: state.pics.detail
 })
-export default connect(mapStateToProps, { delete_pic, pics })(Delete)
+export default connect(mapStateToProps, { delete_pic, latestPics })(Delete)

@@ -7,7 +7,7 @@ import { useState } from 'react';
 import Layout from './Layout';
 import NavBar from './component/NavBar';
 import NotFound from './pics/NotFound';
-import Home from './pics/Home'
+// import Home from './pics/Home'
 import Pic from './pics/Detail'
 import TagFiltered from './pics/TagFiltered';
 import Login from './pics/Login';
@@ -64,7 +64,7 @@ const App = () => {
                     <Route exact path='/top/:page?' element={<TopPics />} />
                     <Route exact path='/random/:page?' element={<RandomPics />} />
                     <Route exact path='/latest/:page?' element={<LatestPics />} />
-                    <Route exact path='/' element={<Home />} />
+                    {/* <Route exact path='/' element={<Home />} /> */}
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </Layout>
