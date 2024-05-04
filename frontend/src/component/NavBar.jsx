@@ -20,7 +20,7 @@ const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticate
     return (
         <Navbar expand="lg" className="navbar-dark pt-3">
             <Container>
-                <Navbar.Brand className='logo'><Link to="/latest" onClick={() => (setCurrentPage(null))}><h3>DRP</h3></Link></Navbar.Brand>
+                <Navbar.Brand className='logo'><Link to="/" onClick={() => (setCurrentPage(1))}><h3>DRP</h3></Link></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto mx-5">
