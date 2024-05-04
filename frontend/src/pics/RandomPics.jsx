@@ -4,6 +4,8 @@ import { randomPics, resetPicsItems } from "../redux/action/pics";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Items from "../component/Items";
 import Loading from "../component/Loading";
+import FilterBar from "../component/FilterBar";
+import UpButton from "../component/upButton";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const RandomPics = ({
@@ -56,6 +58,7 @@ const RandomPics = ({
 
   return (
     <div style={{ margin: "0 8%" }}>
+      <FilterBar />
       <InfiniteScroll
         dataLength={pics.length}
         next={fetchMoreData}
@@ -65,6 +68,7 @@ const RandomPics = ({
       >
         {pics && <Items pics_g={pics} loading={false} />}
       </InfiniteScroll>
+      <UpButton />
     </div>
   );
 };

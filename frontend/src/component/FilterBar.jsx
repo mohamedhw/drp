@@ -8,7 +8,13 @@ import { setTopRange, resetPicsItems } from "../redux/action/pics";
 import { connect } from "react-redux";
 import { useEffect, useState } from "react";
 
-const FilterBar = ({ setCurrentPage, setTopRange, resetPicsItems, topRange, currentPage }) => {
+const FilterBar = ({
+  setCurrentPage,
+  setTopRange,
+  resetPicsItems,
+  topRange,
+  currentPage,
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const routeParam = location.pathname.split("/").filter(Boolean).pop();
@@ -17,21 +23,27 @@ const FilterBar = ({ setCurrentPage, setTopRange, resetPicsItems, topRange, curr
   const topRangeParam = queryParams.get("topRange");
 
   const filters = {
-    "top": "Top",
+    top: "Top",
     random: "Random",
     latest: "Latest",
   };
 
   const [filter, setFilter] = useState(filters[routeParam] || "Latest");
-  const [selectedFilter, setSelectedFilter] = useState(
-    filters[routeParam] || "Latest",
-  );
+  const [selectedFilter, setSelectedFilter] = useState(filters[routeParam] || "Latest");
 
   const handleFiltersDropdownChange = (eventKey) => {
     setFilter(eventKey);
     setSelectedFilter(eventKey);
     setCurrentPage(1);
   };
+
+  useEffect(()=>{
+    if(routeParam !== filter || selectedFilter){
+      setFilter(filters[routeParam] || "Latest");
+      setSelectedFilter(filters[routeParam] || "Latest");
+      setCurrentPage(1);
+    }
+  }, [routeParam])
 
   const ranges = {
     "1d": "Last Day",
@@ -42,25 +54,26 @@ const FilterBar = ({ setCurrentPage, setTopRange, resetPicsItems, topRange, curr
     all: "All",
   };
 
-  const [selectedRange, setSelectedRange] = useState(ranges[topRangeParam] || "Last Month");
+  const [selectedRange, setSelectedRange] = useState(
+    ranges[topRangeParam] || "Last Month",
+  );
   const handleRangeDropdownChange = (eventKey) => {
     setTopRange(eventKey);
     setSelectedRange(eventKey);
-    setCurrentPage(1)
+    setCurrentPage(1);
   };
 
-
   useEffect(() => {
-    if(topRangeParam === "top" && !selectedFilter){
+    if (routeParam === "top" && !selectedRange) {
       setTopRange(ranges[topRangeParam] || ranges["1M"]);
       setSelectedRange(ranges[topRangeParam] || ranges["1M"]);
-    }else{
+    } else {
       setTopRange(ranges[topRangeParam] || ranges["1M"]);
     }
-  }, [])
+  }, []);
 
   return (
-    <Navbar expand="lg" className="navbar-dark pt-3">
+    <Navbar expand="lg" className="navbar-dark pt-0">
       <Container>
         <Navbar.Toggle
           className="filters-toggle"
@@ -91,7 +104,7 @@ const FilterBar = ({ setCurrentPage, setTopRange, resetPicsItems, topRange, curr
                   <Dropdown.Item
                     as={Link}
                     to={`/${key}`}
-                    eventKey={key}
+                    eventKey={value}
                     key={key}
                     className={selectedFilter === value ? "selected" : ""}
                     active={value === selectedFilter}
@@ -139,9 +152,11 @@ const FilterBar = ({ setCurrentPage, setTopRange, resetPicsItems, topRange, curr
 };
 const mapStateToProps = (state) => ({
   topRange: state.pics.top_range,
-  currentPage: state.pages.currentPage
+  currentPage: state.pages.currentPage,
 });
 
-export default connect(mapStateToProps, { setCurrentPage, setTopRange, resetPicsItems })(
-  FilterBar,
-);
+export default connect(mapStateToProps, {
+  setCurrentPage,
+  setTopRange,
+  resetPicsItems,
+})(FilterBar);

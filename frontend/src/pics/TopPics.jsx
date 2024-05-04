@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { topPics, resetPicsItems } from "../redux/action/pics";
 import Items from "../component/Items";
 import Loading from "../component/Loading";
+import UpButton from "../component/upButton";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useNavigate, useLocation } from "react-router-dom";
 import { setCurrentPage } from "../redux/action/pages";
@@ -73,6 +74,7 @@ const TopPics = ({
 
   return (
     <div style={{ margin: "0 8%" }}>
+      <FilterBar />
       <InfiniteScroll
         dataLength={pics.length}
         next={fetchMoreData}
@@ -82,6 +84,7 @@ const TopPics = ({
       >
         {pics && <Items pics_g={pics} loading={false} />}
       </InfiniteScroll>
+      <UpButton />
     </div>
   );
 };

@@ -4,7 +4,6 @@ import Card from "react-bootstrap/Card";
 import { Link, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "../component/Loading";
-import FilterBar from "./FilterBar";
 
 const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
   const handelClick = () => {
@@ -24,7 +23,6 @@ const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
 
   return (
     <div style={{ margin: "auto", width: "100%", textAlign: "center" }}>
-      <FilterBar />
       <h1
         style={{ float: "left", color: "#00bda0", display: "inline" }}
         className="mb-5"

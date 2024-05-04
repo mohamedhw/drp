@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
+import FilterBar from './FilterBar';
 import { Link } from 'react-router-dom';
 import { logout } from '../redux/action/auth';
 import { connect } from 'react-redux';
@@ -18,7 +19,8 @@ const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticate
         setQ(null)
     }
     return (
-        <Navbar expand="lg" className="navbar-dark pt-3">
+      <div className="nav-s">
+        <Navbar expand="lg" className="navbar-dark p-0">
             <Container>
                 <Navbar.Brand className='logo'><Link to="/" onClick={() => (setCurrentPage(1))}><h3>DRP</h3></Link></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -50,6 +52,7 @@ const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticate
                 </Navbar.Collapse>
             </Container>
         </Navbar>  
+      </div>
     )
 }
 
