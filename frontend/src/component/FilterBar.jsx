@@ -4,11 +4,11 @@ import Navbar from "react-bootstrap/Navbar";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { setCurrentPage } from "../redux/action/pages";
-import { setTopRange } from "../redux/action/pics";
+import { setTopRange, resetPicsItems } from "../redux/action/pics";
 import { connect } from "react-redux";
 import { useEffect, useState } from "react";
 
-const FilterBar = ({ setCurrentPage, setTopRange, topRange, currentPage }) => {
+const FilterBar = ({ setCurrentPage, setTopRange, resetPicsItems, topRange, currentPage }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const routeParam = location.pathname.split("/").filter(Boolean).pop();
@@ -142,6 +142,6 @@ const mapStateToProps = (state) => ({
   currentPage: state.pages.currentPage
 });
 
-export default connect(mapStateToProps, { setCurrentPage, setTopRange })(
+export default connect(mapStateToProps, { setCurrentPage, setTopRange, resetPicsItems })(
   FilterBar,
 );

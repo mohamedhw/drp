@@ -83,26 +83,15 @@ const fetchPicsData = async (url, type, dispatch) => {
       dispatch({ type: `${type}_PICS_SUCCESS`, payload: res.data });
     }
   } catch (err) {
-    dispatch({ type: `${type}_PICS_FAIL` });
+    dispatch({ type: `${type}_PICS_FAIL`, err: err });
   }
 };
 
 
-// Action creator to fetch more data
-// export const fetchPicsData = (url) => async (dispatch) => {
-//   dispatch({ type: `${type}_START`});
-//   try {
-//     const response = await fetch(`${url}`, config);
-//     const newData = await response.json();
-//     dispatch({ type: 'PICS_SUCCESS', payload: newData });
-//   } catch (error) {
-//     dispatch({ type: 'PICS_FAIL', error: error.message });
-//   }
-// };
-
 export const randomPics = (url) => async (dispatch) => {
     await fetchPicsData(url, 'RANDOM', dispatch);
 };
+
 export const latestPics = (url) => async (dispatch) => {
     await fetchPicsData(url, 'LATEST', dispatch);
 };
@@ -111,10 +100,6 @@ export const topPics = (url) => async (dispatch) => {
     await fetchPicsData(url, 'TOP', dispatch);
 };
 
-
-// export const randomPics = (url) => async (dispatch) => {
-//     await fetchMoreData(url, 'RANDOM', dispatch);
-// };
 
 
 export const detail = (postId, setZoom_) => async (dispatch) => {
