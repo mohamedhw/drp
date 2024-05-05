@@ -86,7 +86,7 @@ const Profile = ({
   useEffect(() => {
     profile();
     setPlaceholders({ username: username_g, email: email_g });
-  }, [username_g, image_g]);
+  }, [username_g, image_g, email_g]);
 
   return (
     <div className="mt-4">

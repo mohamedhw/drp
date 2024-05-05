@@ -20,7 +20,7 @@ const NavBar = ({setModalShowLogin, setModalShowRegister, logout, isAuthenticate
     }
     return (
       <div className="nav-s">
-        <Navbar expand="lg" className="navbar-dark p-0">
+        <Navbar expand="lg" className="navbar-dark p-0 pt-2">
             <Container>
                 <Navbar.Brand className='logo'><Link to="/" onClick={() => (setCurrentPage(1))}><h3>DRP</h3></Link></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
