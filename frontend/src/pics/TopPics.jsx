@@ -1,12 +1,13 @@
 import { connect } from "react-redux";
 import { useEffect } from "react";
 import { topPics, resetPicsItems } from "../redux/action/pics";
-import Items from "../component/Items";
-import Loading from "../component/Loading";
-import UpButton from "../component/upButton";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { useNavigate, useLocation } from "react-router-dom";
 import { setCurrentPage } from "../redux/action/pages";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Items from "../component/Items";
+import Loading from "../component/Loading";
+import UpButton from "../component/UpButton";
+import FilterBar from "../component/FilterBar"
 
 const TopPics = ({
   pics,

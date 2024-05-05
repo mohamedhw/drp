@@ -1,12 +1,12 @@
 import { connect } from "react-redux";
 import { useEffect, useState } from "react";
 import { latestPics, resetPicsItems } from "../redux/action/pics";
+import { useNavigate, useLocation } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Items from "../component/Items";
 import Loading from "../component/Loading";
 import FilterBar from "../component/FilterBar";
-import UpButton from "../component/upButton";
-import { useNavigate, useLocation } from "react-router-dom";
+import UpButton from "../component/UpButton";
 
 
 const LatestPics = ({ hasMore, pics, loading, resetPicsItems, latestPics}) => {
