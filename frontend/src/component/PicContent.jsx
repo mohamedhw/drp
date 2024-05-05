@@ -36,7 +36,16 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
     },
     [isDragging, prevMousePosition, position],
   );
-
+  const handelZoomPosition = (e) => {
+    const imageContainer = e.target.parentElement;
+    const containerWidth = imageContainer.offsetWidth;
+    const containerHeight = imageContainer.offsetHeight;
+    const mouseX = e.clientX - imageContainer.getBoundingClientRect().left;
+    const mouseY = e.clientY - imageContainer.getBoundingClientRect().top;
+    const scrollLeft = mouseX * (data.get_width - containerWidth) / containerWidth;
+    const scrollTop = mouseY * (data.get_height - containerHeight) / containerHeight;
+    imageContainer.scrollTo(scrollLeft, scrollTop);
+  }
   const handleMouseUp = useCallback(() => {
     if (!moved) {
       handleImageLoad();
@@ -75,21 +84,8 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
   const handleImageLoad = () => {
     if (zoom_ === "showcase-norm") {
       setZoom_("showcase-zoom");
-      const imageContainer = document.querySelector(".scrollbox");
-      const containerHeight = imageContainer.offsetHeight;
-      const containerWidth = imageContainer.offsetWidth;
-      const minImageWidth = Math.max(data && data.image_width, containerWidth);
-      const scrollLeft = (minImageWidth - containerWidth) / 2;
-      const scrollTop = (data && data.image_height - containerHeight) / 2;
-      imageContainer.scrollTo(scrollLeft, scrollTop);
     } else if (zoom_ === "showcase-zoom") {
       setZoom_("showcase-x-zoom");
-      const imageContainer = document.querySelector(".scrollbox");
-      const containerWidth = imageContainer.offsetWidth;
-      const containerHeight = imageContainer.offsetHeight;
-      const scrollLeft = (data && data.image_width - containerWidth) / 2;
-      const scrollTop = (data && data.image_height - containerHeight) / 2;
-      imageContainer.scrollTo(scrollLeft, scrollTop);
     } else {
       setZoom_("showcase-norm");
     }
@@ -113,6 +109,7 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
         data && (
           <img
             onMouseDown={handleMouseDown}
+            onClick={handelZoomPosition}
             className={zoom_}
             id="img-content"
             src={data.image}

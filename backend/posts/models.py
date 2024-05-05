@@ -11,6 +11,14 @@ from PIL import Image
 from os.path import join
 
 
+class Visit(models.Model):
+    ip_address = models.CharField(max_length=45)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.ip_address
+
+
 class HashtagManager(models.Manager):
 
     def search(self, query=None):
@@ -54,7 +62,7 @@ class Post(models.Model):
     thumb = models.ImageField(blank=True, null=True, upload_to='image_gallery/thumbnails')
     saved = models.ManyToManyField(User, blank=True, related_name="save_pic")
     like = models.ManyToManyField(User, blank=True, related_name="like")
-    watched = models.ManyToManyField(User, blank=True, related_name="watched")
+    watched = models.ManyToManyField(Visit, blank=True, related_name="watched")
     objects = PostManager()
 
 
@@ -93,3 +101,4 @@ class Post(models.Model):
     def get_height(self):
         image_height = self.image.height
         return image_height
+

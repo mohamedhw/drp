@@ -4,14 +4,33 @@ import Card from "react-bootstrap/Card";
 import { Link, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "../component/Loading";
+import { useEffect, useState } from "react";
 
 const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
+  const [pageTarget, setPageTarget] = useState(true);
   const handelClick = () => {
     if (setShow) {
       setZoom_("showcase-norm");
       setShow(false);
     }
+    if (window.innerWidth < 1000) {
+      console.log(pageTarget)
+      setPageTarget(false);
+    }
   };
+
+  const [windowWidth, setWindowWidth] = useState();
+
+  // // Update window height and Width when the window is resized
+  // const handleResize = () => {
+  //   setWindowWidth(window.innerWidth);
+  // };
+  // window.addEventListener("resize", handleResize);
+  // // Remove event listener when the component is unmounted
+  // console.log(windowWidth)
+  // return () => {
+  //   window.removeEventListener("resize", handleResize);
+  // };
 
   const filters = {
     top: "Top Pics",
@@ -44,6 +63,7 @@ const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
             >
               <Link
                 to={`/pic/${post.id}`}
+                target={pageTarget && "_blank"}
                 className="article-2"
                 onClick={() => handelClick()}
               >

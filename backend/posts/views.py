@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework import permissions, authentication
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
-from .models import Post, Hashtag
+from .models import Post, Hashtag, Visit
 from .serializers import PostSerializers, HashtagSerializers
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
@@ -24,6 +24,7 @@ class Latest(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
 
     def get_queryset(self):
+            
         # Start with all items
         qs = super().get_queryset().order_by("-date")
         return qs
@@ -265,11 +266,18 @@ class Detail(generics.RetrieveAPIView):
 
     def add_view(self, item):
         try:
+            ip_address = self.request.META.get("REMOTE_ADDR")
+            visitors = Visit.objects.values_list("ip_address", flat=True)
             post = Post.objects.get(pk=item.pk)
-            if not self.request.user in post.watched.all():
-                post.watched.add(self.request.user)
-        except:
-            return Response({"error": "error"})
+            if ip_address in visitors:
+                visitor = Visit.objects.get(ip_address = ip_address)
+                if visitor  not in post.watched.all():
+                    post.watched.add(visitor)
+            else:
+                visitor = Visit.objects.create(ip_address=ip_address)
+                visitors.save()
+        except Exception as e:
+            return Response({"error": str(e)})
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()  # Retrieve the Main Item
