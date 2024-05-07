@@ -7,42 +7,43 @@ import Items from "../component/Items";
 import Loading from "../component/Loading";
 import FilterBar from "../component/FilterBar";
 import UpButton from "../component/UpButton";
+import { setCurrentPage } from "../redux/action/pages";
 
 
-const LatestPics = ({ hasMore, pics, loading, resetPicsItems, latestPics}) => {
+const LatestPics = ({ hasMore, pics, currentPage, setCurrentPage, loading, resetPicsItems, latestPics}) => {
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const pageParam = queryParams.get("page");
-  const [page, setPage] = useState(pageParam || 1);
+  const pageParam = currentPage || (queryParams.get("page") || 1);
 
   const buildUrl = () => {
     let url = `${apiUrl}/api-latest/`;
-    if (page) {
-      url += `?page=${page}`;
+    if (pageParam) {
+      url += `?page=${pageParam}`;
     }
     return url;
   };
 
   const fetchMoreData = async () => {
     const url = buildUrl();
-    if (page === 1 ) {
+    if (pageParam === 1 ) {
       await resetPicsItems();
     }
-    if (hasMore || page === 1) {
+    if (hasMore || pageParam === 1) {
       await latestPics(url);
-      const nextPage = page + 1;
-      if (page > 1) {
-        navigate(`?page=${page}`);
+      const nextPage = parseInt(pageParam) + 1;
+      if (pageParam > 1) {
+        navigate(`?page=${pageParam}`);
       }
-      setPage(nextPage);
+      setCurrentPage(nextPage)
     }
   };
 
   useEffect(() => {
     fetchMoreData();
+    setCurrentPage(1)
   }, []);
 
   if (loading) {
@@ -74,6 +75,6 @@ const mapStateToProps = (state) => ({
   hasMore: state.pics.hasMore,
 });
 
-export default connect(mapStateToProps, { latestPics, resetPicsItems })(
+export default connect(mapStateToProps, { latestPics, resetPicsItems, setCurrentPage })(
   LatestPics,
 );
