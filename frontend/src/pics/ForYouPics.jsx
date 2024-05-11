@@ -21,7 +21,6 @@ const ForYouPics = ({
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  console.log(pics)
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const pageParam = currentPage || queryParams.get("page") || 1;

@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { randomPics, resetPicsItems } from "../redux/action/pics";
 import { setCurrentPage } from "../redux/action/pages";
 import { useNavigate, useLocation } from "react-router-dom";

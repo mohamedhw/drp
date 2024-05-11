@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { latestPics, resetPicsItems } from "../redux/action/pics";
 import { useNavigate, useLocation } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
