@@ -107,7 +107,6 @@ class ForYouPics(generics.ListAPIView):
                 # Exclude liked_qs and saved_qs, then order by the number of matching tags and date
                 qs = qs.order_by(-ordering, "-created_at")
 
-                print("qs", qs)
                 return qs
 
 

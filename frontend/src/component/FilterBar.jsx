@@ -25,7 +25,7 @@ const FilterBar = ({
   const filters = {
     top: "Top",
     random: "Random",
-    latest: "Latest",
+    "": "Latest",
     hot: "Hot",
   };
   if (isAuthenticated) {

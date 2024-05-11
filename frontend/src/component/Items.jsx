@@ -34,8 +34,9 @@ const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
 
   const filters = {
     top: "Top Pics",
-    random: "Random",
-    latest: "Latest",
+    random: "Random Pics",
+    hot: "Hot Pics",
+    foryou: "Pics For You"
   };
   const location = useLocation();
   const routParam = location.pathname.split("/").filter(Boolean).pop();
@@ -46,7 +47,7 @@ const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
         style={{ float: "left", color: "#00bda0", display: "inline" }}
         className="mb-5"
       >
-        {filters[routParam]}
+        {filters[routParam] || "Latest Pics"}
       </h1>
       <Row style={{ margin: "auto", width: "100%", justifyContent: "center" }}>
         {pics_g.length > 0 ? (
