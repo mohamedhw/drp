@@ -14,6 +14,9 @@ export const TOP_PICS_START = 'TOP_PICS_START';
 export const TOP_PICS_SUCCESS = 'TOP_PICS_SUCCESS'
 export const TOP_PICS_FAIL = 'TOP_PICS_FAIL'
 
+export const HOT_PICS_START = 'HOT_PICS_START';
+export const HOT_PICS_SUCCESS = 'HOT_PICS_SUCCESS'
+export const HOT_PICS_FAIL = 'HOT_PICS_FAIL'
 
 // All available tags
 export const TAGS_START = 'TAGS_SUCCESS'
@@ -58,12 +61,15 @@ export const DELETE_FAIL = 'DELETE_FAIL'
 
 
 
+export const REGISTER_START = 'REGISTER_START';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAIL = 'REGISTER_FAIL';
 
+export const LOGIN_START = 'LOGIN_START';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
 
+export const LOGOUT_START = 'LOGOUT_START';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const LOGOUT_FAIL = 'LOGOUT_FAIL';
 

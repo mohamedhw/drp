@@ -7,7 +7,6 @@ import { useState } from 'react';
 import Layout from './Layout';
 import NavBar from './component/NavBar';
 import NotFound from './pics/NotFound';
-// import Home from './pics/Home'
 import Pic from './pics/Detail'
 import TagFiltered from './pics/TagFiltered';
 import Login from './pics/Login';
@@ -28,6 +27,7 @@ import LatestPics from './pics/LatestPics';
 import Delete from './pics/DeleteConfirmation';
 import Cover from './component/CoverUploader';
 import PicCrop from './pics/PicCrop';
+import HotPics from './pics/HotPics';
 
 const App = () => {
     const [modalShow, setModalShow] = useState(false);
@@ -61,6 +61,7 @@ const App = () => {
                     <Route exact path='/tag/:tagSlug' element={<TagFiltered />} />
                     <Route exact path='/pic/:postId' element={<Pic setShowDelete={setShowDelete} setShowCroper={setShowCroper} />} />
                     <Route exact path='/userallpics/:username/' element={<AllUserPics />} />
+                    <Route exact path='/hot/:page?' element={<HotPics />} />
                     <Route exact path='/top/:page?' element={<TopPics />} />
                     <Route exact path='/random/:page?' element={<RandomPics />} />
                     <Route exact path='/latest/:page?' element={<LatestPics />} />

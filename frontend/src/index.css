@@ -9,6 +9,11 @@ body {
   text-align: center;
 }
 
+.form-control:disabled {
+  opacity: 0.5;
+}
+
+
 * {
   font-family: Ubuntu;
   font-style: italic;
@@ -72,7 +77,8 @@ nav {
 }
 
 .side-hr {
-  margin: 0.5ch
+  margin: 0.5ch;
+  border: 1px solid #00dba0
 }
 
 .btn-up {
@@ -706,6 +712,10 @@ button {
   height: 50px;
   animation: spin 1s linear infinite;
   margin: auto;
+}
+.page-active a{
+  background-color: #00dba0 !important;
+  color: #000 !important
 }
 
 @keyframes spin {

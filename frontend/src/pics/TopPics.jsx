@@ -65,7 +65,7 @@ const TopPics = ({
 
   useEffect(() => {
     fetchMoreData();
-    setCurrentPage(1)
+    setCurrentPage()
   }, [topRangeParam]);
 
 

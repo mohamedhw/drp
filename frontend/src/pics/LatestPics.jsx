@@ -18,6 +18,8 @@ const LatestPics = ({ hasMore, pics, currentPage, setCurrentPage, loading, reset
   const queryParams = new URLSearchParams(location.search);
   const pageParam = currentPage || (queryParams.get("page") || 1);
 
+  const routeParam = location.pathname.split("/").filter(Boolean).pop();
+
   const buildUrl = () => {
     let url = `${apiUrl}/api-latest/`;
     if (pageParam) {
@@ -42,9 +44,9 @@ const LatestPics = ({ hasMore, pics, currentPage, setCurrentPage, loading, reset
   };
 
   useEffect(() => {
-    fetchMoreData();
     setCurrentPage(1)
-  }, []);
+    fetchMoreData();
+  }, [routeParam]);
 
   if (loading) {
     return <Loading />;
@@ -59,7 +61,7 @@ const LatestPics = ({ hasMore, pics, currentPage, setCurrentPage, loading, reset
         next={fetchMoreData}
         hasMore={hasMore}
         loader={<p className="mt-5 loading-more-result">Loading...</p>}
-        endMessage={<p className="mt-5 loading-more-result">No more items</p>}
+        endMessage={pics.length > 1 && <p className="mt-5 loading-more-result">No more items</p>}
       >
         {pics && <Items pics_g={pics} loading={false} />}
       </InfiniteScroll>

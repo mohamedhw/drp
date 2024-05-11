@@ -37,7 +37,7 @@ const Side = ({
   };
 
   useEffect(() => {
-    setDatePosted(post?.date);
+    setDatePosted(post?.created_at);
     const timeDifference = new Date() - new Date(datePosted);
 
     // Define the time units for formatting
@@ -48,15 +48,15 @@ const Side = ({
     const years = days * 365;
 
     if (timeDifference < minutes) {
-      setTimeAgo(Math.floor(timeDifference / seconds) + " seconds ago");
+      setTimeAgo(Math.floor(timeDifference / seconds) + "S ago");
     } else if (timeDifference < hours) {
-      setTimeAgo(Math.floor(timeDifference / minutes) + " minutes ago");
+      setTimeAgo(Math.floor(timeDifference / minutes) + "m ago");
     } else if (timeDifference < days) {
-      setTimeAgo(Math.floor(timeDifference / hours) + " hours ago");
+      setTimeAgo(Math.floor(timeDifference / hours) + "h ago");
     } else if (timeDifference < years) {
-      setTimeAgo(Math.floor(timeDifference / days) + " days ago");
+      setTimeAgo(Math.floor(timeDifference / days) + "d ago");
     } else {
-      setTimeAgo(Math.floor(timeDifference / years) + " years ago");
+      setTimeAgo(Math.floor(timeDifference / years) + "Y ago");
     }
   }, [datePosted, post, save, saveToggle]);
 

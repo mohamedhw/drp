@@ -5,10 +5,12 @@ import { useEffect } from "react";
 import { search } from "../redux/action/pics";
 import Pagination from "../component/Pagination";
 import Loading from "../component/Loading";
+import { setCurrentPage } from "../redux/action/pages";
 
 const Searched = ({
   pics_g,
   loading,
+  setCurrentPage,
   currentPage,
   search,
   count,
@@ -80,4 +82,4 @@ const mapStateToProps = (state) => ({
   previous: state.pics.searched.previous,
 });
 
-export default connect(mapStateToProps, { search })(Searched);
+export default connect(mapStateToProps, { search, setCurrentPage })(Searched);

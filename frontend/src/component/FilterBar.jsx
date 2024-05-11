@@ -23,9 +23,10 @@ const FilterBar = ({
   const topRangeParam = queryParams.get("topRange");
 
   const filters = {
-    top: "Top",
-    random: "Random",
-    latest: "Latest",
+    "top": "Top",
+    "random": "Random",
+    "latest": "Latest",
+    "hot": "Hot",
   };
 
   const [filter, setFilter] = useState(filters[routeParam] || "Latest");

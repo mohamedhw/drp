@@ -208,17 +208,18 @@ class RegisterUser(APIView):
             return Response({"error": "username address must be unique."})
         elif queryset.filter(email=email).exists():
             return Response({"error": "Email address must be unique."})
-        try:
-            # Validate password using Django's built-in validators
-            validate_password(password, user=None, password_validators=None)
-            if password == password2:
-                user = User.objects.create_user(
-                    username=username, email=email, password=password)
-                user.is_active = False
-                user.save()
-                activateEmail(request, user, email)
-                return Response({"success": "User created successfully!"})
-            else:
-                return Response({"error": "Passwords do not match!"})
-        except ValidationError as e:
-            return Response({"error": e.messages})
+        else:
+            try:
+                # Validate password using Django's built-in validators
+                validate_password(password, user=None, password_validators=None)
+                if password == password2:
+                    user = User.objects.create_user(
+                        username=username, email=email, password=password)
+                    user.is_active = False
+                    user.save()
+                    activateEmail(request, user, email)
+                    return Response({"success": "User created successfully!"})
+                else:
+                    return Response({"error": "Passwords do not match!"})
+            except ValidationError as e:
+                return Response({"error": e.messages})

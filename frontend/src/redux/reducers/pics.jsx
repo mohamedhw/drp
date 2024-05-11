@@ -9,6 +9,9 @@ import {
   TOP_PICS_START,
   TOP_PICS_SUCCESS,
   TOP_PICS_FAIL,
+  HOT_PICS_START,
+  HOT_PICS_SUCCESS,
+  HOT_PICS_FAIL,
   TAGS_START,
   TAGS_SUCCESS,
   TAGS_FAIL,
@@ -47,7 +50,6 @@ import {
 const initialState = {
   pics_loading: true,
   pics: [],
-  top_pics: [],
 
   items: [],
   all_pics: [],
@@ -91,6 +93,7 @@ export default function(state = initialState, action) {
         pics: [],
         pics_loading: true,
       };
+    case HOT_PICS_START:
     case LATEST_PICS_START:
     case TOP_PICS_START:
     case RANDOM_PICS_START:
@@ -188,6 +191,7 @@ export default function(state = initialState, action) {
         searched_loading: false,
         searched: initialState, // Reset the parameter to its initial value.
       };
+    case HOT_PICS_SUCCESS:
     case LATEST_PICS_SUCCESS:
     case TOP_PICS_SUCCESS:
     case RANDOM_PICS_SUCCESS:
@@ -227,6 +231,7 @@ export default function(state = initialState, action) {
         ...state,
         create_progress: payload,
       };
+    case HOT_PICS_FAIL:
     case LATEST_PICS_FAIL:
     case RANDOM_PICS_FAIL:
     case TOP_PICS_FAIL:

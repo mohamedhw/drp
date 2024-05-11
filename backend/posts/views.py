@@ -1,7 +1,7 @@
 from rest_framework import status
 from django.utils import timezone
-from datetime import timedelta
-from django.db.models import Count, Case, When, Value, IntegerField
+from datetime import timedelta, datetime
+from django.db.models import Count, Case, When, Value, IntegerField, FloatField, F, ExpressionWrapper
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404, redirect
 from rest_framework import generics
@@ -11,8 +11,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from .models import Post, Hashtag, Visit
 from .serializers import PostSerializers, HashtagSerializers
+from .utils import calculate_hotness
 from django.db.models import Q
-from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect
 
@@ -26,11 +26,40 @@ class Latest(generics.ListAPIView):
     def get_queryset(self):
             
         # Start with all items
-        qs = super().get_queryset().order_by("-date")
+        qs = super().get_queryset().order_by("-created_at")
         return qs
 
+class HotPics(generics.ListAPIView):
+    serializer_class = PostSerializers
+    permission_classes = (permissions.AllowAny,)
 
-class Home(generics.ListAPIView):
+    def get_queryset(self):
+        # Calculate the age of the post in hours
+        age_expression = ExpressionWrapper(
+            (timezone.now() - F("created_at")) / 3600,
+            output_field=FloatField(),
+        )
+
+        # Define weights for different parameters
+        likes_weight = 0.7
+        views_weight = 0.2
+        recent_activity_weight = 0.1
+
+        # Calculate hotness score
+        queryset = Post.objects.annotate(
+            age_in_hours=age_expression,
+            like_count=Count("like"),
+            watched_count=Count("watched"),
+            hotness_score=(
+                (Count("like") * likes_weight) +
+                (Count("watched") * views_weight) +
+                (recent_activity_weight / F("age_in_hours"))
+            )
+        ).order_by("-hotness_score")
+
+        return queryset
+
+class ForYouPics(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializers
     permission_classes = (permissions.AllowAny,)
@@ -41,7 +70,7 @@ class Home(generics.ListAPIView):
 
         # check if there is a search request
         if query:
-            qs = super().get_queryset().order_by("-date")
+            qs = super().get_queryset().order_by("-created_at")
             tags = Hashtag.objects.filter(tag__icontains=query)
             qs = qs.filter(tags__in=tags).distinct()
             return qs
@@ -50,7 +79,6 @@ class Home(generics.ListAPIView):
         else:
             user = self.request.user
             if user.id:
-
                 # get the posts where the user in the like field
                 liked_qs = Post.objects.filter(like=user)  # user liked posts
                 # get the posts where the user in the saved field
@@ -77,7 +105,7 @@ class Home(generics.ListAPIView):
                 )
 
                 # Exclude liked_qs and saved_qs, then order by the number of matching tags and date
-                qs = qs.order_by(-ordering, "-date")
+                qs = qs.order_by(-ordering, "-created_at")
 
                 return qs
             # If there is there is no user then show latest posts
@@ -89,7 +117,7 @@ class Home(generics.ListAPIView):
                 ten_days_ago = now - timedelta(days=10)
                 thirty_days_ago = now - timedelta(days=30)
 
-                qs = Post.objects.filter(date__gte=ten_days_ago).order_by("?")
+                qs = Post.objects.filter(created_at__gte=ten_days_ago).order_by("?")
                 qs = qs.annotate(like_count=Count("like"))
                 qs_day = qs.order_by("-like_count")
                 related_items_count = qs_day.count()  # number of related pics
@@ -99,7 +127,7 @@ class Home(generics.ListAPIView):
                     # Define the date range
                     now = timezone.now()
                     ten_days_ago = now - timedelta(days=3)
-                    qs = Post.objects.filter(date__gte=ten_days_ago).order_by("?")
+                    qs = Post.objects.filter(created_at__gte=ten_days_ago).order_by("?")
                     related_items_count = qs.count()  # number of related pics
 
                     # Extract primary keys from related_pics
@@ -122,45 +150,25 @@ class TopPics(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
 
     def get_queryset(self):
-        now = timezone.now()
-        top_range_qs = self.request.GET.get("topRange")
-        ranges = ["1d", "3d", "1w", "1M", "6M", "1y", "all"]
-
-        time_range = now - timedelta(days=30)
-        qs = Post.objects.filter(date__gte=time_range)
-        if top_range_qs in ranges:
-            if top_range_qs[1] == "d":
-                top_range_num = int(top_range_qs[0])
-                if top_range_num == 1:
-                    time_range = now - timedelta(days=1)
-                    qs = Post.objects.filter(date__gte=time_range)
-                elif top_range_num == 3:
-                    time_range = now - timedelta(days=3)
-                    qs = Post.objects.filter(date__gte=time_range)
-            elif top_range_qs[1] == "w":
-                time_range = now - timedelta(days=7)
-                qs = Post.objects.filter(date__gte=time_range)
-            elif top_range_qs[1] == "M":
-                top_range_num = int(top_range_qs[0])
-                if top_range_num == 1:
-                    time_range = now - timedelta(days=30)
-                    qs = Post.objects.filter(date__gte=time_range)
-                elif top_range_num == 6:
-                    time_range = now - timedelta(days=180)
-                    qs = Post.objects.filter(date__gte=time_range)
-            elif top_range_qs[1] == "y":
-                time_range = now - timedelta(days=365)
-                qs = Post.objects.filter(date__gte=time_range)
-            elif top_range_qs == "all":
-                qs = Post.objects.all()
-            else:
-                qs = Post.objects.all()
+        now = datetime.now()
+        top_range_qs = self.request.GET.get("topRange", "1M")
+        time_ranges = {
+            "1d": timedelta(days=1),
+            "3d": timedelta(days=3),
+            "1w": timedelta(weeks=1),
+            "1M": timedelta(days=30),
+            "6M": timedelta(days=180),
+            "1y": timedelta(days=365),
+            "all": None
+        }
+        time_range = time_ranges.get(top_range_qs)
+        if time_range is not None:
+            time_range_start = now - time_range
+            qs = Post.objects.filter(created_at__gte=time_range_start)
         else:
-            time_range = now - timedelta(days=30)
-            qs = Post.objects.filter(date__gte=time_range)
+            qs = Post.objects.all()
 
-        qs = qs.annotate(like_count=Count("like"))
-        qs = qs.order_by("-like_count")
+        qs = qs.annotate(like_count=Count("like")).order_by("-like_count")
         return qs
 
 
@@ -200,6 +208,7 @@ def save_pic(request, pk):
         else:
             post.saved.add(request.user)
             return Response({"success": "pic added to your saved pics list"})
+        
     except:
         return Response({"error": "error"})
 
@@ -227,7 +236,7 @@ class Search(generics.ListAPIView):
         if query:
             tags = Hashtag.objects.filter(tag__icontains=query)
             qs = qs.filter(tags__in=tags).distinct()
-        qs = qs.order_by("-date")
+        qs = qs.order_by("-created_at")
         return qs
 
 
@@ -266,16 +275,20 @@ class Detail(generics.RetrieveAPIView):
 
     def add_view(self, item):
         try:
+            post = Post.objects.get(pk=item.pk)
             ip_address = self.request.META.get("REMOTE_ADDR")
             visitors = Visit.objects.values_list("ip_address", flat=True)
-            post = Post.objects.get(pk=item.pk)
-            if ip_address in visitors:
-                visitor = Visit.objects.get(ip_address = ip_address)
-                if visitor  not in post.watched.all():
-                    post.watched.add(visitor)
-            else:
+            
+            if ip_address not in visitors:
                 visitor = Visit.objects.create(ip_address=ip_address)
-                visitors.save()
+            else:
+                visitor = Visit.objects.get(ip_address=ip_address)
+                
+            if visitor not in post.watched.all():
+                post.watched.add(visitor)
+                post.save()
+            
+            return Response({"success": "View added successfully."})
         except Exception as e:
             return Response({"error": str(e)})
 

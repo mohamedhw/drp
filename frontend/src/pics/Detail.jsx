@@ -26,7 +26,7 @@ const Pic = ({
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="25"
-      height="25"
+      height="30"
       fill="currentColor"
       className="bi bi-arrow-right-square"
       viewBox="0 0 16 16"

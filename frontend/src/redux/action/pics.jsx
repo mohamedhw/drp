@@ -15,6 +15,9 @@ import {
   TOP_PICS_START,
   TOP_PICS_SUCCESS,
   TOP_PICS_FAIL,
+  HOT_PICS_START,
+  HOT_PICS_SUCCESS,
+  HOT_PICS_FAIL,
   TAGS_START,
   TAGS_SUCCESS,
   TAGS_FAIL,
@@ -100,6 +103,9 @@ export const topPics = (url) => async (dispatch) => {
     await fetchPicsData(url, 'TOP', dispatch);
 };
 
+export const hotPics = (url) => async (dispatch) => {
+    await fetchPicsData(url, 'HOT', dispatch);
+};
 
 
 export const detail = (postId, setZoom_) => async (dispatch) => {
