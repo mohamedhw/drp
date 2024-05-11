@@ -12,6 +12,9 @@ import {
   HOT_PICS_START,
   HOT_PICS_SUCCESS,
   HOT_PICS_FAIL,
+  FOR_YOU_PICS_START,
+  FOR_YOU_PICS_SUCCESS,
+  FOR_YOU_PICS_FAIL,
   TAGS_START,
   TAGS_SUCCESS,
   TAGS_FAIL,
@@ -93,6 +96,7 @@ export default function(state = initialState, action) {
         pics: [],
         pics_loading: true,
       };
+    case FOR_YOU_PICS_START:
     case HOT_PICS_START:
     case LATEST_PICS_START:
     case TOP_PICS_START:
@@ -191,6 +195,7 @@ export default function(state = initialState, action) {
         searched_loading: false,
         searched: initialState, // Reset the parameter to its initial value.
       };
+    case FOR_YOU_PICS_SUCCESS:
     case HOT_PICS_SUCCESS:
     case LATEST_PICS_SUCCESS:
     case TOP_PICS_SUCCESS:
@@ -231,6 +236,7 @@ export default function(state = initialState, action) {
         ...state,
         create_progress: payload,
       };
+    case FOR_YOU_PICS_FAIL:
     case HOT_PICS_FAIL:
     case LATEST_PICS_FAIL:
     case RANDOM_PICS_FAIL:

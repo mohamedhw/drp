@@ -18,7 +18,7 @@ from django.views.decorators.csrf import csrf_protect
 
 
 
-class Latest(generics.ListAPIView):
+class LatestPics(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializers
     permission_classes = (permissions.AllowAny,)
@@ -107,38 +107,7 @@ class ForYouPics(generics.ListAPIView):
                 # Exclude liked_qs and saved_qs, then order by the number of matching tags and date
                 qs = qs.order_by(-ordering, "-created_at")
 
-                return qs
-            # If there is there is no user then show latest posts
-            else:
-
-                # Define the date range
-                now = timezone.now()
-                one_days_ago = now - timedelta(days=1)
-                ten_days_ago = now - timedelta(days=10)
-                thirty_days_ago = now - timedelta(days=30)
-
-                qs = Post.objects.filter(created_at__gte=ten_days_ago).order_by("?")
-                qs = qs.annotate(like_count=Count("like"))
-                qs_day = qs.order_by("-like_count")
-                related_items_count = qs_day.count()  # number of related pics
-
-                additional_items_needed = 24 - related_items_count
-                if related_items_count < 24:
-                    # Define the date range
-                    now = timezone.now()
-                    ten_days_ago = now - timedelta(days=3)
-                    qs = Post.objects.filter(created_at__gte=ten_days_ago).order_by("?")
-                    related_items_count = qs.count()  # number of related pics
-
-                    # Extract primary keys from related_pics
-                    related_pics_pks = qs_day.values_list("pk", flat=True)
-
-                    additional_items = Post.objects.exclude(
-                        Q(pk__in=related_pics_pks)
-                    ).order_by("?")[:additional_items_needed]
-
-                    qs = list(qs) + list(additional_items)
-
+                print("qs", qs)
                 return qs
 
 

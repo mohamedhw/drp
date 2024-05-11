@@ -18,6 +18,11 @@ export const HOT_PICS_START = 'HOT_PICS_START';
 export const HOT_PICS_SUCCESS = 'HOT_PICS_SUCCESS'
 export const HOT_PICS_FAIL = 'HOT_PICS_FAIL'
 
+export const FOR_YOU_PICS_START = 'FOR_YOU_PICS_START';
+export const FOR_YOU_PICS_SUCCESS = 'FOR_YOU_PICS_SUCCESS'
+export const FOR_YOU_PICS_FAIL = 'FOR_YOU_PICS_FAIL'
+
+
 // All available tags
 export const TAGS_START = 'TAGS_SUCCESS'
 export const TAGS_SUCCESS = 'TAGS_SUCCESS'

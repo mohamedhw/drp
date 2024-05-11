@@ -1,6 +1,10 @@
 from django.urls import path
 from .views import (
     HotPics,
+    TopPics,
+    LatestPics,
+    RandomPics,
+    ForYouPics,
     Detail,
     TagFilterView,
     Search,
@@ -12,10 +16,7 @@ from .views import (
     SavedPics,
     like_pic,
     AllTags,
-    TopPics,
     TagsSuggestion,
-    RandomPics,
-    Latest,
     )
 
 
@@ -23,7 +24,8 @@ from .views import (
 
 urlpatterns = [
     path('api-hot/', HotPics.as_view()),
-    path('api-latest/', Latest.as_view()),
+    path('api-foryou/', ForYouPics.as_view()),
+    path('api-latest/', LatestPics.as_view()),
     path('api-post/<str:pk>/', Detail.as_view()),
     path('api-tag/<slug:tag_slug>/', TagFilterView.as_view()),
     path('api-search/', Search.as_view()),

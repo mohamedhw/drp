@@ -28,6 +28,7 @@ import Delete from './pics/DeleteConfirmation';
 import Cover from './component/CoverUploader';
 import PicCrop from './pics/PicCrop';
 import HotPics from './pics/HotPics';
+import ForYouPics from './pics/ForYouPics';
 
 const App = () => {
     const [modalShow, setModalShow] = useState(false);
@@ -50,13 +51,14 @@ const App = () => {
 
                 <Routes>
                     <Route element={<PrivetRoute setModalShow={setModalShow} />}>
-                        <Route path='/profile' element={<Profile setShow={setShowCover} setCoverPic={setCoverPic} />} />
-                        <Route path='/create' element={<Create />} />
-                        <Route path='/saved' element={<SavedPics />} />
-                        <Route path='/moresaved' element={<AllSavedPics />} />
+                        <Route exact path='/profile' element={<Profile setShow={setShowCover} setCoverPic={setCoverPic} />} />
+                        <Route exact path='/create' element={<Create />} />
+                        <Route exact path='/saved' element={<SavedPics />} />
+                        <Route exact path='/moresaved' element={<AllSavedPics />} />
+                        <Route exact path='/foryou/:page?' element={<ForYouPics />} />
                     </Route>
                     <Route exact path='/tags' element={<Tags />} />
-                    <Route path='/userpics/:authorname' element={<UserPics />} />
+                    <Route exact path='/userpics/:authorname' element={<UserPics />} />
                     <Route exact path='/search' element={<Searched />} />
                     <Route exact path='/tag/:tagSlug' element={<TagFiltered />} />
                     <Route exact path='/pic/:postId' element={<Pic setShowDelete={setShowDelete} setShowCroper={setShowCroper} />} />
@@ -64,8 +66,7 @@ const App = () => {
                     <Route exact path='/hot/:page?' element={<HotPics />} />
                     <Route exact path='/top/:page?' element={<TopPics />} />
                     <Route exact path='/random/:page?' element={<RandomPics />} />
-                    <Route exact path='/latest/:page?' element={<LatestPics />} />
-                    <Route exact path='/' element={<LatestPics />} />
+                    <Route exact path='/:page?' element={<LatestPics />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </Layout>

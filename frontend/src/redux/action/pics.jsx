@@ -18,6 +18,9 @@ import {
   HOT_PICS_START,
   HOT_PICS_SUCCESS,
   HOT_PICS_FAIL,
+  FOR_YOU_PICS_START,
+  FOR_YOU_PICS_SUCCESS,
+  FOR_YOU_PICS_FAIL,
   TAGS_START,
   TAGS_SUCCESS,
   TAGS_FAIL,
@@ -107,6 +110,9 @@ export const hotPics = (url) => async (dispatch) => {
     await fetchPicsData(url, 'HOT', dispatch);
 };
 
+export const forYouPics = (url) => async (dispatch) => {
+    await fetchPicsData(url, 'FOR_YOU', dispatch);
+};
 
 export const detail = (postId, setZoom_) => async (dispatch) => {
   const url = `${apiUrl}/api-post/${postId}/`;

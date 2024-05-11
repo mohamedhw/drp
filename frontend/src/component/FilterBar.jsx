@@ -14,6 +14,7 @@ const FilterBar = ({
   resetPicsItems,
   topRange,
   currentPage,
+  isAuthenticated,
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,16 +22,19 @@ const FilterBar = ({
 
   const queryParams = new URLSearchParams(location.search);
   const topRangeParam = queryParams.get("topRange");
-
   const filters = {
-    "top": "Top",
-    "random": "Random",
-    "latest": "Latest",
-    "hot": "Hot",
+    top: "Top",
+    random: "Random",
+    latest: "Latest",
+    hot: "Hot",
   };
-
+  if (isAuthenticated) {
+    filters["foryou"] = "ForYou";
+  }
   const [filter, setFilter] = useState(filters[routeParam] || "Latest");
-  const [selectedFilter, setSelectedFilter] = useState(filters[routeParam] || "Latest");
+  const [selectedFilter, setSelectedFilter] = useState(
+    filters[routeParam] || "Latest",
+  );
 
   const handleFiltersDropdownChange = (eventKey) => {
     setFilter(eventKey);
@@ -38,13 +42,13 @@ const FilterBar = ({
     setCurrentPage(1);
   };
 
-  useEffect(()=>{
-    if(routeParam !== filter || selectedFilter){
+  useEffect(() => {
+    if (routeParam !== filter || selectedFilter) {
       setFilter(filters[routeParam] || "Latest");
       setSelectedFilter(filters[routeParam] || "Latest");
       setCurrentPage(1);
     }
-  }, [routeParam])
+  }, [routeParam]);
 
   const ranges = {
     "1d": "Last Day",
@@ -115,7 +119,7 @@ const FilterBar = ({
                 ))}
               </Dropdown.Menu>
             </Dropdown>
-            {routeParam == "top" && (
+            {routeParam === "top" && (
               <Dropdown className="mx-1" onSelect={handleRangeDropdownChange}>
                 <Dropdown.Toggle
                   className="btn-s custom-dropdown-button"
@@ -154,6 +158,7 @@ const FilterBar = ({
 const mapStateToProps = (state) => ({
   topRange: state.pics.top_range,
   currentPage: state.pages.currentPage,
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(mapStateToProps, {
