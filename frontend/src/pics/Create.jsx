@@ -5,13 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import Container from "react-bootstrap/esm/Container";
 import { tags, tag_suggestion } from "../redux/action/pics";
+import { setCurrentPage } from "../redux/action/pages";
 import Form from "react-bootstrap/Form";
 import { IoIosCloseCircle } from "react-icons/io";
 import Badge from "react-bootstrap/Badge";
 import Loading from "../component/Loading";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
-const Create = ({ user_g, tag_suggestion, tag_suggestions }) => {
+const Create = ({ user_g, tag_suggestion, tag_suggestions, setCurrentPage }) => {
   const user = user_g;
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
@@ -53,6 +54,7 @@ const Create = ({ user_g, tag_suggestion, tag_suggestions }) => {
       .then(() => {
         setIsLoading(false);
         setErr(null);
+        setCurrentPage()
         navigate("/");
       })
       .catch((err) => {
@@ -158,4 +160,4 @@ const mapStateToProps = (state) => ({
   tag_suggestions: state.pics.tag_suggestion.results,
 });
 
-export default connect(mapStateToProps, { tags, tag_suggestion })(Create);
+export default connect(mapStateToProps, { tags, tag_suggestion, setCurrentPage })(Create);
