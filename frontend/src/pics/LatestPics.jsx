@@ -30,7 +30,7 @@ const LatestPics = ({ hasMore, pics, currentPage, setCurrentPage, loading, reset
 
   const fetchMoreData = async () => {
     const url = buildUrl();
-    if (pageParam === 1 ) {
+    if (pageParam === 1) {
       await resetPicsItems();
     }
     if (hasMore || pageParam === 1) {
@@ -44,9 +44,9 @@ const LatestPics = ({ hasMore, pics, currentPage, setCurrentPage, loading, reset
   };
 
   useEffect(() => {
-    setCurrentPage(1)
+    setCurrentPage()
     fetchMoreData();
-  }, [routeParam]);
+  }, []);
 
   if (loading) {
     return <Loading />;
