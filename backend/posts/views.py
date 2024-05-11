@@ -11,7 +11,6 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from .models import Post, Hashtag, Visit
 from .serializers import PostSerializers, HashtagSerializers
-from .utils import calculate_hotness
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect
@@ -29,24 +28,27 @@ class LatestPics(generics.ListAPIView):
         qs = super().get_queryset().order_by("-created_at")
         return qs
 
+
 class HotPics(generics.ListAPIView):
     serializer_class = PostSerializers
     permission_classes = (permissions.AllowAny,)
-
     def get_queryset(self):
+
+        # Get current time
+        now = timezone.now()
+
         # Calculate the age of the post in hours
         age_expression = ExpressionWrapper(
-            (timezone.now() - F("created_at")) / 3600,
+            (now - F("created_at")) / timedelta(hours=1),
             output_field=FloatField(),
         )
-
         # Define weights for different parameters
         likes_weight = 0.7
         views_weight = 0.2
         recent_activity_weight = 0.1
 
         # Calculate hotness score
-        queryset = Post.objects.annotate(
+        qs = Post.objects.annotate(
             age_in_hours=age_expression,
             like_count=Count("like"),
             watched_count=Count("watched"),
@@ -57,7 +59,7 @@ class HotPics(generics.ListAPIView):
             )
         ).order_by("-hotness_score")
 
-        return queryset
+        return qs
 
 class ForYouPics(generics.ListAPIView):
     queryset = Post.objects.all()
