@@ -7,6 +7,7 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
   const [prevMousePosition, setPrevMousePosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [moved, setMoved] = useState();
+  const [zooming, setZooming] = useState(false);
 
   const handleMouseMove = useCallback(
     (e) => {
@@ -36,22 +37,27 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
     },
     [isDragging, prevMousePosition, position],
   );
+
   const handelZoomPosition = (e) => {
-    const imageContainer = e.target.parentElement;
-    const containerWidth = imageContainer.offsetWidth;
-    const containerHeight = imageContainer.offsetHeight;
-    const mouseX = e.clientX - imageContainer.getBoundingClientRect().left;
-    const mouseY = e.clientY - imageContainer.getBoundingClientRect().top;
-    const scrollLeft = mouseX * (data.get_width - containerWidth) / containerWidth;
-    const scrollTop = mouseY * (data.get_height - containerHeight) / containerHeight;
-    imageContainer.scrollTo(scrollLeft, scrollTop);
+    // if (zooming) return; // Do not execute if zooming
+    // e.preventDefault();
+    // const imageContainer = e.target.parentElement;
+    // const containerWidth = imageContainer.offsetWidth;
+    // const containerHeight = imageContainer.offsetHeight;
+    // const mouseX = e.clientX - imageContainer.getBoundingClientRect().left;
+    // const mouseY = e.clientY - imageContainer.getBoundingClientRect().top;
+    // const scrollLeft = mouseX * (data.get_width - containerWidth) / containerWidth;
+    // const scrollTop = mouseY * (data.get_height - containerHeight) / containerHeight;
+    // imageContainer.scrollTo(scrollLeft, scrollTop);
   }
+
   const handleMouseUp = useCallback(() => {
     if (!moved) {
       handleImageLoad();
     }
     setIsDragging(false);
     setMoved(false);
+    setZooming(false); // Reset zooming state
   }, [isDragging, position, prevMousePosition]);
 
   useEffect(() => {
@@ -67,9 +73,9 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
     };
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
+
   const handleMouseDown = (e) => {
     e.preventDefault();
-
     setIsDragging(true);
     setPrevMousePosition({
       x: e.clientX,
@@ -79,6 +85,7 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
       x: e.target.parentElement.scrollLeft,
       y: e.target.parentElement.scrollTop,
     });
+    setZooming(true); // Set zooming state when mouse is down
   };
 
   const handleImageLoad = () => {
@@ -108,8 +115,7 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
       ) : (
         data && (
           <img
-            onMouseDown={handleMouseDown}
-            onClick={handelZoomPosition}
+            onMouseDown={e => {handleMouseDown(e), handelZoomPosition(e)}}
             className={zoom_}
             id="img-content"
             src={data.image}
