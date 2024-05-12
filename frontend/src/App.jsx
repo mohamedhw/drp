@@ -51,8 +51,8 @@ const App = () => {
 
                 <Routes>
                     <Route element={<PrivetRoute setModalShow={setModalShow} />}>
-                        <Route exact path='/profile' element={<Profile setShow={setShowCover} setCoverPic={setCoverPic} />} />
                         <Route exact path='/create' element={<Create />} />
+                        <Route exact path='/profile' element={<Profile setShow={setShowCover} setCoverPic={setCoverPic} />} />
                         <Route exact path='/saved' element={<SavedPics />} />
                         <Route exact path='/moresaved' element={<AllSavedPics />} />
                         <Route exact path='/foryou/:page?' element={<ForYouPics />} />

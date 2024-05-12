@@ -10,9 +10,14 @@ import Form from "react-bootstrap/Form";
 import { IoIosCloseCircle } from "react-icons/io";
 import Badge from "react-bootstrap/Badge";
 import Loading from "../component/Loading";
-import ProgressBar from 'react-bootstrap/ProgressBar';
+import ProgressBar from "react-bootstrap/ProgressBar";
 
-const Create = ({ user_g, tag_suggestion, tag_suggestions, setCurrentPage }) => {
+const Create = ({
+  user_g,
+  tag_suggestion,
+  tag_suggestions,
+  setCurrentPage,
+}) => {
   const user = user_g;
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
@@ -23,13 +28,12 @@ const Create = ({ user_g, tag_suggestion, tag_suggestions, setCurrentPage }) => 
   const [handleErr, setErr] = useState(null);
   const [qs, setQs] = useState([]);
   const [progress, setProgress] = useState();
-  const submitBtn = document.getElementById("create-sub-btn")
+  const submitBtn = document.getElementById("create-sub-btn");
 
   useEffect(() => {
     tag_suggestion(qs);
   }, [qs]);
 
-  
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -51,10 +55,10 @@ const Create = ({ user_g, tag_suggestion, tag_suggestions, setCurrentPage }) => 
     };
     axios
       .post(`${apiUrl}/api-create/`, form_data, config)
-      .then(() => {
+      .then((response) => {
         setIsLoading(false);
         setErr(null);
-        setCurrentPage()
+        setCurrentPage();
         navigate("/");
       })
       .catch((err) => {
@@ -68,14 +72,14 @@ const Create = ({ user_g, tag_suggestion, tag_suggestions, setCurrentPage }) => 
   const addTag = (e) => {
     setQs(e.target.value);
     setTempTag(e.target.value);
-    if (e.key === "Enter"){
-      if(e.target.value != "") {
+    if (e.key === "Enter") {
+      if (e.target.value != "") {
         setTag([...tag, e.target.value]);
         e.target.value = "";
       } else if (e.target.value === "") {
-        submitBtn.click()
+        submitBtn.click();
       }
-      setTempTag()
+      setTempTag();
     }
   };
 
@@ -96,21 +100,24 @@ const Create = ({ user_g, tag_suggestion, tag_suggestions, setCurrentPage }) => 
             }}
           />
         </Form.Group>
-        <Form.Group className="mb-5 p-1 tags-input form-control">
-          <ul>
+        <Form.Group>
+          <ul className="tags-list-ul">
             {tag &&
               tag.map((tag_, index) => (
-                <li key={index}>
-                  <Badge bg="success" className="tag-bg">
+                <li className="mx-1" key={index}>
+                  <Badge bg="success" className="tag-bg my-1 p-1">
                     {tag_}
                     <IoIosCloseCircle
                       onClick={() => removeTags(index)}
                       className="close-ic"
+                      style={{marginLeft: "1ch"}}
                     />
                   </Badge>
                 </li>
               ))}
           </ul>
+        </Form.Group>
+        <Form.Group className="mb-5 p-1 tags-input form-control">
           <input
             id="tag-in"
             data-role="tagsinput"
@@ -125,30 +132,35 @@ const Create = ({ user_g, tag_suggestion, tag_suggestions, setCurrentPage }) => 
           />
           {tag_suggestions && (
             <datalist id="tag-list" className="mt-5 m-3">
-              {tag_suggestions.map((item) => (
+              {tag_suggestions.slice(0, 6).map((item) => (
                 <option key={item.tag_slug} value={item.tag}></option>
               ))}
             </datalist>
           )}
         </Form.Group>
 
-        {progress ? 
+        {progress ? (
           <div style={{ display: "flex", justifyContent: "center" }}>
-          <ProgressBar variant="success" now={progress} label={`${progress}%`} style={{width: '30%'}}  />
+            <ProgressBar
+              variant="success"
+              now={progress}
+              label={`${progress}%`}
+              style={{ width: "30%" }}
+            />
           </div>
-          :
+        ) : (
           <input
-          id="create-sub-btn"
-          className="btn btn-outline-success btn-s px-4"
-          type="submit"
-          value="Post"
-          onClick={() => {
-            if(tempTag){
-              setTag([...tag, tempTag]);
-            }
-          }}
+            id="create-sub-btn"
+            className="btn btn-outline-success btn-s px-4"
+            type="submit"
+            value="Post"
+            onClick={() => {
+              if (tempTag) {
+                setTag([...tag, tempTag]);
+              }
+            }}
           />
-        }
+        )}
       </Form>
     </Container>
   );
@@ -160,4 +172,8 @@ const mapStateToProps = (state) => ({
   tag_suggestions: state.pics.tag_suggestion.results,
 });
 
-export default connect(mapStateToProps, { tags, tag_suggestion, setCurrentPage })(Create);
+export default connect(mapStateToProps, {
+  tags,
+  tag_suggestion,
+  setCurrentPage,
+})(Create);

@@ -347,14 +347,12 @@ class PostCreate(generics.CreateAPIView):
                             post.tags.add(tag)
                             # pass
                         post.tags.add(tag)
-                    return redirect("/")
+                    return Response({"success": "post created successfully"})
         else:
-
             post_serializer = PostSerializers(data=data)
-
             if post_serializer.is_valid():
                 post = post_serializer.save()
-                return redirect("/")
+                return Response({"success": "post created successfully"})
 
         return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -162,10 +162,28 @@ textarea::placeholder {
   margin-left: 5px;
 }
 
+.tags-list-ul {
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tags-list-ul li {
+  display: inline;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .tag-bg {
   font-size: medium;
   line-height: normal;
   letter-spacing: 0.5px;
+  white-space: normal;
+  word-wrap: break-word;
+  white-space: normal;
+  max-width: 100%;
 }
 
 .custom-dropdown-button {
