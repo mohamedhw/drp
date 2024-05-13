@@ -80,6 +80,7 @@ const Create = ({
         submitBtn.click();
       }
       setTempTag();
+      setQs([])
     }
   };
 
