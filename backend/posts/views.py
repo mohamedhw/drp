@@ -1,3 +1,4 @@
+from django.db.models.fields import related_lookups
 from rest_framework import status
 from django.utils import timezone
 from datetime import timedelta, datetime
@@ -67,49 +68,37 @@ class ForYouPics(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
 
     def get_queryset(self, *args, **kwargs):
+        user = self.request.user
+        if user.id:
+            # get the posts where the user in the like field
+            liked_qs = Post.objects.filter(like=user)  # user liked posts
+            # get the posts where the user in the saved field
+            saved_qs = Post.objects.filter(saved=user)  # user saved posts
+            # Combine the liked_qs and the saved_qs
+            combined_qs = liked_qs.union(saved_qs)
+            # get the tags of both
+            taged_qs = combined_qs.values_list("tags", flat=True)
+            # get the posts with related tags
+            # related_pics = Post.objects.filter(tags__in=taged_qs)
+            related_pics = Post.objects.filter(tags__in=taged_qs).annotate(
+                num_matching_tags=Count("tags", filter=Q(tags__in=taged_qs))
+            )
+            qs = related_pics.exclude(Q(id__in=liked_qs) | Q(id__in=saved_qs))
 
-        query = self.request.GET.get("q")
+            # Define the sorting order using Case/When
+            ordering = Case(
+                *[
+                    When(num_matching_tags=i, then=Value(i))
+                    for i in range(len(taged_qs) + 1)
+                ],
+                default=Value(len(taged_qs)),
+                output_field=IntegerField(),
+            )
 
-        # check if there is a search request
-        if query:
-            qs = super().get_queryset().order_by("-created_at")
-            tags = Hashtag.objects.filter(tag__icontains=query)
-            qs = qs.filter(tags__in=tags).distinct()
+            # Exclude liked_qs and saved_qs, then order by the number of matching tags and date
+            qs = qs.order_by(-ordering, "-created_at")
+
             return qs
-
-        # check if there is a user to show recomended posts
-        else:
-            user = self.request.user
-            if user.id:
-                # get the posts where the user in the like field
-                liked_qs = Post.objects.filter(like=user)  # user liked posts
-                # get the posts where the user in the saved field
-                saved_qs = Post.objects.filter(saved=user)  # user saved posts
-                # Combine the liked_qs and the saved_qs
-                combined_qs = liked_qs.union(saved_qs)
-                # get the tags of both
-                taged_qs = combined_qs.values_list("tags", flat=True)
-                # get the posts with related tags
-                # related_pics = Post.objects.filter(tags__in=taged_qs)
-                related_pics = Post.objects.filter(tags__in=taged_qs).annotate(
-                    num_matching_tags=Count("tags", filter=Q(tags__in=taged_qs))
-                )
-                qs = related_pics.exclude(Q(id__in=liked_qs) | Q(id__in=saved_qs))
-
-                # Define the sorting order using Case/When
-                ordering = Case(
-                    *[
-                        When(num_matching_tags=i, then=Value(i))
-                        for i in range(len(taged_qs) + 1)
-                    ],
-                    default=Value(len(taged_qs)),
-                    output_field=IntegerField(),
-                )
-
-                # Exclude liked_qs and saved_qs, then order by the number of matching tags and date
-                qs = qs.order_by(-ordering, "-created_at")
-
-                return qs
 
 
 
@@ -218,29 +207,37 @@ class Detail(generics.RetrieveAPIView):
     permission_classes = (permissions.AllowAny,)
 
     def get_related_tags(self, item):
-
         qs = Post.objects.get(pk=item.pk).tags.all()
-
         return qs
 
     def get_related_pics(self, item):
+        taged_qs = item.tags.all()  # get the item tags
+        related_pics = Post.objects.filter(tags__in=taged_qs).annotate(
+            num_matching_tags=Count("tags", filter=Q(tags__in=taged_qs))
+            ).exclude(pk=item.pk)
 
-        item_tags = item.tags.all()  # get the item tags
+        # Define the sorting order using Case/When
+        ordering = Case(
+                *[
+                    When(num_matching_tags=i, then=Value(i))
+                    for i in range(len(taged_qs) + 1)
+                    ],
+                default=Value(len(taged_qs)),
+                output_field=IntegerField(),
+                )
 
-        related_pics = Post.objects.filter(tags__in=item_tags).exclude(pk=item.pk)[:6]
-        print("test", item_tags)
-
+        # Exclude liked_qs and saved_qs, then order by the number of matching tags and date
+        related_pics = related_pics.order_by(-ordering)[:6]
         related_items_count = related_pics.count()  # number of related pics
-
         if related_items_count < 6:
             additional_items_needed = 6 - related_items_count
 
-            # Extract primary keys from related_pics
             related_pics_pks = related_pics.values_list("pk", flat=True)
 
             additional_items = Post.objects.exclude(
                 Q(pk=item.pk) | Q(pk__in=related_pics_pks)
-            )[:additional_items_needed]
+            ).distinct()[:additional_items_needed]
+
             related_pics = list(related_pics) + list(additional_items)
 
         return related_pics
