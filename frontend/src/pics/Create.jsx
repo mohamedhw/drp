@@ -87,6 +87,7 @@ const Create = ({
   if (isLoading) {
     return <Loading />;
   }
+
   return (
     <Container>
       {handleErr && { handleErr }}
@@ -133,7 +134,7 @@ const Create = ({
           />
           {tag_suggestions && (
             <datalist id="tag-list" className="mt-5 m-3">
-              {tag_suggestions.slice(0, 6).map((item) => (
+              {tag_suggestions.filter((tagSuggestion) => !tag.some((tag_) => tagSuggestion.tag_slug === tag_)).slice(0, 6).map((item) => (
                 <option key={item.tag_slug} value={item.tag}></option>
               ))}
             </datalist>
