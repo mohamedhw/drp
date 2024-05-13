@@ -13,6 +13,9 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from .models import Post, Hashtag, Visit
 from .serializers import PostSerializers, HashtagSerializers
 from django.db.models import Q
+import operator
+from functools import reduce
+import re
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect
 
@@ -178,15 +181,13 @@ class SavedPics(generics.ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         user = self.request.user
-
         # Start with all items
         qs = Post.objects.filter(saved=user)
-
         return qs
 
 
 class Search(generics.ListAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.none()
     serializer_class = PostSerializers
     permission_classes = (permissions.AllowAny,)
 
@@ -194,10 +195,17 @@ class Search(generics.ListAPIView):
         qs = Post.objects.all()
         query = self.request.GET.get("q")
         if query:
-            query_list = query.split(" ")
-            tags = Hashtag.objects.filter(Q(tag__in=query_list) | Q(tag__icontains=query))
-            qs = qs.filter(tags__in=tags).distinct()
-        qs = qs.order_by("-created_at")
+            query_list = [word.strip() for word in re.split(r'\s+', query) if word.strip()]  # Strip and remove empty strings
+            # Fetch hashtags matching each word in the query
+            matching_hashtags = Hashtag.objects.filter(reduce(operator.or_, (Q(tag__icontains=word) for word in query_list)))
+            # If there are no matching hashtags, set qs to empty list
+            if not matching_hashtags.exists():
+                qs = []
+            else:
+                # Filter posts to include those that contain at least one hashtag from each specified hashtag group
+                for hashtag_group in query_list:
+                    qs = qs.filter(tags__in=Hashtag.objects.filter(tag__icontains=hashtag_group))
+
         return qs
 
 
