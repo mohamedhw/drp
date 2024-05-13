@@ -36,7 +36,7 @@ const NavBar = ({
       <Navbar expand="lg" className="navbar-dark p-0 pt-2">
         <Container>
           <Navbar.Brand className="logo">
-            <a href="/" onClick={()=>setCurrentPage(1)} >
+            <a href="/" >
               <h3>DRP</h3>
             </a>
           </Navbar.Brand>
@@ -58,7 +58,7 @@ const NavBar = ({
               </Nav.Link>
               <Nav.Link>
                 <Link to="/tags">
-                  <Button className="btn btn-outline-success btn-s">
+                  <Button onClick={()=>setCurrentPage(1)} className="btn btn-outline-success btn-s">
                     tags
                   </Button>
                 </Link>
