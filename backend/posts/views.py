@@ -194,7 +194,8 @@ class Search(generics.ListAPIView):
         qs = Post.objects.all()
         query = self.request.GET.get("q")
         if query:
-            tags = Hashtag.objects.filter(tag__icontains=query)
+            query_list = query.split(" ")
+            tags = Hashtag.objects.filter(Q(tag__in=query_list) | Q(tag__icontains=query))
             qs = qs.filter(tags__in=tags).distinct()
         qs = qs.order_by("-created_at")
         return qs
