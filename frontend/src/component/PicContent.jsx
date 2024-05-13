@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Loading from "./Loading";
 
@@ -7,8 +7,8 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
   const [prevMousePosition, setPrevMousePosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [moved, setMoved] = useState();
-  const [zooming, setZooming] = useState(false);
 
+  // Move in tha image feat
   const handleMouseMove = useCallback(
     (e) => {
       if (!isDragging) return;
@@ -17,7 +17,9 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
       const scrollLeft = position.x + deltaX;
       const scrollTop = position.y + deltaY;
 
-      e.target.parentElement.scrollTo({
+      const imageContainer = document.getElementById("scrollContainer");
+
+      imageContainer.scrollTo({
         left: scrollLeft,
         top: scrollTop,
         behavior: "auto", // or 'smooth' for smooth scrolling
@@ -38,40 +40,17 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
     [isDragging, prevMousePosition, position],
   );
 
-  const handelZoomPosition = (e) => {
-    // if (zooming) return; // Do not execute if zooming
-    // e.preventDefault();
-    // const imageContainer = e.target.parentElement;
-    // const containerWidth = imageContainer.offsetWidth;
-    // const containerHeight = imageContainer.offsetHeight;
-    // const mouseX = e.clientX - imageContainer.getBoundingClientRect().left;
-    // const mouseY = e.clientY - imageContainer.getBoundingClientRect().top;
-    // const scrollLeft = mouseX * (data.get_width - containerWidth) / containerWidth;
-    // const scrollTop = mouseY * (data.get_height - containerHeight) / containerHeight;
-    // imageContainer.scrollTo(scrollLeft, scrollTop);
-  }
 
-  const handleMouseUp = useCallback(() => {
-    if (!moved) {
-      handleImageLoad();
-    }
-    setIsDragging(false);
-    setMoved(false);
-    setZooming(false); // Reset zooming state
-  }, [isDragging, position, prevMousePosition]);
-
-  useEffect(() => {
-
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-    }
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isDragging, handleMouseMove, handleMouseUp]);
+  const handleMouseUp = useCallback(
+    (e) => {
+      if (!moved) {
+        handleImageLoad(e);
+      }
+      setIsDragging(false);
+      setMoved(false);
+    },
+    [isDragging, position, prevMousePosition],
+  );
 
 
   const handleMouseDown = (e) => {
@@ -85,9 +64,9 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
       x: e.target.parentElement.scrollLeft,
       y: e.target.parentElement.scrollTop,
     });
-    setZooming(true); // Set zooming state when mouse is down
   };
 
+  // Zooming feat
   const handleImageLoad = () => {
     if (zoom_ === "showcase-norm") {
       setZoom_("showcase-zoom");
@@ -98,6 +77,37 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
     }
   };
 
+  // Where to zoom feat
+  const handelZoomPosition = () => {
+    const imageContainer = document.getElementById("scrollContainer");
+    const containerWidth = imageContainer.offsetWidth;
+    const containerHeight = imageContainer.offsetHeight;
+    const mouseX = prevMousePosition.x - imageContainer.getBoundingClientRect().left;
+    const mouseY = prevMousePosition.y - imageContainer.getBoundingClientRect().top;
+    const scrollLeft =
+      (mouseX * (data.get_width - containerWidth)) / containerWidth;
+    const scrollTop =
+      (mouseY * (data.get_height - containerHeight)) / containerHeight;
+    imageContainer.scrollTo(scrollLeft, scrollTop);
+  };
+
+  useEffect(() => {
+    if (zoom_ !== "showcase-norm") {
+      handelZoomPosition();
+    }
+  }, [zoom_]);
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    }
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging, handleMouseMove, handleMouseUp]);
+
   return (
     <div
       id="scrollContainer"
@@ -105,7 +115,7 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
       style={{
         marginRight: "-16.8px",
         marginBottom: "-16.8px",
-        height: "85vh",
+        height: "100vh",
         display: "flex",
         alignItems: "center",
       }}
@@ -115,7 +125,7 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
       ) : (
         data && (
           <img
-            onMouseDown={e => {handleMouseDown(e), handelZoomPosition(e)}}
+            onMouseDown={handleMouseDown}
             className={zoom_}
             id="img-content"
             src={data.image}
@@ -129,7 +139,7 @@ const PicContent = ({ data, zoom_, setZoom_, loading }) => {
 };
 
 const mapStateToProps = (state) => ({
-  loading: state.pics.detail_loading
+  loading: state.pics.detail_loading,
 });
 
 export default connect(mapStateToProps, null)(PicContent);
