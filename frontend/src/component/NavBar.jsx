@@ -50,8 +50,8 @@ const NavBar = ({
             <Nav>
               <Nav.Link>
                 <Button
+                  onClick={()=>{setCurrentPage(1), handelSearch()}} 
                   className="btn btn-outline-success btn-s"
-                  onClick={handelSearch}
                 >
                   <BiSearchAlt />
                 </Button>
@@ -67,7 +67,7 @@ const NavBar = ({
                 <>
                   <Nav.Link>
                     <Link to={`/userpics/${username_global}`}>
-                      <Button className="btn btn-outline-success btn-s">
+                      <Button onClick={()=>setCurrentPage(1)} className="btn btn-outline-success btn-s">
                         <BsFillPersonFill />
                       </Button>
                     </Link>

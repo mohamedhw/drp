@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import Loading from "../component/Loading";
 import { useState } from "react";
 
-const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
+const Items = ({ loading, pics_g, setShow, setZoom_, title }) => {
   const [pageTarget, setPageTarget] = useState(true);
   const handelClick = () => {
     if (setShow) {
@@ -18,14 +18,7 @@ const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
     }
   };
 
-  const filters = {
-    top: "Top Pics",
-    random: "Random Pics",
-    hot: "Hot Pics",
-    foryou: "Pics For You"
-  };
   const location = useLocation();
-  const routParam = location.pathname.split("/").filter(Boolean).pop();
 
   return (
     <div style={{ margin: "auto", width: "100%", textAlign: "center" }}>
@@ -33,7 +26,7 @@ const Items = ({ loading, pics_g, setShow, setZoom_ }) => {
         style={{ float: "left", color: "#00bda0", display: "inline" }}
         className="mb-5"
       >
-        {filters[routParam] || "Latest Pics"}
+        {title}
       </h1>
       <Row style={{ margin: "auto", width: "100%", justifyContent: "center" }}>
         {pics_g.length > 0 ? (

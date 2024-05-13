@@ -62,7 +62,7 @@ const LatestPics = ({ hasMore, pics, currentPage, setCurrentPage, loading, reset
         loader={<p className="mt-5 loading-more-result">Loading...</p>}
         endMessage={pics.length > 1 && <p className="mt-5 loading-more-result">No more items</p>}
       >
-        {pics && <Items pics_g={pics} loading={false} />}
+        {pics && <Items pics_g={pics} loading={false} title="Latest Pics"/>}
       </InfiniteScroll>
       <UpButton />
     </div>

@@ -22,10 +22,12 @@ const Search = ({
   setCurrentPage,
 }) => {
 
+  console.log(pics_g)
   const moreResultsButtonRef = useRef(null);
   const apiUrl = import.meta.env.VITE_API_URL;
   let url = ``;
   const [fullscreen, setFullscreen] = useState(true);
+  const [title, setTitle] = useState()
 
   function handleShow(breakpoint) {
     setFullscreen(breakpoint);
@@ -34,7 +36,7 @@ const Search = ({
 
   useEffect(() => {
     if (q && show) {
-      url = `${apiUrl}/api-post/?q=${q}`;
+      url = `${apiUrl}/api-search/?q=${q}`;
     }
     if (show){
       search(url);
@@ -47,6 +49,7 @@ const Search = ({
       setCurrentPage(1);
       navigate(`/search/?q=${q}`);
     }else{
+      setCurrentPage(1);
       navigate(`/search/?q=${q}`);
     }
   };

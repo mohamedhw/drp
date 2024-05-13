@@ -199,10 +199,11 @@ class SavedPics(generics.ListAPIView):
 class Search(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializers
+    permission_classes = (permissions.AllowAny,)
 
     def get_queryset(self):
         qs = Post.objects.all()
-        query = self.request.GET.get("search")
+        query = self.request.GET.get("q")
         if query:
             tags = Hashtag.objects.filter(tag__icontains=query)
             qs = qs.filter(tags__in=tags).distinct()
@@ -227,6 +228,7 @@ class Detail(generics.RetrieveAPIView):
         item_tags = item.tags.all()  # get the item tags
 
         related_pics = Post.objects.filter(tags__in=item_tags).exclude(pk=item.pk)[:6]
+        print("test", item_tags)
 
         related_items_count = related_pics.count()  # number of related pics
 

@@ -73,7 +73,7 @@ const HotPics = ({
           )
         }
       >
-        {pics && <Items pics_g={pics} loading={false} />}
+        {pics && <Items pics_g={pics} loading={false} title="Hot Pics" />}
       </InfiniteScroll>
       <UpButton />
     </div>

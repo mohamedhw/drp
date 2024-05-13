@@ -29,7 +29,7 @@ const Searched = ({
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const buildUrl = () => {
-    let url = `${apiUrl}/api-post/?q=${q}`;
+    let url = `${apiUrl}/api-search/?q=${q}`;
     let params = `?q=${q}`;
 
     if (pageParam) {

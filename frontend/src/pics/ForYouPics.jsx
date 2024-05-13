@@ -74,7 +74,7 @@ const ForYouPics = ({
           )
         }
       >
-        {pics && <Items pics_g={pics} loading={false} />}
+        {pics && <Items pics_g={pics} loading={false} title="Pics For You" />}
       </InfiniteScroll>
       <UpButton />
     </div>
