@@ -96,7 +96,7 @@ export const USER_DATA_SUCCESS = 'USER_SUCCESS';
 export const USER_DATA_FAIL = 'USER_FAIL';
 
 
-
+export const SET_SEARCHING = 'SET_SEARCHING'
 export const RESET_PARAMETER = 'RESET_PARAMETER';
 export const SET_Q = 'SET_Q';
 export const SET_TOP_RANGE = 'SET_TOP_RANGE';

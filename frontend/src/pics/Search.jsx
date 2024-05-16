@@ -15,6 +15,7 @@ const Search = ({
   q,
   setQ,
   show,
+  page,
   setShow,
   pics_g,
   count,
@@ -22,12 +23,10 @@ const Search = ({
   setCurrentPage,
 }) => {
 
-  console.log(pics_g)
   const moreResultsButtonRef = useRef(null);
   const apiUrl = import.meta.env.VITE_API_URL;
   let url = ``;
   const [fullscreen, setFullscreen] = useState(true);
-  const [title, setTitle] = useState()
 
   function handleShow(breakpoint) {
     setFullscreen(breakpoint);
@@ -45,11 +44,10 @@ const Search = ({
 
   const handelMore = () => {
     setShow(false);
+    setCurrentPage(1);
     if(count>24){
-      setCurrentPage(1);
       navigate(`/search/?q=${q}`);
     }else{
-      setCurrentPage(1);
       navigate(`/search/?q=${q}`);
     }
   };
@@ -153,6 +151,7 @@ const mapStateToProps = (state) => ({
   pics_g: state.pics.searched.results,
   count: state.pics.searched.count,
   loading: state.pics.searched_loading,
+  page: state.pics.page,
   q: state.pics.q,
 });
 export default connect(mapStateToProps, { search, setQ, setCurrentPage })(

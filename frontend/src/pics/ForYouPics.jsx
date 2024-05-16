@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { useEffect } from "react";
 import { forYouPics, resetPicsItems } from "../redux/action/pics";
 import { useNavigate, useLocation } from "react-router-dom";
-import { setCurrentPage } from "../redux/action/pages";
+import { setCurrentPage, setPage } from "../redux/action/pages";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Items from "../component/Items";
 import Loading from "../component/Loading";
@@ -14,7 +14,9 @@ const ForYouPics = ({
   hasMore,
   loading,
   currentPage,
+  page,
   setCurrentPage,
+  setPage,
   forYouPics,
   resetPicsItems,
 }) => {
@@ -48,11 +50,13 @@ const ForYouPics = ({
         navigate(`?page=${pageParam}`);
       }
       setCurrentPage(nextPage);
+      setPage(nextPage);
     }
   };
 
   useEffect(() => {
     setCurrentPage(1);
+    setPage()
     fetchMoreData();
   }, [routeParam]);
 
@@ -86,10 +90,12 @@ const mapStateToProps = (state) => ({
   loading: state.pics.pics_loading,
   hasMore: state.pics.hasMore,
   currentPage: state.pages.currentPage,
+  page: state.pages.page
 });
 
 export default connect(mapStateToProps, {
   forYouPics,
   resetPicsItems,
   setCurrentPage,
+  setPage,
 })(ForYouPics);

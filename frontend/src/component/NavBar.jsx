@@ -50,7 +50,7 @@ const NavBar = ({
             <Nav>
               <Nav.Link>
                 <Button
-                  onClick={()=>{setCurrentPage(1), handelSearch()}} 
+                  onClick={()=>{handelSearch()}} 
                   className="btn btn-outline-success btn-s"
                 >
                   <BiSearchAlt />

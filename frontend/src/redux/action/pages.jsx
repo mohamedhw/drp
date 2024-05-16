@@ -1,4 +1,4 @@
-import { SET_CURRENT_PAGE, SET_PAGE } from "./type";
+import { SET_CURRENT_PAGE, SET_PAGE, SET_SEARCHING } from "./type";
 import { useLocation } from "react-router-dom";
 
 export const setPage = (page) => (dispatch) => {
@@ -17,5 +17,12 @@ export const setCurrentPage = (currentPage, page) => (dispatch) => {
     type: "SET_CURRENT_PAGE",
     currentPage,
     page,
+  });
+};
+
+export const setSearching = (searching) => (dispatch) => {
+  dispatch({
+    type: "SET_SEARCHING",
+    payload: searching
   });
 };

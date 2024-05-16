@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { useEffect } from "react";
 import { randomPics, resetPicsItems } from "../redux/action/pics";
-import { setCurrentPage } from "../redux/action/pages";
+import { setCurrentPage, setPage } from "../redux/action/pages";
 import { useNavigate, useLocation } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Items from "../component/Items";
@@ -12,17 +12,19 @@ import UpButton from "../component/UpButton";
 const RandomPics = ({
   hasMore,
   setCurrentPage,
+  setPage,
   currentPage,
+  page,
   pics,
   loading,
   randomPics,
   resetPicsItems
 }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const pageParam = currentPage || queryParams.get("page") || 1;
-  const navigate = useNavigate();
+  const pageParam = currentPage || (queryParams.get("page") || 1);
 
   const buildUrl = () => {
     let url = `${apiUrl}/api-random-pics/`;
@@ -46,12 +48,14 @@ const RandomPics = ({
         navigate(`?page=${pageParam}`);
       }
       setCurrentPage(nextPage)
+      setPage(nextPage)
     }
   };
 
   useEffect(() => {
-    fetchMoreData();
+    setPage()
     setCurrentPage()
+    fetchMoreData();
   }, []);
 
   if (loading) {
@@ -80,8 +84,9 @@ const mapStateToProps = (state) => ({
   pics: state.pics.pics,
   loading: state.pics.pics_loading,
   currentPage: state.pages.currentPage,
+  page: state.pages.page,
   hasMore: state.pics.hasMore,
 });
 
-export default connect(mapStateToProps, { randomPics, resetPicsItems, setCurrentPage })(RandomPics);
+export default connect(mapStateToProps, { randomPics, resetPicsItems, setCurrentPage, setPage })(RandomPics);
 

@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { useEffect } from "react";
 import { topPics, resetPicsItems } from "../redux/action/pics";
 import { useNavigate, useLocation } from "react-router-dom";
-import { setCurrentPage } from "../redux/action/pages";
+import { setCurrentPage, setPage } from "../redux/action/pages";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Items from "../component/Items";
 import Loading from "../component/Loading";
@@ -14,7 +14,9 @@ const TopPics = ({
   hasMore,
   loading,
   currentPage,
+  page,
   setCurrentPage,
+  setPage,
   topPics,
   resetPicsItems,
 }) => {
@@ -60,12 +62,14 @@ const TopPics = ({
         }
       }
       setCurrentPage(nextPage);
+      setPage(nextPage)
     }
   };
 
   useEffect(() => {
-    fetchMoreData();
+    setPage()
     setCurrentPage()
+    fetchMoreData();
   }, [topRangeParam]);
 
 
@@ -94,6 +98,7 @@ const mapStateToProps = (state) => ({
   pics: state.pics.pics,
   loading: state.pics.pics_loading,
   hasMore: state.pics.hasMore,
-  currentPage: state.pages.currentPage
+  currentPage: state.pages.currentPage,
+  page: state.pages.page
 });
-export default connect(mapStateToProps, { topPics, resetPicsItems, setCurrentPage })(TopPics);
+export default connect(mapStateToProps, { topPics, resetPicsItems, setCurrentPage, setPage })(TopPics);

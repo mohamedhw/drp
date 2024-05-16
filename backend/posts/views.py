@@ -194,18 +194,26 @@ class Search(generics.ListAPIView):
     def get_queryset(self):
         qs = Post.objects.all()
         query = self.request.GET.get("q")
+        print('qu', query)
         if query:
-            query_list = [word.strip() for word in re.split(r'\s+', query) if word.strip()]  # Strip and remove empty strings
+            query_list = [word.strip() for word in re.split(r'\s+', query) if word.strip()]
             # Fetch hashtags matching each word in the query
+            print("query", query_list)
             matching_hashtags = Hashtag.objects.filter(reduce(operator.or_, (Q(tag__icontains=word) for word in query_list)))
             # If there are no matching hashtags, set qs to empty list
+            print("matching", matching_hashtags)
             if not matching_hashtags.exists():
                 qs = []
             else:
                 # Filter posts to include those that contain at least one hashtag from each specified hashtag group
                 for hashtag_group in query_list:
+                    print('hash', hashtag_group)
                     qs = qs.filter(tags__in=Hashtag.objects.filter(tag__icontains=hashtag_group))
+                    # if qs and :
+                    # qs = qs.filter(tags_in=)
+                    print("qs", qs)
 
+            qs = qs.distinct()
         return qs
 
 
