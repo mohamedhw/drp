@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import { user_data, profile } from '../redux/action/profile';
+import { user_data, profile, setCoverPic } from '../redux/action/profile';
 import { useEffect } from 'react'
 import { toast } from "react-toastify";
 
@@ -100,4 +100,4 @@ const mapStateToProps = state => ({
     user_cover: state.profile.user_cover,
 })
 
-export default connect(mapStateToProps, { user_data, profile })(ProfileHead);
+export default connect(mapStateToProps, { user_data, profile, setCoverPic })(ProfileHead);

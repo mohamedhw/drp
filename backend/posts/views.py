@@ -1,23 +1,18 @@
-from django.db.models.fields import related_lookups
-from rest_framework import status
 from django.utils import timezone
-from datetime import timedelta, datetime
-from django.db.models import Count, Case, When, Value, IntegerField, FloatField, F, ExpressionWrapper
-from rest_framework.decorators import api_view
+from django.db.models import Count, Case, When, Value, IntegerField, FloatField, F, Q, ExpressionWrapper
 from django.shortcuts import get_object_or_404, redirect
-from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework import permissions, authentication
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from django.contrib.auth.models import User
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import permissions, authentication, status, generics
+from datetime import timedelta, datetime
 from .models import Post, Hashtag, Visit
 from .serializers import PostSerializers, HashtagSerializers
-from django.db.models import Q
-import operator
 from functools import reduce
+import operator
 import re
-from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_protect
 
 
 
@@ -160,7 +155,7 @@ def like_pic(request, pk):
         return Response({"error": "error"})
 
 
-@api_view(["POST", "GET"])
+@api_view(["POST"])
 def save_pic(request, pk):
     try:
         post = Post.objects.get(pk=pk)
@@ -327,50 +322,46 @@ class AllTags(generics.ListAPIView):
         # Return the serialized data as a response
         return Response(serializer.data)
 
-
-@method_decorator(csrf_protect, name="dispatch")
+@method_decorator(csrf_protect, name='dispatch')
 class PostCreate(generics.CreateAPIView):
     authentication_classes = [authentication.SessionAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = PostSerializers
 
     def post(self, request):
-        data = request.data
-        tag_data = data.get("tag")
-        if tag_data:
-            tags_data = data.pop("tag", [])
-            if tags_data == ["undefined"]:
-                post_serializer = PostSerializers(data=data)
+        if request.method == 'POST':
+            data = request.data
+            tag_data = data.get('tag')
+            if tag_data:
+                # Extract the tag data from the request, default to an empty list if not present
+                tags_data = data.pop('tag', [])
+                tags_data = tag_data.split(',') if tag_data != ['undefined'] else []
 
-                if post_serializer.is_valid():
-                    post = post_serializer.save()
-                    return redirect("/")
-            else:
-                tags_data = tags_data[0].split(",")
                 post_serializer = PostSerializers(data=data)
-
+                # Check if the data provided is valid according to the serializer
                 if post_serializer.is_valid():
                     # Create and associate tags with the post
                     post = post_serializer.save()
-
                     for tag_data in tags_data:
-                        if "#" in tag_data:
-                            tag_data = tag_data.lstrip("#")
+                        #checking every tag for # or spaces at the start or the end and remvoe them
+                        if '#' in tag_data:
+                            tag_data = tag_data.lstrip('#')
                         tag_data = tag_data.strip()
-                        tag, created = Hashtag.objects.get_or_create(tag=tag_data)
+                        # geting the tag if it exists befor if not create it
+                        tag, _ = Hashtag.objects.get_or_create(
+                            tag=tag_data)
 
-                        if not created:
-                            post.tags.add(tag)
-                            # pass
                         post.tags.add(tag)
-                    return Response({"success": "post created successfully"})
-        else:
-            post_serializer = PostSerializers(data=data)
-            if post_serializer.is_valid():
-                post = post_serializer.save()
-                return Response({"success": "post created successfully"})
+                    return redirect('/')
+            else:
+                post_serializer = PostSerializers(data=data)
+                if post_serializer.is_valid():
+                    post = post_serializer.save()
+                    return redirect('/')
 
-        return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"detail": "Method not allowed."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class TagsSuggestion(generics.ListAPIView):

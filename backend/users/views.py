@@ -1,28 +1,26 @@
-from django.contrib.auth import get_user_model
-from rest_framework import generics
-from .serializer import UserProfileSerializer, UserSerializer
-from .models import Profile
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
-from rest_framework.views import APIView
-from rest_framework import permissions
-from rest_framework.response import Response
 from django.contrib import auth
-from .tokens import account_activation_token
+from django.contrib.auth.password_validation import validate_password
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
+from django.core.exceptions import ValidationError
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
-from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from rest_framework import generics, permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializer import UserProfileSerializer, UserSerializer
+from .models import Profile
+from .tokens import account_activation_token
 
-User = get_user_model()
+User = auth.get_user_model()
 
 
 def activate(request, uidb64, token):
-    User = get_user_model()
+    User = auth.get_user_model()
     try:
         # decodeing the tokein to get the user's id
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -93,19 +91,20 @@ class UserView(APIView):
 class UpdateUserView(APIView):
     def put(self, *args, **kwargs):
         try:
-            data = self.request.data
-            new_username = data['username']  # new username
-            new_email = data['email']
-            user_now = self.request.user  # user
-            username = user_now.username  # username
-            user = User.objects.get(id=user_now.id)
-            user.username = new_username
-            user.email = new_email
-            user.save()
-            return Response({'success': "updated successfully"})
-        except:
-            return Response({"error": "could not update this profile!"})
-
+            if self.request.method == 'PUT':
+                data = self.request.data
+                new_username = data['username']  # new username
+                new_email = data['email']
+                user_now = self.request.user  # user
+                user = User.objects.get(id=user_now.id)
+                user.username = new_username
+                user.email = new_email
+                user.save()
+                return Response({'success': "user data updated successfully"})
+            else:
+                return Response({"error": "Method not allowed."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        except Exception as e:
+            return Response({"error": "could not update this profile!"}, {"detail": e})
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
 class UpdateProfileView(generics.UpdateAPIView):
@@ -117,15 +116,17 @@ class UpdateProfileView(generics.UpdateAPIView):
         return profile
 
     def update(self, request, *args, **kwargs):
-        instance = self.get_object(user=request.user)
-        serializer = UserProfileSerializer(
-            instance, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"success": "profile image updated successfully"})
+        if self.request.method == 'PUT':
+            instance = self.get_object(user=request.user)
+            serializer = UserProfileSerializer(
+                instance, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"success": "profile image updated successfully"})
+            else:
+                return Response({"error": serializer.errors})
         else:
-            return Response({"error": serializer.errors})
-
+            return Response({"error": "Method not allowed."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 class UserProfileAPIView(generics.UpdateAPIView):
     queryset = Profile.objects.all()
@@ -159,26 +160,30 @@ class LogoutUser(APIView):
         try:
             auth.logout(request)
             return Response({"success": "loged out successfully!"})
-        except:
-            return Response({"error": "some thing went wrong loginout!"})
-
+        except Exception as e:
+            return Response({"error": "could not logout!", "detail": e})
 
 @method_decorator(csrf_protect, name='dispatch')
 class LoginUser(APIView):
     permission_classes = (permissions.AllowAny, )
 
     def post(self, request, format=None):
-        data = self.request.data
-        username = data['username']
-        password = data['password']
-        user = auth.authenticate(username=username, password=password)
+        if request.method == 'POST':
+            data = self.request.data
+            username = data['username']
+            password = data['password']
+            if not username or not password:
+                return Response({"error": "Please provide both username and password."}, status=status.HTTP_400_BAD_REQUEST)
 
-        if user is not None:
-            auth.login(request, user)
-            return Response({"success": "login successfully"})
+            user = auth.authenticate(username=username, password=password)
+
+            if user is not None:
+                auth.login(request, user)
+                return Response({"success": "login successfully"})
+            else:
+                return Response({"error": "Invalid username or password."}, status=status.HTTP_401_UNAUTHORIZED)
         else:
-            return Response({"error": "some thing went wrong!"})
-
+            return Response({"detail": "Method not allowed."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 @method_decorator(csrf_protect, name='dispatch')
 class CheckAuth(APIView):
@@ -195,20 +200,19 @@ class RegisterUser(APIView):
     permission_classes = (permissions.AllowAny, )
 
     def post(self, request, format=None):
-        data = self.request.data
+        if request.method == 'POST':
+            data = self.request.data
 
-        username = data['username']
-        email = data['email']
-        password = data['password']
-        password2 = data['password2']
+            username = data['username']
+            email = data['email']
+            password = data['password']
+            password2 = data['password2']
 
-        # user = self.user  # Get the current user instance if available
-        queryset = User.objects.all()
-        if queryset.filter(username=username).exists():
-            return Response({"error": "username address must be unique."})
-        elif queryset.filter(email=email).exists():
-            return Response({"error": "Email address must be unique."})
-        else:
+            queryset = User.objects.all()
+            if queryset.filter(username=username).exists():
+                return Response({"error": "username address must be unique."})
+            elif queryset.filter(email=email).exists():
+                return Response({"error": "Email address must be unique."})
             try:
                 # Validate password using Django's built-in validators
                 validate_password(password, user=None, password_validators=None)
@@ -223,3 +227,5 @@ class RegisterUser(APIView):
                     return Response({"error": "Passwords do not match!"})
             except ValidationError as e:
                 return Response({"error": e.messages})
+        else:
+            return Response({"error": "Method not allowed."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

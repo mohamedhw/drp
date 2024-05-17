@@ -37,7 +37,6 @@ const App = () => {
     const [showDelete, setShowDelete] = useState(false);
     const [showCover, setShowCover] = useState(false);
     const [showCroper, setShowCroper] = useState(false);
-    const [coverPic, setCoverPic] = useState()
     return (
         <>
             <Layout>
@@ -46,13 +45,13 @@ const App = () => {
                 <Register show={modalShowRegister} onHide={() => setModalShowRegister(false)} setModalShow={setModalShow} />
                 <Search show={show} setShow={() => setShow(false)} />
                 <Delete show={showDelete} setShow={() => setShowDelete(false)} />
-                <Cover show={showCover} setShow={() => setShowCover(false)} coverPic={coverPic} />
+                <Cover show={showCover} setShow={() => setShowCover(false)} />
                 <PicCrop show={showCroper} setShow={() => setShowCroper(false)} />
 
                 <Routes>
                     <Route element={<PrivetRoute setModalShow={setModalShow} />}>
                         <Route exact path='/create' element={<Create />} />
-                        <Route exact path='/profile' element={<Profile setShow={setShowCover} setCoverPic={setCoverPic} />} />
+                        <Route exact path='/profile' element={<Profile setShow={setShowCover} />} />
                         <Route exact path='/saved' element={<SavedPics />} />
                         <Route exact path='/moresaved' element={<AllSavedPics />} />
                         <Route exact path='/foryou/:page?' element={<ForYouPics />} />

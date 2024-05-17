@@ -17,7 +17,8 @@ const Profile = ({
   setCoverPic,
   loading,
 }) => {
-  const [data, setData] = useState({ username: "", email: "", image: null });
+  const [buttonDisabled, setButtonDisabled] = useState(false); // Add state for button disabled status
+  const [data, setData] = useState({ username: null, email: null, image: null });
   const [placeholders, setPlaceholders] = useState({
     username: `${username_g}`,
     email: `${email_g}`,
@@ -32,59 +33,47 @@ const Profile = ({
   const isImageFile = (file) => {
     return file && file.type.startsWith("image/");
   };
-  const handelImage = (e) => {
-    e.preventDefault();
 
-    const file = e.target.files[0];
-    if (file && isImageFile(file) && acceptedFileArray.includes(file.type)) {
-      setData({ ...data, image: file });
-    } else {
-      e.target.value = null; // Reset file input
-      toast(
-        "Invalid file type. Please select a valid image (png, x-png, jpg, jpeg",
-        { type: "error" },
-      );
-    }
-  };
+  const handelImage = (e) => {
+      const file = e.target.files[0]
+      if (file && isImageFile(file) && acceptedFileArray.includes(file.type)) {
+        setData({ ...data, image: file });
+      } else {
+          document.getElementById('profileimage').value = null;
+          toast('Invalid file type. Please select a valid image (png, x-png, jpg, jpeg', { type: "error" })
+      }
+  }
 
   const notifyError = () => {
     toast.error("Error: Could not update the profile!");
   };
 
-  const handelSubmit = async (e) => {
+  const handelSubmit = (e) => {
     e.preventDefault();
-    let form_data = new FormData();
-    if (data.image && data.email && data.username) {
-      form_data.append("image", data.image);
-      await user_update(data.username, data.email);
-      await profile_update(form_data);
-    } else if (data.username && data.email) {
-      await user_update(data.username, data.email);
-    } else if (data.image && data.username) {
-      form_data.append("image", data.image);
-      await user_update(data.username, email_g);
-      await profile_update(form_data);
-    } else if (data.image && data.email) {
-      form_data.append("image", data.image);
-      await user_update(username_g, data.email);
-      await profile_update(form_data);
-    } else if (data.image) {
-      form_data.append("image", data.image);
-      await profile_update(form_data);
-    } else if (data.username) {
-      await user_update(data.username, email_g);
-    } else if (data.email) {
-      await user_update(username_g, data.email);
+    setButtonDisabled(true); // Disable the button when submitting
+    const form_data = new FormData();
+    if (data.image || data.username || data.email) {
+      if (data.image){
+        form_data.append("image", data.image);
+        profile_update(form_data).then(() => {
+          profile(); // Fetch updated profile data after successful update
+          setButtonDisabled(false); // Disable the button when submitting
+        });
+      }
+      if(data.username || data.email){
+        user_update(data.username, data.email).then(()=>{
+          profile(); // Fetch updated profile data after successful update
+          setButtonDisabled(false); // Disable the button when submitting
+        });
+      }
     } else {
       notifyError();
+      setButtonDisabled(false); // Disable the button when submitting
     }
-    await profile();
-    document.getElementById("up-profile").reset();
-    setData({ username: "", email: "", image: null });
   };
 
+  
   useEffect(() => {
-    profile();
     setPlaceholders({ username: username_g, email: email_g });
   }, [username_g, image_g, email_g]);
 
@@ -133,9 +122,9 @@ const Profile = ({
           <small>the image will be resized to 200*200 & 200kb</small>
           <div className="mt-5 m-1">
             <button
-              style={{ display: "inline-block" }}
               type="submit"
               className="btn btn-outline-success btn-s px-4 mt-3"
+              disabled={buttonDisabled}
             >
               Update
             </button>

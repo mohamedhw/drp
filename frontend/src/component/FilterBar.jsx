@@ -63,16 +63,18 @@ const FilterBar = ({
     ranges[topRangeParam] || "Last Month",
   );
   const handleRangeDropdownChange = (eventKey) => {
-    setTopRange(eventKey);
-    setSelectedRange(eventKey);
-    setCurrentPage(1);
+    if(routeParam === "top"){
+      setTopRange(eventKey);
+      setSelectedRange(eventKey);
+      setCurrentPage(1);
+    }
   };
 
   useEffect(() => {
     if (routeParam === "top" && !selectedRange) {
       setTopRange(ranges[topRangeParam] || ranges["1M"]);
       setSelectedRange(ranges[topRangeParam] || ranges["1M"]);
-    } else {
+    } else if (routeParam === "top") {
       setTopRange(ranges[topRangeParam] || ranges["1M"]);
     }
   }, []);

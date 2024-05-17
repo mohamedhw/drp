@@ -95,8 +95,9 @@ export const USER_UPDATE_FAIL = 'USER_UPDATE_FAIL';
 export const USER_DATA_SUCCESS = 'USER_SUCCESS';
 export const USER_DATA_FAIL = 'USER_FAIL';
 
+export const COVER_SET_PIC = 'COVER_SET_PIC';
 
-export const SET_SEARCHING = 'SET_SEARCHING'
+export const SET_SEARCHING = 'SET_SEARCHING';
 export const RESET_PARAMETER = 'RESET_PARAMETER';
 export const SET_Q = 'SET_Q';
 export const SET_TOP_RANGE = 'SET_TOP_RANGE';
@@ -105,7 +106,7 @@ export const RESET_SIDE_BAR = 'RESET_SIDE_BAR';
 export const RESET_PICS_ITEMS = 'RESET_PICS_ITEMS';
 
 export const HOLD_SIDE_BAR = 'HOLD_SIDE_BAR';
-export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE"
-export const SET_PAGE = "SET_PAGE"
+export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
+export const SET_PAGE = "SET_PAGE";
 
-export const SET_AUTHOR = "SET_AUTHOR"
+export const SET_AUTHOR = "SET_AUTHOR";
