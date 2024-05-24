@@ -30,9 +30,9 @@ const HotPics = ({
   const routeParam = location.pathname.split("/").filter(Boolean).pop();
 
   const buildUrl = () => {
-    let url = `${apiUrl}/api-hot/`;
+    let url = `${apiUrl}/api-pics/?type=hot`;
     if (pageParam) {
-      url += `?page=${pageParam}`;
+      url += `&page=${pageParam}`;
     }
     return url;
   };

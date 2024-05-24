@@ -29,17 +29,17 @@ const TopPics = ({
   const topRangeParam = queryParams.get("topRange");
 
   const buildUrl = () => {
-    let url = `${apiUrl}/api-top-pics/`;
+    let url = `${apiUrl}/api-pics/?type=top`;
     let params = "?";
     if (topRangeParam) {
-      url += `?topRange=${topRangeParam}`;
+      url += `&topRange=${topRangeParam}`;
       params += `topRange=${topRangeParam}`;
       if (pageParam) {
         url += `&page=${pageParam}`;
       }
     } else {
       if (pageParam) {
-        url += `?page=${pageParam}`;
+        url += `&page=${pageParam}`;
         params += `page=${pageParam}`;
       }
     }

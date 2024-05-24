@@ -19,9 +19,9 @@ const LatestPics = ({ hasMore, pics, currentPage, page, setCurrentPage, setPage,
 
 
   const buildUrl = () => {
-    let url = `${apiUrl}/api-latest/`;
+    let url = `${apiUrl}/api-pics/?type=latest`;
     if (pageParam) {
-      url += `?page=${pageParam}`;
+      url += `&page=${pageParam}`;
     }
     return url;
   };

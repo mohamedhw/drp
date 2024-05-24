@@ -27,11 +27,11 @@ const RandomPics = ({
   const pageParam = currentPage || (queryParams.get("page") || 1);
 
   const buildUrl = () => {
-    let url = `${apiUrl}/api-random-pics/`;
+    let url = `${apiUrl}/api-pics/?type=random`;
     let params = "";
     if (pageParam) {
-      url += `?page=${pageParam}`;
-      params += `?page=${pageParam}`;
+      url += `&page=${pageParam}`;
+      params += `&page=${pageParam}`;
     }
     return url;
   };

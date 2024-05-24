@@ -35,7 +35,7 @@ const Search = ({
 
   useEffect(() => {
     if (q && show) {
-      url = `${apiUrl}/api-search/?q=${q}`;
+      url = `${apiUrl}/api-pics/?q=${q}`;
     }
     if (show){
       search(url);

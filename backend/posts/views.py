@@ -1,4 +1,3 @@
-from django.utils import timezone
 from django.db.models import Count, Case, When, Value, IntegerField, FloatField, F, Q, ExpressionWrapper
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
@@ -14,29 +13,55 @@ from functools import reduce
 import operator
 import re
 
-
-
-class LatestPics(generics.ListAPIView):
+class PicsFilter(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializers
     permission_classes = (permissions.AllowAny,)
-
+    
     def get_queryset(self):
-            
-        # Start with all items
-        qs = super().get_queryset().order_by("-created_at")
+
+        filter_type = self.request.GET.get("type")
+        query = self.request.GET.get("q")
+        now = datetime.now()
+
+        if query:
+            return self.get_search(query)
+        elif filter_type == "latest":
+            return self.get_latest_pics()
+        elif filter_type == "hot":
+            return self.get_hot_pics(now)
+        elif filter_type == "foryou":
+            return self.get_for_you_pics()
+        elif filter_type == "top":
+            return self.get_top_pics(now)
+        elif filter_type == "random":
+            return self.get_random_pics()
+        else:
+            # Default to latest pics
+            return self.get_latest_pics()
+
+    def get_search(self, query):
+        qs = Post.objects.all()
+        if query:
+            query_list = [word.strip() for word in re.split(r'\s+', query) if word.strip()]
+            # Fetch hashtags matching each word in the query
+            matching_hashtags = Hashtag.objects.filter(reduce(operator.or_, (Q(tag__icontains=word) for word in query_list)))
+            # If there are no matching hashtags, set qs to empty list
+            if not matching_hashtags.exists():
+                qs = []
+            else:
+                # Filter posts to include those that contain at least one hashtag from each specified hashtag group
+                for hashtag_group in query_list:
+                    qs = qs.filter(tags__in=Hashtag.objects.filter(tag__icontains=hashtag_group))
+                    # if qs and :
+                    # qs = qs.filter(tags_in=)
+            qs = qs.distinct()
         return qs
 
+    def get_latest_pics(self):
+        return self.queryset.order_by("-created_at")
 
-class HotPics(generics.ListAPIView):
-    serializer_class = PostSerializers
-    permission_classes = (permissions.AllowAny,)
-    def get_queryset(self):
-
-        # Get current time
-        now = timezone.now()
-
-        # Calculate the age of the post in hours
+    def get_hot_pics(self, now):
         age_expression = ExpressionWrapper(
             (now - F("created_at")) / timedelta(hours=1),
             output_field=FloatField(),
@@ -60,12 +85,8 @@ class HotPics(generics.ListAPIView):
 
         return qs
 
-class ForYouPics(generics.ListAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializers
-    permission_classes = (permissions.AllowAny,)
 
-    def get_queryset(self, *args, **kwargs):
+    def get_for_you_pics(self):
         user = self.request.user
         if user.id:
             # get the posts where the user in the like field
@@ -98,16 +119,7 @@ class ForYouPics(generics.ListAPIView):
 
             return qs
 
-
-
-# most liked pics
-class TopPics(generics.ListAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializers
-    permission_classes = (permissions.AllowAny,)
-
-    def get_queryset(self):
-        now = datetime.now()
+    def get_top_pics(self, now):
         top_range_qs = self.request.GET.get("topRange", "1M")
         time_ranges = {
             "1d": timedelta(days=1),
@@ -128,17 +140,8 @@ class TopPics(generics.ListAPIView):
         qs = qs.annotate(like_count=Count("like")).order_by("-like_count")
         return qs
 
-
-# Random pics
-class RandomPics(generics.ListAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializers
-    permission_classes = (permissions.AllowAny,)
-
-    def get_queryset(self):
-        qs = Post.objects.all()
-        qs = qs.order_by("?")
-        return qs
+    def get_random_pics(self):
+        return self.queryset.order_by("?")
 
 
 @api_view(["POST", "GET"])
@@ -180,36 +183,6 @@ class SavedPics(generics.ListAPIView):
         qs = Post.objects.filter(saved=user)
         return qs
 
-
-class Search(generics.ListAPIView):
-    queryset = Post.objects.none()
-    serializer_class = PostSerializers
-    permission_classes = (permissions.AllowAny,)
-
-    def get_queryset(self):
-        qs = Post.objects.all()
-        query = self.request.GET.get("q")
-        print('qu', query)
-        if query:
-            query_list = [word.strip() for word in re.split(r'\s+', query) if word.strip()]
-            # Fetch hashtags matching each word in the query
-            print("query", query_list)
-            matching_hashtags = Hashtag.objects.filter(reduce(operator.or_, (Q(tag__icontains=word) for word in query_list)))
-            # If there are no matching hashtags, set qs to empty list
-            print("matching", matching_hashtags)
-            if not matching_hashtags.exists():
-                qs = []
-            else:
-                # Filter posts to include those that contain at least one hashtag from each specified hashtag group
-                for hashtag_group in query_list:
-                    print('hash', hashtag_group)
-                    qs = qs.filter(tags__in=Hashtag.objects.filter(tag__icontains=hashtag_group))
-                    # if qs and :
-                    # qs = qs.filter(tags_in=)
-                    print("qs", qs)
-
-            qs = qs.distinct()
-        return qs
 
 
 class Detail(generics.RetrieveAPIView):

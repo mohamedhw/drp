@@ -14,7 +14,6 @@ const ForYouPics = ({
   hasMore,
   loading,
   currentPage,
-  page,
   setCurrentPage,
   setPage,
   forYouPics,
@@ -30,9 +29,9 @@ const ForYouPics = ({
   const routeParam = location.pathname.split("/").filter(Boolean).pop();
 
   const buildUrl = () => {
-    let url = `${apiUrl}/api-foryou/`;
+    let url = `${apiUrl}/api-pics/?type=foryou`;
     if (pageParam) {
-      url += `?page=${pageParam}`;
+      url += `&page=${pageParam}`;
     }
     return url;
   };
