@@ -29,6 +29,7 @@ import Cover from './component/CoverUploader';
 import PicCrop from './pics/PicCrop';
 import HotPics from './pics/HotPics';
 import ForYouPics from './pics/ForYouPics';
+import RelatedPics from './pics/RelatedPics';
 
 const App = () => {
     const [modalShow, setModalShow] = useState(false);
@@ -61,6 +62,7 @@ const App = () => {
                     <Route exact path='/search' element={<Searched />} />
                     <Route exact path='/tag/:tagSlug' element={<TagFiltered />} />
                     <Route exact path='/pic/:postId' element={<Pic setShowDelete={setShowDelete} setShowCroper={setShowCroper} />} />
+                    <Route exact path='/related/:postId' element={<RelatedPics/>} />
                     <Route exact path='/userallpics/:username/' element={<AllUserPics />} />
                     <Route exact path='/hot/:page?' element={<HotPics />} />
                     <Route exact path='/top/:page?' element={<TopPics />} />

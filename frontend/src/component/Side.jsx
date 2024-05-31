@@ -237,6 +237,11 @@ const Side = ({
                     />
                   </Link>
                 ))}
+                <Link to={`/related/${post.id}`}>
+                  <h6 className="colored-t" style={{ marginBottom: "1ch", marginTop: "1ch"}}>
+                    more like this
+                  </h6>
+                </Link>
               </div>
               <hr className="side-hr" />
             </>

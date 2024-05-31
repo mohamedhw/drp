@@ -116,7 +116,6 @@ class PicsFilter(generics.ListAPIView):
 
             # Exclude liked_qs and saved_qs, then order by the number of matching tags and date
             qs = qs.order_by(-ordering, "-created_at")
-
             return qs
 
     def get_top_pics(self, now):
@@ -262,6 +261,32 @@ class Detail(generics.RetrieveAPIView):
         ).data  # Extend the Response Data
         data["related_pics"] = self.get_serializer(related_pics, many=True).data
         return Response(data)
+
+class MoreRelatedPics(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializers
+    permission_classes = (permissions.AllowAny,)
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        item = Post.objects.get(pk=pk)
+        taged_qs = item.tags.all()  # get the item tags
+        related_pics = Post.objects.filter(tags__in=taged_qs).annotate(
+            num_matching_tags=Count("tags", filter=Q(tags__in=taged_qs))
+            ).exclude(pk=item.pk)
+        # Define the sorting order using Case/When
+        ordering = Case(
+                *[
+                    When(num_matching_tags=i, then=Value(i))
+                    for i in range(len(taged_qs) + 1)
+                    ],
+                default=Value(len(taged_qs)),
+                output_field=IntegerField(),
+                )
+        # Exclude liked_qs and saved_qs, then order by the number of matching tags and date
+        related_pics = related_pics.order_by(-ordering)
+
+        return related_pics
 
 
 class TagFilterView(generics.ListAPIView):

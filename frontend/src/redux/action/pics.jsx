@@ -21,6 +21,9 @@ import {
   FOR_YOU_PICS_START,
   FOR_YOU_PICS_SUCCESS,
   FOR_YOU_PICS_FAIL,
+  RELATED_PICS_START,
+  RELATED_PICS_SUCCESS,
+  RELATED_PICS_FAIL,
   TAGS_START,
   TAGS_SUCCESS,
   TAGS_FAIL,
@@ -136,6 +139,29 @@ export const detail = (postId, setZoom_) => async (dispatch) => {
     });
   }
 };
+
+
+export const relatedPics = (url) => async (dispatch) => {
+  dispatch({type: RELATED_PICS_START})
+  try {
+    const res = await axios.get(url, config);
+    if (res.data.error) {
+      dispatch({
+        type: RELATED_PICS_FAIL
+      })
+    } else {
+      dispatch({
+        type: RELATED_PICS_SUCCESS,
+        payload: res.data,
+      })
+    }
+  } catch (err){
+    dispatch({
+      type: RELATED_PICS_FAIL,
+    })
+  }
+
+}
 
 // Get a list of all available tags
 export const tags = () => async (dispatch) => {

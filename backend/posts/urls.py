@@ -12,12 +12,14 @@ from .views import (
     like_pic,
     AllTags,
     TagsSuggestion,
+    MoreRelatedPics
 )
 
 
 urlpatterns = [
     path("api-pics/", PicsFilter.as_view()),
     path("api-post/<str:pk>/", Detail.as_view()),
+    path("api-related/<str:pk>/", MoreRelatedPics.as_view()),
     path("api-tag/<slug:tag_slug>/", TagFilterView.as_view()),
     path("api-create/", PostCreate.as_view()),
     path("api-tag-suggestion/", TagsSuggestion.as_view()),

@@ -15,6 +15,9 @@ import {
   FOR_YOU_PICS_START,
   FOR_YOU_PICS_SUCCESS,
   FOR_YOU_PICS_FAIL,
+  RELATED_PICS_START,
+  RELATED_PICS_SUCCESS,
+  RELATED_PICS_FAIL,
   TAGS_START,
   TAGS_SUCCESS,
   TAGS_FAIL,
@@ -110,6 +113,11 @@ export default function(state = initialState, action) {
         ...state,
         detail_loading: true,
       };
+    case RELATED_PICS_START:
+      return {
+        ...state,
+        related_pics_loading: true,
+      };
     case TAG_PICS_START:
       return {
         ...state,
@@ -200,6 +208,7 @@ export default function(state = initialState, action) {
     case LATEST_PICS_SUCCESS:
     case TOP_PICS_SUCCESS:
     case RANDOM_PICS_SUCCESS:
+    case RELATED_PICS_SUCCESS:
       // filter the payload to get only the new pics
       const newPics = payload.results.filter((result) => {
         return !state.pics.some((pic) => pic.id === result.id);
@@ -243,6 +252,7 @@ export default function(state = initialState, action) {
     case TOP_PICS_FAIL:
     case AUTHOR_PICS_FAIL:
     case DETAIL_FAIL:
+    case RELATED_PICS_FAIL:
     case TAGS_FAIL:
     case LIKE_FAIL:
     case SEARCH_FAIL:

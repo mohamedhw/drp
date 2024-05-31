@@ -7,6 +7,7 @@ import Loading from "../component/Loading";
 import { useState } from "react";
 
 const Items = ({ loading, pics_g, setShow, setZoom_, title }) => {
+  console.log(pics_g)
   const [pageTarget, setPageTarget] = useState(true);
   const handelClick = () => {
     if (setShow) {
@@ -17,8 +18,6 @@ const Items = ({ loading, pics_g, setShow, setZoom_, title }) => {
       setPageTarget(false);
     }
   };
-
-  const location = useLocation();
 
   return (
     <div style={{ margin: "auto", width: "100%", textAlign: "center" }}>
