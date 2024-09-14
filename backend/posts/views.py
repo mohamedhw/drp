@@ -344,7 +344,7 @@ class PostCreate(generics.CreateAPIView):
                         #checking every tag for # or spaces at the start or the end and remvoe them
                         if '#' in tag_data:
                             tag_data = tag_data.lstrip('#')
-                        tag_data = tag_data.strip()
+                        tag_data = tag_data.strip().lower()
                         # geting the tag if it exists befor if not create it
                         tag, _ = Hashtag.objects.get_or_create(
                             tag=tag_data)
